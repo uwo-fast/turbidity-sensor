@@ -32,3 +32,7 @@
 - [GitHub - Capstone Project (TSW)](https://github.com/ziya-bot/Capstone-Project)
 
 - [GitHub - MATLAB Turbidity Sensor](https://github.com/JPerk00/MATLAB--Turbidity-Sensor)
+
+- [DFRobot - SEN0189](https://www.dfrobot.com/product-1394.html)
+  - [DFRobot - SEN0189 Wiki](https://wiki.dfrobot.com/sen0189)
+  - This is the sensor that we currently have on hand. However it is a fairly standard amplifier circuit for a turbidity sensor, and the actual sensor is still the TSW-10 / TST-10.
