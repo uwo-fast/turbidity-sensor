@@ -1,0 +1,10 @@
+{
+  "name": "turbidity-sensor",
+  "version": "0.1.0",
+  "description": "Portable C turbidity estimation core for TSW-10 and TST-10 sensors.",
+  "keywords": ["turbidity", "sensor", "embedded", "arduino"],
+  "build": {
+    "includeDir": "include",
+    "srcDir": "src"
+  }
+}

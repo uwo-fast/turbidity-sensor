@@ -292,4 +292,6 @@ working/
 references/
 reference/
 _referneces/
-_reference/
+_reference/.pio/
+.pioenvs/
+.piolibdeps/
