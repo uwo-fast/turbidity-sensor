@@ -1,0 +1,28 @@
+Sensor: TST-10
+Source CSV: tst10-calibration.csv
+Model: quadratic fit of voltage as a function of NTU
+Valid NTU range: 0 to 4000
+
+Voltage (High)
+Equation:
+V = a*NTU^2 + b*NTU + c
+V = 1.204569820423e-07*NTU^2 + -1.152056151166e-03*NTU + 4.401205574913e+00
+Copy/paste form:
+voltage = (1.204569820423e-07 * ntu * ntu) + (-1.152056151166e-03 * ntu) + 4.401205574913e+00
+Coefficients:
+a = 1.204569820423e-07
+b = -1.152056151166e-03
+c = 4.401205574913e+00
+R^2 = 0.995989604
+
+Voltage (Low)
+Equation:
+V = a*NTU^2 + b*NTU + c
+V = 1.194702773120e-07*NTU^2 + -1.147161597053e-03*NTU + 3.609305647841e+00
+Copy/paste form:
+voltage = (1.194702773120e-07 * ntu * ntu) + (-1.147161597053e-03 * ntu) + 3.609305647841e+00
+Coefficients:
+a = 1.194702773120e-07
+b = -1.147161597053e-03
+c = 3.609305647841e+00
+R^2 = 0.995448279

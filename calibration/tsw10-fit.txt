@@ -1,0 +1,28 @@
+Sensor: TSW-10
+Source CSV: tsw10-calibration.csv
+Model: quadratic fit of voltage as a function of NTU
+Valid NTU range: 0 to 2000
+
+Voltage (High)
+Equation:
+V = a*NTU^2 + b*NTU + c
+V = 3.391898719130e-07*NTU^2 + -1.721756367203e-03*NTU + 4.782673066064e+00
+Copy/paste form:
+voltage = (3.391898719130e-07 * ntu * ntu) + (-1.721756367203e-03 * ntu) + 4.782673066064e+00
+Coefficients:
+a = 3.391898719130e-07
+b = -1.721756367203e-03
+c = 4.782673066064e+00
+R^2 = 0.998889257
+
+Voltage (Low)
+Equation:
+V = a*NTU^2 + b*NTU + c
+V = 3.654358227585e-07*NTU^2 + -1.599118398764e-03*NTU + 3.606403726708e+00
+Copy/paste form:
+voltage = (3.654358227585e-07 * ntu * ntu) + (-1.599118398764e-03 * ntu) + 3.606403726708e+00
+Coefficients:
+a = 3.654358227585e-07
+b = -1.599118398764e-03
+c = 3.606403726708e+00
+R^2 = 0.995475314
