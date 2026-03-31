@@ -1,38 +1,105 @@
-# turbidity-sensor
+# turbidity
 
-## Parts
+Portable C turbidity modeling and calibration utilities for the Amphenol `TSW-10` and `TST-10` sensors.
 
-- TSW-10
-  - [Digikey - TSW-10](https://www.digikey.ca/en/products/detail/amphenol-advanced-sensors/TSW-10/4250485)
-  - [Amphenol - TSW-10](https://amphenol-sensors.com/en/thermometrics/turbidity/934-tsw-10)
-- TST-10
-  - [Digikey - TST-10](https://www.digikey.ca/en/products/detail/amphenol-advanced-sensors/TST-10/4767842)
-  - [Amphenol - TST-10](https://amphenol-sensors.com/en/thermometrics/turbidity/2959-tst-10)
+This repository is now organized as a small code-first open source project:
 
-## References
+- a stateless C library for the sensor model and 3-point calibration solve
+- a calibration CLI that emits a machine-readable JSON profile
+- a strict CSV stream example for host-side validation and replay
+- an Arduino example that applies the same model to a conditioned analog input
 
-## Academic Papers
+## Status
 
-- [Ötz-T: 3D-printed open-source turbidity sensor with Arduino shield for suspended sediment monitoring](https://doi.org/10.1016/j.ohx.2023.e00395)
+This is an MVP built from vendor-datasheet curves that were digitized and fit offline. It is useful for software integration, bench validation, and unit-specific 3-point profiling, but it is not a substitute for empirical end-to-end optical calibration on finished hardware.
 
-- [A Low-Cost Continuous Turbidity Monitor](https://www.mdpi.com/1424-8220/19/14/3039)
+## Repository Map
 
-- [An automated low-cost monitoring station for suspended sediments and water level](https://doi.org/10.1016/j.ohx.2024.e00594)
+- `include/`: public C API
+- `src/`: core implementation plus the generated vendor-fit header used at runtime
+- `tools/`: offline utilities, including the 3-point calibration CLI and calibration generator
+- `examples/`: host and Arduino examples
+- `data/calibration/`: raw vendor digitizations and generated calibration artifacts
+- `tests/`: unit, CLI-contract, and package smoke tests
+- `docs/archive/`: preserved research, planning, and datasheet material
 
-- [An Affordable Open-Source Turbidimeter](https://doi.org/10.3390/s140407142)
+## Build
 
-## Implementation References
+```sh
+cmake -S . -B build -DBUILD_TESTS=ON -DBUILD_TOOLS=ON -DBUILD_EXAMPLES=ON
+cmake --build build
+```
 
-- [Formula for measuring sensor SEN0189 at 3.3 V](https://forum.arduino.cc/t/formula-for-measuring-sensor-sen0189-at-3-3-v/991779)
+## Test
 
-- [GitHub - Open Turbidimeter Project](https://github.com/wash4all/open-turbidimeter-project)
+```sh
+ctest --test-dir build --output-on-failure
+```
 
-- [GitHub - Suspended Sediment Sensor](https://github.com/rivertechlabs/suspendedsedimentsensor)
+## Install
 
-- [GitHub - Capstone Project (TSW)](https://github.com/ziya-bot/Capstone-Project)
+```sh
+cmake --install build --prefix ./_install
+```
 
-- [GitHub - MATLAB Turbidity Sensor](https://github.com/JPerk00/MATLAB--Turbidity-Sensor)
+The install exports a standard CMake package that downstream projects can consume with:
 
-- [DFRobot - SEN0189](https://www.dfrobot.com/product-1394.html)
-  - [DFRobot - SEN0189 Wiki](https://wiki.dfrobot.com/sen0189)
-  - This is the sensor that we currently have on hand. However it is a fairly standard amplifier circuit for a turbidity sensor, and the actual sensor is still the TSW-10 / TST-10.
+```cmake
+find_package(turbidity REQUIRED CONFIG)
+target_link_libraries(my_app PRIVATE turbidity::turbidity)
+```
+
+## Quick Start
+
+Solve a unit-specific profile from exactly three known `NTU,mV` reference pairs:
+
+```sh
+build/turbidity_calibrate \
+  --sensor tsw10 \
+  --point 0,4200 \
+  --point 500,3350 \
+  --point 1500,1800
+```
+
+Example JSON output:
+
+```json
+{"sensor":"tsw10","trim_t":0.500000000,"gain":1.000000000,"offset_mv":0.000000000,"rmse_mv":0.000000000,"max_abs_error_mv":0.000000000}
+```
+
+Replay a CSV stream through the model:
+
+```sh
+printf 'timestamp_ms,raw_mv\n0,4200\n100,3350\n200,1800\n' | \
+  build/turbidity_stream --sensor tsw10 --trim 0.5 --gain 1.0 --offset-mv 0 --filter-window 8
+```
+
+Input schema is strict:
+
+- the first line must be exactly `timestamp_ms,raw_mv`
+- every sample row must contain exactly two columns
+- malformed rows are treated as hard errors
+
+## Calibration Data Pipeline
+
+The vendor-derived model is generated from the digitized point clouds in `data/calibration/vendor-data/`.
+
+To regenerate the derived calibration tables, fit reports, and runtime header:
+
+```sh
+python3 tools/generate_vendor_calibration.py
+```
+
+If you want CMake to run that regeneration as part of the build, enable:
+
+```sh
+cmake -S . -B build -DTURBIDITY_REGENERATE_CALIBRATION=ON
+```
+
+## Arduino Example
+
+The Arduino example lives under `examples/arduino/` and uses the same stateless library API. It assumes a conditioned analog voltage in millivolts, not direct photodiode front-end circuitry.
+
+## License
+
+This project is licensed under `GPL-3.0-only`. See [LICENSE](LICENSE).

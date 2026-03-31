@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <turbidity/turbidity.h>
 
+#include "../../common/moving_average.h"
+
 #ifndef TURBIDITY_ANALOG_PIN
 #define TURBIDITY_ANALOG_PIN A0
 #endif
@@ -37,7 +39,9 @@
 #define TURBIDITY_FILTER_WINDOW 8
 #endif
 
-static turbidity_context g_context;
+static turbidity_profile g_profile;
+static moving_average_filter g_filter;
+static double g_filter_buffer[TURBIDITY_FILTER_WINDOW];
 static unsigned long g_last_sample_ms = 0UL;
 
 static turbidity_profile make_profile()
@@ -46,53 +50,62 @@ static turbidity_profile make_profile()
     profile.trim_t = TURBIDITY_TRIM_T;
     profile.gain = TURBIDITY_GAIN;
     profile.offset_mv = TURBIDITY_OFFSET_MV;
-    profile.filter_window = TURBIDITY_FILTER_WINDOW;
     return profile;
 }
 
 void setup()
 {
-    turbidity_profile profile = make_profile();
+    g_profile = make_profile();
+    moving_average_init(&g_filter, g_filter_buffer, TURBIDITY_FILTER_WINDOW);
+    moving_average_reset(&g_filter);
 
     Serial.begin(115200);
-    while (!Serial) {
-    }
-
-    turbidity_init(&g_context, &profile);
-    Serial.println("timestamp_ms,sensor,raw_mv,filtered_mv,estimated_ntu,range_status");
+    Serial.println("timestamp_ms,sensor,raw_mv,filtered_mv,equivalent_mv,estimated_ntu,range_status");
 }
 
 void loop()
 {
     unsigned long now = millis();
+    int raw_counts;
+    double raw_mv;
+    double filtered_mv;
+    turbidity_estimate estimate;
+    turbidity_status status;
+
     if ((now - g_last_sample_ms) < TURBIDITY_SAMPLE_PERIOD_MS) {
         return;
     }
-
     g_last_sample_ms = now;
 
-    int raw_counts = analogRead(TURBIDITY_ANALOG_PIN);
-    double raw_mv = ((double)raw_counts * TURBIDITY_ADC_REF_MV) / TURBIDITY_ADC_MAX_COUNT;
-    turbidity_sample sample;
-    turbidity_result result;
+    raw_counts = analogRead(TURBIDITY_ANALOG_PIN);
+    raw_mv = ((double)raw_counts * TURBIDITY_ADC_REF_MV) / TURBIDITY_ADC_MAX_COUNT;
+    filtered_mv = moving_average_push(&g_filter, raw_mv);
+    status = turbidity_estimate_ntu_from_mv(&g_profile, filtered_mv, &estimate);
 
-    sample.timestamp_ms = (uint32_t)now;
-    sample.raw_mv = raw_mv;
-
-    if (turbidity_process_sample(&g_context, &sample, &result) != 0) {
-        Serial.println("0,unknown,0.000,0.000,0.000000,invalid");
+    if (status != TURBIDITY_STATUS_OK) {
+        Serial.print(now);
+        Serial.print(',');
+        Serial.print(turbidity_sensor_name(g_profile.sensor_kind));
+        Serial.print(',');
+        Serial.print(raw_mv, 3);
+        Serial.print(',');
+        Serial.print(filtered_mv, 3);
+        Serial.print(",0.000,0.000000,");
+        Serial.println(turbidity_status_name(status));
         return;
     }
 
-    Serial.print(result.timestamp_ms);
+    Serial.print(now);
     Serial.print(',');
-    Serial.print(turbidity_sensor_name(g_context.profile.sensor_kind));
+    Serial.print(turbidity_sensor_name(g_profile.sensor_kind));
     Serial.print(',');
-    Serial.print(result.raw_mv, 3);
+    Serial.print(raw_mv, 3);
     Serial.print(',');
-    Serial.print(result.filtered_mv, 3);
+    Serial.print(filtered_mv, 3);
     Serial.print(',');
-    Serial.print(result.estimated_ntu, 6);
+    Serial.print(estimate.equivalent_mv, 3);
     Serial.print(',');
-    Serial.println(turbidity_range_status_name(result.range_status));
+    Serial.print(estimate.estimated_ntu, 6);
+    Serial.print(',');
+    Serial.println(turbidity_range_status_name(estimate.range_status));
 }

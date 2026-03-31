@@ -1,15 +1,19 @@
 # Vendor Data
 
-The following files were created using WebPlotDigitizer to extract data points from the
-calibration curves provided in the datasheets for the TSW-10 and TST-10 turbidity sensors.
-The source images are:
+This directory holds the raw calibration inputs extracted from the Amphenol datasheet plots with WebPlotDigitizer.
+
+Files:
 
 - `tst10-datasheet-plot.png`
 - `tsw10-datasheet-plot.png`
-
-The extracted raw CSV files are:
-
 - `tst10-high.csv`
 - `tst10-low.csv`
 - `tsw10-high.csv`
 - `tsw10-low.csv`
+
+Each CSV contains two columns in the original extracted order:
+
+- voltage in volts
+- turbidity in NTU
+
+These files are the source inputs for `tools/generate_vendor_calibration.py`.

@@ -1,0 +1,39 @@
+set(package_smoke_root "@PROJECT_BINARY_DIR@/package_smoke")
+set(package_install_dir "${package_smoke_root}/prefix")
+set(package_build_dir "${package_smoke_root}/build")
+set(package_executable "${package_build_dir}/turbidity_package_smoke@CMAKE_EXECUTABLE_SUFFIX@")
+
+file(REMOVE_RECURSE "${package_smoke_root}")
+file(MAKE_DIRECTORY "${package_smoke_root}")
+
+execute_process(
+    COMMAND "@CMAKE_COMMAND@" --install "@PROJECT_BINARY_DIR@" --prefix "${package_install_dir}"
+    RESULT_VARIABLE install_result
+)
+if(NOT install_result EQUAL 0)
+    message(FATAL_ERROR "Package smoke install failed with code ${install_result}")
+endif()
+
+execute_process(
+    COMMAND "@CMAKE_COMMAND@" -S "@PROJECT_SOURCE_DIR@/tests/package_smoke" -B "${package_build_dir}" -DCMAKE_PREFIX_PATH=${package_install_dir}
+    RESULT_VARIABLE configure_result
+)
+if(NOT configure_result EQUAL 0)
+    message(FATAL_ERROR "Package smoke configure failed with code ${configure_result}")
+endif()
+
+execute_process(
+    COMMAND "@CMAKE_COMMAND@" --build "${package_build_dir}"
+    RESULT_VARIABLE build_result
+)
+if(NOT build_result EQUAL 0)
+    message(FATAL_ERROR "Package smoke build failed with code ${build_result}")
+endif()
+
+execute_process(
+    COMMAND "${package_executable}"
+    RESULT_VARIABLE run_result
+)
+if(NOT run_result EQUAL 0)
+    message(FATAL_ERROR "Package smoke executable failed with code ${run_result}")
+endif()

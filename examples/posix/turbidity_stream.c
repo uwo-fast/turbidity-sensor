@@ -1,4 +1,5 @@
 #include "turbidity/turbidity.h"
+#include "moving_average.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -7,84 +8,93 @@
 
 static void print_usage(const char *program)
 {
-    fprintf(stderr,
+    fprintf(
+        stderr,
         "Usage: %s --sensor tsw10|tst10 [--trim T] [--gain G] [--offset-mv O] [--filter-window N]\n",
-        program);
+        program
+    );
 }
 
-static int parse_sensor(const char *text, turbidity_sensor_kind *out_sensor)
+static turbidity_status parse_sensor(const char *text, turbidity_sensor_kind *out_sensor)
 {
     if ((text == NULL) || (out_sensor == NULL)) {
-        return -1;
+        return TURBIDITY_STATUS_INVALID_ARGUMENT;
     }
     if (strcmp(text, "tsw10") == 0) {
         *out_sensor = TURBIDITY_SENSOR_TSW10;
-        return 0;
+        return TURBIDITY_STATUS_OK;
     }
     if (strcmp(text, "tst10") == 0) {
         *out_sensor = TURBIDITY_SENSOR_TST10;
-        return 0;
+        return TURBIDITY_STATUS_OK;
     }
-    return -1;
+    return TURBIDITY_STATUS_INVALID_SENSOR;
 }
 
-static int parse_u32(const char *text, uint32_t *out_value)
+static turbidity_status parse_size(const char *text, size_t *out_value)
 {
     char *end = NULL;
-    unsigned long parsed;
+    unsigned long value;
 
-    parsed = strtoul(text, &end, 10);
-    if ((end == text) || (*end != '\0')) {
-        return -1;
+    if ((text == NULL) || (out_value == NULL)) {
+        return TURBIDITY_STATUS_INVALID_ARGUMENT;
     }
-    *out_value = (uint32_t)parsed;
-    return 0;
+
+    value = strtoul(text, &end, 10);
+    if ((end == text) || (*end != '\0') || (value == 0UL)) {
+        return TURBIDITY_STATUS_INVALID_ARGUMENT;
+    }
+
+    *out_value = (size_t)value;
+    return TURBIDITY_STATUS_OK;
 }
 
-static int parse_double(const char *text, double *out_value)
+static turbidity_status parse_double(const char *text, double *out_value)
 {
     char *end = NULL;
-    double parsed = strtod(text, &end);
+    double value;
 
-    if ((end == text) || (*end != '\0')) {
-        return -1;
+    if ((text == NULL) || (out_value == NULL)) {
+        return TURBIDITY_STATUS_INVALID_ARGUMENT;
     }
-    *out_value = parsed;
-    return 0;
+
+    value = strtod(text, &end);
+    if ((end == text) || (*end != '\0')) {
+        return TURBIDITY_STATUS_INVALID_ARGUMENT;
+    }
+
+    *out_value = value;
+    return TURBIDITY_STATUS_OK;
 }
 
-static int parse_input_line(const char *line, turbidity_sample *out_sample)
+static turbidity_status parse_row(
+    const char *line,
+    unsigned long line_number,
+    unsigned int *out_timestamp_ms,
+    double *out_raw_mv
+)
 {
     char buffer[256];
     char *first;
     char *second;
-    char *cursor;
+    char *end = NULL;
+    unsigned long timestamp_ms;
+    double raw_mv;
 
-    if ((line == NULL) || (out_sample == NULL)) {
-        return -1;
+    if ((line == NULL) || (out_timestamp_ms == NULL) || (out_raw_mv == NULL)) {
+        return TURBIDITY_STATUS_INVALID_ARGUMENT;
     }
-
-    while (isspace((unsigned char)*line)) {
-        ++line;
-    }
-    if ((*line == '\0') || (*line == '#')) {
-        return 1;
-    }
-
     if (strlen(line) >= sizeof(buffer)) {
-        return -1;
+        fprintf(stderr, "line %lu is too long\n", line_number);
+        return TURBIDITY_STATUS_INVALID_ARGUMENT;
     }
+
     strcpy(buffer, line);
-
-    cursor = strchr(buffer, '\n');
-    if (cursor != NULL) {
-        *cursor = '\0';
-    }
-
     first = strtok(buffer, ",");
     second = strtok(NULL, ",");
-    if ((first == NULL) || (second == NULL)) {
-        return 1;
+    if ((first == NULL) || (second == NULL) || (strtok(NULL, ",") != NULL)) {
+        fprintf(stderr, "line %lu must have exactly two comma-separated columns\n", line_number);
+        return TURBIDITY_STATUS_INVALID_ARGUMENT;
     }
 
     while (isspace((unsigned char)*first)) {
@@ -94,58 +104,73 @@ static int parse_input_line(const char *line, turbidity_sample *out_sample)
         ++second;
     }
 
-    if (!isdigit((unsigned char)first[0])) {
-        return 1;
+    timestamp_ms = strtoul(first, &end, 10);
+    if ((end == first) || ((*end != '\0') && (*end != '\n'))) {
+        fprintf(stderr, "line %lu has an invalid timestamp\n", line_number);
+        return TURBIDITY_STATUS_INVALID_ARGUMENT;
     }
 
-    if ((parse_u32(first, &out_sample->timestamp_ms) != 0) || (parse_double(second, &out_sample->raw_mv) != 0)) {
-        return -1;
+    raw_mv = strtod(second, &end);
+    if ((end == second) || ((*end != '\0') && (*end != '\n'))) {
+        fprintf(stderr, "line %lu has an invalid raw_mv\n", line_number);
+        return TURBIDITY_STATUS_INVALID_ARGUMENT;
     }
 
-    return 0;
+    *out_timestamp_ms = (unsigned int)timestamp_ms;
+    *out_raw_mv = raw_mv;
+    return TURBIDITY_STATUS_OK;
 }
 
 int main(int argc, char **argv)
 {
     turbidity_profile profile = turbidity_default_profile(TURBIDITY_SENSOR_TSW10);
-    turbidity_context context;
+    moving_average_filter filter;
+    double *filter_buffer = NULL;
+    size_t filter_window = 8U;
     char line[256];
+    unsigned long line_number = 0UL;
     int sensor_set = 0;
+    int header_seen = 0;
     int index;
 
     for (index = 1; index < argc; ++index) {
+        turbidity_status status = TURBIDITY_STATUS_OK;
+
         if (strcmp(argv[index], "--sensor") == 0) {
-            if ((index + 1 >= argc) || (parse_sensor(argv[index + 1], &profile.sensor_kind) != 0)) {
+            if (index + 1 >= argc) {
                 print_usage(argv[0]);
                 return 1;
             }
-            sensor_set = 1;
+            status = parse_sensor(argv[index + 1], &profile.sensor_kind);
+            sensor_set = (status == TURBIDITY_STATUS_OK);
             index += 1;
         } else if (strcmp(argv[index], "--trim") == 0) {
-            if ((index + 1 >= argc) || (parse_double(argv[index + 1], &profile.trim_t) != 0)) {
+            if (index + 1 >= argc) {
                 print_usage(argv[0]);
                 return 1;
             }
+            status = parse_double(argv[index + 1], &profile.trim_t);
             index += 1;
         } else if (strcmp(argv[index], "--gain") == 0) {
-            if ((index + 1 >= argc) || (parse_double(argv[index + 1], &profile.gain) != 0)) {
+            if (index + 1 >= argc) {
                 print_usage(argv[0]);
                 return 1;
             }
+            status = parse_double(argv[index + 1], &profile.gain);
             index += 1;
         } else if (strcmp(argv[index], "--offset-mv") == 0) {
-            if ((index + 1 >= argc) || (parse_double(argv[index + 1], &profile.offset_mv) != 0)) {
+            if (index + 1 >= argc) {
                 print_usage(argv[0]);
                 return 1;
             }
+            status = parse_double(argv[index + 1], &profile.offset_mv);
             index += 1;
         } else if (strcmp(argv[index], "--filter-window") == 0) {
-            uint32_t parsed_window = 0U;
-            if ((index + 1 >= argc) || (parse_u32(argv[index + 1], &parsed_window) != 0)) {
+            if (index + 1 >= argc) {
                 print_usage(argv[0]);
                 return 1;
             }
-            profile.filter_window = (uint16_t)parsed_window;
+            status = parse_size(argv[index + 1], &filter_window);
             index += 1;
         } else if ((strcmp(argv[index], "--help") == 0) || (strcmp(argv[index], "-h") == 0)) {
             print_usage(argv[0]);
@@ -154,43 +179,83 @@ int main(int argc, char **argv)
             print_usage(argv[0]);
             return 1;
         }
+
+        if (status != TURBIDITY_STATUS_OK) {
+            fprintf(stderr, "argument error: %s\n", turbidity_status_name(status));
+            return 1;
+        }
     }
 
-    if (!sensor_set || !turbidity_profile_validate(&profile)) {
+    if (!sensor_set) {
         print_usage(argv[0]);
         return 1;
     }
+    if (turbidity_profile_validate(&profile) != TURBIDITY_STATUS_OK) {
+        fprintf(stderr, "invalid profile\n");
+        return 1;
+    }
 
-    turbidity_init(&context, &profile);
-    printf("timestamp_ms,sensor,raw_mv,filtered_mv,estimated_ntu,range_status\n");
+    filter_buffer = (double *)calloc(filter_window, sizeof(*filter_buffer));
+    if (filter_buffer == NULL) {
+        fprintf(stderr, "failed to allocate filter buffer\n");
+        return 1;
+    }
+
+    moving_average_init(&filter, filter_buffer, filter_window);
+    moving_average_reset(&filter);
+
+    printf("timestamp_ms,sensor,raw_mv,filtered_mv,equivalent_mv,estimated_ntu,range_status\n");
 
     while (fgets(line, sizeof(line), stdin) != NULL) {
-        turbidity_sample sample;
-        turbidity_result result;
-        int parse_status = parse_input_line(line, &sample);
+        turbidity_estimate estimate;
+        turbidity_status status;
+        unsigned int timestamp_ms;
+        double raw_mv;
+        double filtered_mv;
 
-        if (parse_status == 1) {
+        line_number += 1UL;
+        if (!header_seen) {
+            if (strcmp(line, "timestamp_ms,raw_mv\n") != 0 && strcmp(line, "timestamp_ms,raw_mv") != 0) {
+                fprintf(stderr, "line 1 must be the exact header: timestamp_ms,raw_mv\n");
+                free(filter_buffer);
+                return 1;
+            }
+            header_seen = 1;
             continue;
         }
-        if (parse_status != 0) {
-            fprintf(stderr, "Failed to parse input line: %s", line);
+
+        status = parse_row(line, line_number, &timestamp_ms, &raw_mv);
+        if (status != TURBIDITY_STATUS_OK) {
+            free(filter_buffer);
             return 1;
         }
-        if (turbidity_process_sample(&context, &sample, &result) != 0) {
-            fprintf(stderr, "Failed to process sample at timestamp %u\n", sample.timestamp_ms);
+
+        filtered_mv = moving_average_push(&filter, raw_mv);
+        status = turbidity_estimate_ntu_from_mv(&profile, filtered_mv, &estimate);
+        if (status != TURBIDITY_STATUS_OK) {
+            fprintf(stderr, "line %lu estimate failed: %s\n", line_number, turbidity_status_name(status));
+            free(filter_buffer);
             return 1;
         }
 
         printf(
-            "%u,%s,%.3f,%.3f,%.6f,%s\n",
-            result.timestamp_ms,
+            "%u,%s,%.3f,%.3f,%.3f,%.6f,%s\n",
+            timestamp_ms,
             turbidity_sensor_name(profile.sensor_kind),
-            result.raw_mv,
-            result.filtered_mv,
-            result.estimated_ntu,
-            turbidity_range_status_name(result.range_status)
+            raw_mv,
+            filtered_mv,
+            estimate.equivalent_mv,
+            estimate.estimated_ntu,
+            turbidity_range_status_name(estimate.range_status)
         );
     }
 
+    if (!header_seen) {
+        fprintf(stderr, "stdin is empty; expected a CSV header\n");
+        free(filter_buffer);
+        return 1;
+    }
+
+    free(filter_buffer);
     return 0;
 }

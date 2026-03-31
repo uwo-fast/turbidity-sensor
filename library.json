@@ -1,8 +1,11 @@
 {
-  "name": "turbidity-sensor",
-  "version": "0.1.0",
-  "description": "Portable C turbidity estimation core for TSW-10 and TST-10 sensors.",
-  "keywords": ["turbidity", "sensor", "embedded", "arduino"],
+  "name": "turbidity",
+  "version": "0.2.0",
+  "description": "Portable C turbidity modeling library and calibration tools for TSW-10 and TST-10 sensors.",
+  "keywords": ["turbidity", "sensor", "embedded", "arduino", "calibration"],
+  "license": "GPL-3.0-only",
+  "frameworks": ["arduino"],
+  "platforms": ["*"],
   "build": {
     "includeDir": "include",
     "srcDir": "src"

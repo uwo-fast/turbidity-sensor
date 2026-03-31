@@ -2,14 +2,18 @@
 #define TURBIDITY_TURBIDITY_H
 
 #include <stddef.h>
-#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define TURBIDITY_MAX_FILTER_WINDOW 64U
-#define TURBIDITY_DEFAULT_FILTER_WINDOW 8U
+typedef enum turbidity_status {
+    TURBIDITY_STATUS_OK = 0,
+    TURBIDITY_STATUS_INVALID_ARGUMENT = 1,
+    TURBIDITY_STATUS_INVALID_SENSOR = 2,
+    TURBIDITY_STATUS_INVALID_PROFILE = 3,
+    TURBIDITY_STATUS_NO_SOLUTION = 4
+} turbidity_status;
 
 typedef enum turbidity_sensor_kind {
     TURBIDITY_SENSOR_TSW10 = 0,
@@ -19,8 +23,7 @@ typedef enum turbidity_sensor_kind {
 typedef enum turbidity_range_status {
     TURBIDITY_RANGE_IN_RANGE = 0,
     TURBIDITY_RANGE_CLAMPED_LOW = 1,
-    TURBIDITY_RANGE_CLAMPED_HIGH = 2,
-    TURBIDITY_RANGE_INVALID = 3
+    TURBIDITY_RANGE_CLAMPED_HIGH = 2
 } turbidity_range_status;
 
 typedef struct turbidity_profile {
@@ -28,59 +31,42 @@ typedef struct turbidity_profile {
     double trim_t;
     double gain;
     double offset_mv;
-    uint16_t filter_window;
 } turbidity_profile;
 
-typedef struct turbidity_sample {
-    uint32_t timestamp_ms;
-    double raw_mv;
-} turbidity_sample;
-
-typedef struct turbidity_result {
-    uint32_t timestamp_ms;
-    double raw_mv;
-    double filtered_mv;
+typedef struct turbidity_estimate {
+    double equivalent_mv;
     double estimated_ntu;
     turbidity_range_status range_status;
-} turbidity_result;
-
-typedef struct turbidity_context {
-    turbidity_profile profile;
-    double window_samples[TURBIDITY_MAX_FILTER_WINDOW];
-    double sum_mv;
-    uint16_t next_index;
-    uint16_t sample_count;
-} turbidity_context;
+} turbidity_estimate;
 
 turbidity_profile turbidity_default_profile(turbidity_sensor_kind sensor_kind);
-int turbidity_profile_validate(const turbidity_profile *profile);
-void turbidity_init(turbidity_context *context, const turbidity_profile *profile);
-void turbidity_reset(turbidity_context *context);
 
-double turbidity_sensor_max_ntu(turbidity_sensor_kind sensor_kind);
-const char *turbidity_sensor_name(turbidity_sensor_kind sensor_kind);
-const char *turbidity_range_status_name(turbidity_range_status status);
+turbidity_status turbidity_profile_validate(const turbidity_profile *profile);
+turbidity_status turbidity_sensor_max_ntu(
+    turbidity_sensor_kind sensor_kind,
+    double *out_max_ntu
+);
 
-int turbidity_eval_family_mv(
+turbidity_status turbidity_eval_family_mv(
     turbidity_sensor_kind sensor_kind,
     double trim_t,
     double ntu,
     double *out_mv
 );
 
-int turbidity_predict_measured_mv(
+turbidity_status turbidity_predict_measured_mv(
     const turbidity_profile *profile,
     double ntu,
     double *out_mv
 );
 
-int turbidity_process_sample(
-    turbidity_context *context,
-    const turbidity_sample *sample,
-    turbidity_result *out_result
+turbidity_status turbidity_estimate_ntu_from_mv(
+    const turbidity_profile *profile,
+    double measured_mv,
+    turbidity_estimate *out_estimate
 );
 
-int turbidity_solve_profile_3point(
+turbidity_status turbidity_solve_profile_3point(
     turbidity_sensor_kind sensor_kind,
     const double ntu[3],
     const double mv[3],
@@ -88,6 +74,10 @@ int turbidity_solve_profile_3point(
     double *out_rmse_mv,
     double *out_max_abs_error_mv
 );
+
+const char *turbidity_sensor_name(turbidity_sensor_kind sensor_kind);
+const char *turbidity_status_name(turbidity_status status);
+const char *turbidity_range_status_name(turbidity_range_status status);
 
 #ifdef __cplusplus
 }
