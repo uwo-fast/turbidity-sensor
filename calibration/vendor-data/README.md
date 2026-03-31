@@ -1,6 +1,13 @@
 # Vendor Data
 
-The following files were created using WebPlotDigitizer to extract data points from the calibration curves provided in the datasheets for the TSW-10 and TST-10 turbidity sensors. These images are located in `tst10-plot.png` and `tsw10-plot.png`. The extracted data points are saved in the following CSV files:
+The following files were created using WebPlotDigitizer to extract data points from the
+calibration curves provided in the datasheets for the TSW-10 and TST-10 turbidity sensors.
+The source images are:
+
+- `tst10-datasheet-plot.png`
+- `tsw10-datasheet-plot.png`
+
+The extracted raw CSV files are:
 
 - `tst10-high.csv`
 - `tst10-low.csv`

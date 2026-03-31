@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 def plot_sensor(csv_path, sensor_label, output_path):
     """
-    Reads a CSV with columns [NTU, Voltage (Curve 1), Voltage (Curve 2)],
+    Reads a CSV with columns [NTU, Voltage (High), Voltage (Low)],
     then plots raw data + quadratic fits for both curves on its own figure.
     """
     df = pd.read_csv(csv_path)
@@ -19,7 +19,7 @@ def plot_sensor(csv_path, sensor_label, output_path):
 
     fig, ax = plt.subplots(figsize=(8, 5))
     for curve_col, color in zip(
-        ["Voltage (Curve 1)", "Voltage (Curve 2)"], ["C0", "C1"]
+        ["Voltage (High)", "Voltage (Low)"], ["C0", "C1"]
     ):
         y = df[curve_col].values
 
@@ -49,8 +49,8 @@ def plot_sensor(csv_path, sensor_label, output_path):
 if __name__ == "__main__":
     cal_dir = os.path.dirname(os.path.abspath(__file__))
     sensors = [
-        ("Voltage_vs_NTU_TST-10.csv", "TST-10", "tst10-plot.png"),
-        ("Voltage_vs_NTU_TSW-10.csv", "TSW-10", "tsw10-plot.png"),
+        ("tst10-calibration.csv", "TST-10", "tst10-plot.png"),
+        ("tsw10-calibration.csv", "TSW-10", "tsw10-plot.png"),
     ]
 
     for csv_name, label, output_name in sensors:

@@ -1,3 +1,20 @@
 # Calibration
 
-`tst10-plot.png` and `tsw10-plot.png` are plots of the calibration curves for the TST-10 and TSW-10 turbidity sensors, respectively which are plotted from `Voltage_vs_NTU_TST-10.csv` and `Voltage_vs_NTU_TSW-10.csv`. THose two csv files were created using `vendor-data/tst10-*` and `vendor-data/tsw10-*` CSV files, which were created using WebPlotDigitizer to extract data points from the calibration curves provided in the datasheets for the TSW-10 and TST-10 turbidity sensors.
+`vendor-data/` contains the raw WebPlotDigitizer exports from the vendor datasheets.
+
+`generate_calibration_csvs.py` converts those raw `voltage, NTU` point clouds into the
+canonical calibration tables:
+
+- `tst10-calibration.csv`
+- `tsw10-calibration.csv`
+
+Those generated CSVs contain three columns:
+
+- `NTU`
+- `Voltage (High)`
+- `Voltage (Low)`
+
+`plot.py` reads the generated CSVs and writes the derived plot images:
+
+- `tst10-plot.png`
+- `tsw10-plot.png`
