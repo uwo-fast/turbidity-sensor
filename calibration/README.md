@@ -14,7 +14,10 @@ Those generated CSVs contain three columns:
 - `Voltage (High)`
 - `Voltage (Low)`
 
-`plot.py` reads the generated CSVs and writes the derived plot images:
+`plot.py` reads the generated CSVs and writes the derived plot images and quadratic
+fit reports:
 
 - `tst10-plot.png`
 - `tsw10-plot.png`
+- `tst10-fit.txt`
+- `tsw10-fit.txt`
