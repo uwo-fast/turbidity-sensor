@@ -68,13 +68,20 @@ The current TSW datasheet text extraction clearly exposes more of the electrical
 than the TST datasheet OCR does. It shows:
 
 - pin 1 as `VCC (+5V)`
-- pin 2 as `Output`
-- pin 3 as `GND`
+- pin 2 as the phototransistor emitter, which carries the output
+- pin 3 as the emitting diode's cathode
 - an internal optical path labeled with a diode and photo transistor
-- resistor labels around `470 ohm` and `4.7 kohm`
+- resistors `Ro 4.7 kohm` (pin 2 to GND) and `Ri 470 ohm` (pin 3 to GND)
 
-This is strong evidence that the TSW part is an optical sensing element with a simple
-internal network rather than a complete MCU-ready conditioning board.
+Correction: an earlier version of this note read the resistors as an internal network
+and pin 3 as `GND`. On the rendered schematic, both resistors sit outside the "Turbidity
+Sensor" boundary, and the TST-10 datasheet shows the same circuit. The host circuit must
+supply them. Without `Ri` the emitter is unpowered; without `Ro` the output floats. With
+both fitted, the output is the voltage across `Ro`, and the datasheet curves lie within
+about `1.8-4.8 V`.
+
+This is strong evidence that the part is a bare optical sensing element (emitter plus
+phototransistor) rather than a complete MCU-ready conditioning board.
 
 ### What matters for this repo
 

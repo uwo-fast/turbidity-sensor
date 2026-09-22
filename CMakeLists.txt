@@ -7,6 +7,7 @@ include(CMakePackageConfigHelpers)
 option(BUILD_TESTS "Build the test suite" ON)
 option(BUILD_TOOLS "Build command-line tools" ON)
 option(BUILD_EXAMPLES "Build host examples" ON)
+option(TURBIDITY_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
 option(TURBIDITY_REGENERATE_CALIBRATION "Regenerate calibration artifacts from vendor data during the build" OFF)
 
 if(TURBIDITY_REGENERATE_CALIBRATION)
@@ -30,6 +31,18 @@ if(TURBIDITY_REGENERATE_CALIBRATION)
         COMMENT "Regenerating vendor-derived calibration artifacts"
         VERBATIM
     )
+endif()
+
+if(MSVC)
+    set(TURBIDITY_WARNING_FLAGS /W4)
+    if(TURBIDITY_WARNINGS_AS_ERRORS)
+        list(APPEND TURBIDITY_WARNING_FLAGS /WX)
+    endif()
+else()
+    set(TURBIDITY_WARNING_FLAGS -Wall -Wextra -Wpedantic -Wshadow -Wconversion)
+    if(TURBIDITY_WARNINGS_AS_ERRORS)
+        list(APPEND TURBIDITY_WARNING_FLAGS -Werror)
+    endif()
 endif()
 
 add_library(turbidity STATIC
@@ -56,10 +69,8 @@ if(TURBIDITY_REGENERATE_CALIBRATION)
     add_dependencies(turbidity turbidity_generate_calibration)
 endif()
 
-if(MSVC)
-    target_compile_options(turbidity PRIVATE /W4)
-else()
-    target_compile_options(turbidity PRIVATE -Wall -Wextra -Wpedantic)
+target_compile_options(turbidity PRIVATE ${TURBIDITY_WARNING_FLAGS})
+if(NOT MSVC)
     target_link_libraries(turbidity PUBLIC m)
 endif()
 
@@ -68,9 +79,7 @@ if(BUILD_TOOLS OR BUILD_TESTS)
         tools/turbidity_calibrate.c
     )
     target_link_libraries(turbidity_calibrate PRIVATE turbidity)
-    if(NOT MSVC)
-        target_compile_options(turbidity_calibrate PRIVATE -Wall -Wextra -Wpedantic)
-    endif()
+    target_compile_options(turbidity_calibrate PRIVATE ${TURBIDITY_WARNING_FLAGS})
 endif()
 
 if(BUILD_EXAMPLES OR BUILD_TESTS)
@@ -81,9 +90,7 @@ if(BUILD_EXAMPLES OR BUILD_TESTS)
         ${PROJECT_SOURCE_DIR}/examples/common
     )
     target_link_libraries(turbidity_stream PRIVATE turbidity)
-    if(NOT MSVC)
-        target_compile_options(turbidity_stream PRIVATE -Wall -Wextra -Wpedantic)
-    endif()
+    target_compile_options(turbidity_stream PRIVATE ${TURBIDITY_WARNING_FLAGS})
 endif()
 
 install(TARGETS turbidity
@@ -143,18 +150,14 @@ if(BUILD_TESTS)
         ${PROJECT_SOURCE_DIR}/src
     )
     target_link_libraries(turbidity_test_core PRIVATE turbidity)
-    if(NOT MSVC)
-        target_compile_options(turbidity_test_core PRIVATE -Wall -Wextra -Wpedantic)
-    endif()
+    target_compile_options(turbidity_test_core PRIVATE ${TURBIDITY_WARNING_FLAGS})
     add_test(NAME turbidity_core COMMAND turbidity_test_core)
 
     add_executable(turbidity_test_cli_contracts
         tests/test_cli_contracts.c
     )
     target_link_libraries(turbidity_test_cli_contracts PRIVATE turbidity)
-    if(NOT MSVC)
-        target_compile_options(turbidity_test_cli_contracts PRIVATE -Wall -Wextra -Wpedantic)
-    endif()
+    target_compile_options(turbidity_test_cli_contracts PRIVATE ${TURBIDITY_WARNING_FLAGS})
     add_test(
         NAME turbidity_cli_contracts
         COMMAND turbidity_test_cli_contracts

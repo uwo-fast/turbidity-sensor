@@ -23,16 +23,26 @@ This is an MVP built from vendor-datasheet curves that were digitized and fit of
 - `tests/`: unit, CLI-contract, and package smoke tests
 - `docs/archive/`: preserved research, planning, and datasheet material
 
-## Build
+## Development
+
+Tasks run through [`just`](https://github.com/casey/just) (`just --list` shows them all):
+
+```sh
+just build    # configure and compile (warnings are errors)
+just test     # build and run the test suite
+just check    # clang-format check + clang-tidy (CI-equivalent)
+just fmt      # format C/C++ sources in place
+just regen    # regenerate calibration artifacts
+just arduino  # compile the Arduino example with PlatformIO
+```
+
+`fmt`, `check` and CI use clang-format and clang-tidy 18.1.8.
+
+Without `just`, the equivalent CMake commands are:
 
 ```sh
 cmake -S . -B build -DBUILD_TESTS=ON -DBUILD_TOOLS=ON -DBUILD_EXAMPLES=ON
 cmake --build build
-```
-
-## Test
-
-```sh
 ctest --test-dir build --output-on-failure
 ```
 
@@ -56,21 +66,23 @@ Solve a unit-specific profile from exactly three known `NTU,mV` reference pairs:
 ```sh
 build/turbidity_calibrate \
   --sensor tsw10 \
-  --point 0,4200 \
-  --point 500,3350 \
-  --point 1500,1800
+  --point 0,4195 \
+  --point 500,3452 \
+  --point 1500,2497
 ```
 
 Example JSON output:
 
 ```json
-{"sensor":"tsw10","trim_t":0.500000000,"gain":1.000000000,"offset_mv":0.000000000,"rmse_mv":0.000000000,"max_abs_error_mv":0.000000000}
+{"sensor":"tsw10","trim_t":0.478192628,"gain":1.003159094,"offset_mv":12.943040793,"rmse_mv":0.000000000,"max_abs_error_mv":0.000000000}
 ```
+
+The solve has three free parameters for three points, so `rmse_mv` and `max_abs_error_mv` are zero whenever `trim_t` lands inside `[0, 1]`. They only become non-zero when `trim_t` is pinned at a bound, so they do not measure calibration quality.
 
 Replay a CSV stream through the model:
 
 ```sh
-printf 'timestamp_ms,raw_mv\n0,4200\n100,3350\n200,1800\n' | \
+printf 'timestamp_ms,raw_mv\n0,4195\n100,3452\n200,2497\n' | \
   build/turbidity_stream --sensor tsw10 --trim 0.5 --gain 1.0 --offset-mv 0 --filter-window 8
 ```
 
@@ -98,7 +110,17 @@ cmake -S . -B build -DTURBIDITY_REGENERATE_CALIBRATION=ON
 
 ## Arduino Example
 
-The Arduino example lives under `examples/arduino/` and uses the same stateless library API. It assumes a conditioned analog voltage in millivolts, not direct photodiode front-end circuitry.
+The Arduino example lives under `examples/arduino/` and uses the same stateless library API. It reads the sensor output as an analog voltage in millivolts.
+
+The `TST-10` and `TSW-10` need two external resistors, per the datasheet test circuit:
+
+| Sensor pin | Function | Connect to |
+| --- | --- | --- |
+| 1 | VCC (emitter anode, phototransistor collector) | +5 V |
+| 2 | Output (phototransistor emitter) | ADC input, and `Ro` 4.7 kΩ to GND |
+| 3 | Emitter diode cathode | `Ri` 470 Ω to GND |
+
+Power the sensor from the same 5 V rail the ADC uses as its reference. The emitter current, and so the output, rises with the supply, so a shared reference cancels part of the supply variation. It is not fully ratiometric, because the diode forward voltage does not scale with the supply.
 
 ## License
 

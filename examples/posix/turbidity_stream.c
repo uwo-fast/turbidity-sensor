@@ -80,16 +80,18 @@ static turbidity_status parse_row(
     char *end = NULL;
     unsigned long timestamp_ms;
     double raw_mv;
+    size_t line_length;
 
     if ((line == NULL) || (out_timestamp_ms == NULL) || (out_raw_mv == NULL)) {
         return TURBIDITY_STATUS_INVALID_ARGUMENT;
     }
-    if (strlen(line) >= sizeof(buffer)) {
+    line_length = strlen(line);
+    if (line_length >= sizeof(buffer)) {
         fprintf(stderr, "line %lu is too long\n", line_number);
         return TURBIDITY_STATUS_INVALID_ARGUMENT;
     }
 
-    strcpy(buffer, line);
+    memcpy(buffer, line, line_length + 1U);
     first = strtok(buffer, ",");
     second = strtok(NULL, ",");
     if ((first == NULL) || (second == NULL) || (strtok(NULL, ",") != NULL)) {
