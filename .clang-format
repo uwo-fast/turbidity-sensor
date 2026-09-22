@@ -1,0 +1,15 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+ColumnLimit: 0
+BreakBeforeBraces: Linux
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+IndentCaseLabels: false
+PointerAlignment: Right
+AlignAfterOpenBracket: BlockIndent
+BinPackParameters: false
+BinPackArguments: true
+SortIncludes: Never
+IncludeBlocks: Preserve
+AlignOperands: DontAlign
+ContinuationIndentWidth: 4

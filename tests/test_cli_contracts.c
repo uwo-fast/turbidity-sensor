@@ -62,16 +62,16 @@ static int parse_stream_row(
 )
 {
     return sscanf(
-        line,
-        "%u,%31[^,],%lf,%lf,%lf,%lf,%31s",
-        timestamp_ms,
-        sensor,
-        raw_mv,
-        filtered_mv,
-        equivalent_mv,
-        estimated_ntu,
-        range_status
-    ) == 7;
+               line,
+               "%u,%31[^,],%lf,%lf,%lf,%lf,%31s",
+               timestamp_ms,
+               sensor,
+               raw_mv,
+               filtered_mv,
+               equivalent_mv,
+               estimated_ntu,
+               range_status
+           ) == 7;
 }
 
 static int parse_calibration_json(
@@ -85,15 +85,15 @@ static int parse_calibration_json(
 )
 {
     return sscanf(
-        text,
-        "{\"sensor\":\"%31[^\"]\",\"trim_t\":%lf,\"gain\":%lf,\"offset_mv\":%lf,\"rmse_mv\":%lf,\"max_abs_error_mv\":%lf}",
-        sensor,
-        trim_t,
-        gain,
-        offset_mv,
-        rmse_mv,
-        max_abs_error_mv
-    ) == 6;
+               text,
+               "{\"sensor\":\"%31[^\"]\",\"trim_t\":%lf,\"gain\":%lf,\"offset_mv\":%lf,\"rmse_mv\":%lf,\"max_abs_error_mv\":%lf}",
+               sensor,
+               trim_t,
+               gain,
+               offset_mv,
+               rmse_mv,
+               max_abs_error_mv
+           ) == 6;
 }
 
 static void test_calibration_cli(const char *calibrate_executable)
