@@ -28,7 +28,7 @@ fmt-check:
 # Static analysis over the compile database, plus a Python syntax check
 lint: setup
     clang-tidy --quiet -p {{build_dir}} $(git ls-files '*.c')
-    python3 -c "import ast, sys; ast.parse(open(sys.argv[1]).read(), sys.argv[1])" tools/generate_vendor_calibration.py
+    python3 -c "import ast, sys; [ast.parse(open(f).read(), f) for f in sys.argv[1:]]" $(git ls-files '*.py')
 
 # Format-check + lint (non-mutating — CI-equivalent)
 check: fmt-check lint
@@ -41,9 +41,21 @@ test: build
 regen:
     python3 tools/generate_vendor_calibration.py
 
-# Compile the Arduino example with PlatformIO
+# Compile the Arduino example for every board in platformio.ini
 arduino:
     pio run -d examples/arduino
+
+# Flash the Arduino example to a connected board (env: uno, nano, nano_oldbootloader, uno_switched_emitter)
+upload env="uno":
+    pio run -d examples/arduino -e {{env}} -t upload
+
+# Record the board's CSV log to a file until Ctrl+C (or pass --duration SECONDS)
+capture port output *args:
+    python3 tools/capture_serial.py --port {{port}} --output {{output}} {{args}}
+
+# Summarize capture files: count, mean, std, min, max per signal column
+summarize +files:
+    python3 tools/summarize_capture.py {{files}}
 
 # Remove build artifacts
 clean:

@@ -174,4 +174,15 @@ if(BUILD_TESTS)
         NAME turbidity_package_smoke
         COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/tests/package_smoke/run_package_smoke.cmake
     )
+
+    # The capture tool uses POSIX termios, so its tests cannot run on Windows.
+    if(WIN32)
+        message(STATUS "Skipping turbidity_tools tests: tools/capture_serial.py needs POSIX termios")
+    else()
+        find_package(Python3 REQUIRED COMPONENTS Interpreter)
+        add_test(
+            NAME turbidity_tools
+            COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/tests/test_tools.py
+        )
+    endif()
 endif()

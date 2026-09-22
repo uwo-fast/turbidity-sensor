@@ -17,10 +17,11 @@ This is an MVP built from vendor-datasheet curves that were digitized and fit of
 
 - `include/`: public C API
 - `src/`: core implementation plus the generated vendor-fit header used at runtime
-- `tools/`: offline utilities, including the 3-point calibration CLI and calibration generator
+- `tools/`: offline utilities: the 3-point calibration CLI, the calibration generator, and the serial capture and summary scripts
 - `examples/`: host and Arduino examples
 - `data/calibration/`: raw vendor digitizations and generated calibration artifacts
 - `tests/`: unit, CLI-contract, and package smoke tests
+- `docs/bench/`: bench procedures
 - `docs/archive/`: preserved research, planning, and datasheet material
 
 ## Development
@@ -33,7 +34,10 @@ just test     # build and run the test suite
 just check    # clang-format check + clang-tidy (CI-equivalent)
 just fmt      # format C/C++ sources in place
 just regen    # regenerate calibration artifacts
-just arduino  # compile the Arduino example with PlatformIO
+just arduino  # compile the Arduino example for every board
+just upload   # flash the Arduino example (default env: uno)
+just capture  # record a board's serial log to CSV
+just summarize  # per-file statistics for captured logs
 ```
 
 `fmt`, `check` and CI use clang-format and clang-tidy 18.1.8.
@@ -112,7 +116,18 @@ cmake -S . -B build -DTURBIDITY_REGENERATE_CALIBRATION=ON
 
 ## Arduino Example
 
-The Arduino example lives under `examples/arduino/` and uses the same stateless library API. It reads the sensor output as an analog voltage in millivolts.
+The Arduino example lives under `examples/arduino/` and uses the same stateless library API. It builds for the Uno and Nano (`uno`, `nano`, `nano_oldbootloader`), and for an Uno with a switched emitter (`uno_switched_emitter`).
+
+Every 100 ms it logs one CSV row over serial at 115200 baud:
+
+- `adc_counts`: the mean of 16 ADC reads, the primary measurement
+- `dark_adc_counts`: the same with the emitter off (`uno_switched_emitter` only), which measures ambient light
+- `vcc_mv`: supply estimate from the ATmega328P's internal bandgap; it tracks drift within a session and is not an absolute measurement
+- `raw_mv`, `filtered_mv`, `equivalent_mv`, `estimated_ntu`, `range_status`: the vendor-curve model applied to the reading
+
+The log replays directly through `turbidity_stream`. `tools/capture_serial.py` (`just capture`) records it to a file, starting at the header and dropping a truncated last line.
+
+[`docs/bench/session-1.md`](docs/bench/session-1.md) is the first bench procedure: wiring checks, baselines, and a kaolin dilution series.
 
 The `TST-10` and `TSW-10` need two external resistors, per the datasheet test circuit:
 
