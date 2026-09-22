@@ -86,11 +86,13 @@ printf 'timestamp_ms,raw_mv\n0,4195\n100,3452\n200,2497\n' | \
   build/turbidity_stream --sensor tsw10 --trim 0.5 --gain 1.0 --offset-mv 0 --filter-window 8
 ```
 
-Input schema is strict:
+Input schema is strict, and any violation is a hard error:
 
-- the first line must be exactly `timestamp_ms,raw_mv`
-- every sample row must contain exactly two columns
-- malformed rows are treated as hard errors
+- the first line is a header naming each column; it must include `timestamp_ms` and `raw_mv`, in any order, with no empty or repeated names
+- other named columns are allowed and ignored, so the Arduino example's serial log replays as-is
+- every row has exactly as many fields as the header, with no empty fields and no surrounding whitespace
+- `timestamp_ms` is a non-negative integer up to 2^64 - 1; `raw_mv` is a finite number
+- lines end in LF or CRLF, may be at most 510 characters, and the last line may omit its newline
 
 ## Calibration Data Pipeline
 
