@@ -15,20 +15,23 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Install pinned clang tools
+        run: python3 -m pip install clang-format==18.1.8 clang-tidy==18.1.8
+
+      - name: Install just
+        uses: extractions/setup-just@v4
+
       - name: Regenerate calibration artifacts
-        run: python3 tools/generate_vendor_calibration.py
+        run: just regen
 
       - name: Verify generated artifacts are up to date
         run: git diff --exit-code -- data/calibration src/turbidity_model_data.generated.h
 
-      - name: Configure
-        run: cmake -S . -B build -DBUILD_TESTS=ON -DBUILD_TOOLS=ON -DBUILD_EXAMPLES=ON
-
-      - name: Build
-        run: cmake --build build --parallel
+      - name: Check
+        run: just check
 
       - name: Test
-        run: ctest --test-dir build --output-on-failure
+        run: just test
 
   arduino-compile:
     runs-on: ubuntu-latest
