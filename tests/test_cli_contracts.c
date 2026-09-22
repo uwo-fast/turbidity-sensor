@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 static int g_failures = 0;
@@ -279,7 +280,7 @@ static void test_stream_rejects_bad_header(const char *stream_executable)
         return;
     }
 
-    fprintf(input, "raw_mv,timestamp_ms\n1000,0\n");
+    fprintf(input, "time,value\n0,1000\n");
     fclose(input);
 
     snprintf(
@@ -296,6 +297,204 @@ static void test_stream_rejects_bad_header(const char *stream_executable)
     remove(output_path);
 }
 
+/*
+ * Runs the stream CLI on `input` (written byte-for-byte) and captures stdout.
+ * Returns the CLI's exit code, or -1 if it did not exit normally (a crash).
+ */
+static int run_stream_case(
+    const char *stream_executable,
+    const char *input,
+    char *output,
+    size_t output_size
+)
+{
+    char input_path[256];
+    char output_path[256];
+    char error_path[256];
+    char command[1024];
+    FILE *file = NULL;
+    size_t length = 0U;
+    int status;
+
+    snprintf(input_path, sizeof(input_path), "case_input_%ld.csv", (long)getpid());
+    snprintf(output_path, sizeof(output_path), "case_output_%ld.csv", (long)getpid());
+    snprintf(error_path, sizeof(error_path), "case_error_%ld.txt", (long)getpid());
+
+    output[0] = '\0';
+    file = fopen(input_path, "wb");
+    if (file == NULL) {
+        return 0;
+    }
+    fputs(input, file);
+    fclose(file);
+
+    snprintf(
+        command,
+        sizeof(command),
+        "\"%s\" --sensor tsw10 --filter-window 1 < \"%s\" > \"%s\" 2> \"%s\"",
+        stream_executable,
+        input_path,
+        output_path,
+        error_path
+    );
+    status = system(command);
+
+    file = fopen(output_path, "rb");
+    if (file != NULL) {
+        length = fread(output, 1U, output_size - 1U, file);
+        fclose(file);
+    }
+    output[length] = '\0';
+
+    remove(input_path);
+    remove(output_path);
+    remove(error_path);
+    if ((status == -1) || !WIFEXITED(status)) {
+        return -1;
+    }
+    return WEXITSTATUS(status);
+}
+
+static void expect_stream_accepts(
+    const char *stream_executable,
+    const char *input,
+    const char *expected_substring,
+    const char *message
+)
+{
+    char output[4096];
+    int exit_code = run_stream_case(stream_executable, input, output, sizeof(output));
+
+    expect_true(exit_code == 0, message);
+    expect_true(strstr(output, expected_substring) != NULL, message);
+}
+
+static void expect_stream_rejects(
+    const char *stream_executable,
+    const char *input,
+    const char *message
+)
+{
+    char output[4096];
+    int exit_code = run_stream_case(stream_executable, input, output, sizeof(output));
+    const char *first_row = strchr(output, '\n');
+
+    /* Exactly 1: a clean rejection, not a crash. */
+    expect_true(exit_code == 1, message);
+    /* Nothing after the output header: a rejected input must not emit rows. */
+    expect_true((first_row == NULL) || (first_row[1] == '\0'), message);
+}
+
+static void test_stream_input_contract(const char *stream_executable)
+{
+    char long_line[700];
+
+    expect_stream_accepts(
+        stream_executable,
+        "timestamp_ms,raw_mv\r\n0,4195\r\n100,3452\r\n",
+        "100,tsw10,3452.000,",
+        "stream CLI should accept CRLF line endings"
+    );
+    expect_stream_accepts(
+        stream_executable,
+        "timestamp_ms,raw_mv\n100,3452",
+        "100,tsw10,3452.000,",
+        "stream CLI should accept a final row without a newline"
+    );
+    expect_stream_accepts(
+        stream_executable,
+        "timestamp_ms,raw_mv\n5000000000,3452\n",
+        "5000000000,tsw10,3452.000,",
+        "stream CLI should preserve timestamps above 2^32"
+    );
+    expect_stream_accepts(
+        stream_executable,
+        "timestamp_ms,sensor,raw_mv,filtered_mv,equivalent_mv,estimated_ntu,range_status\r\n"
+        "100,tsw10,3452.000,3452.000,3452.000,500.304214,in_range\r\n",
+        "100,tsw10,3452.000,",
+        "stream CLI should read raw_mv by header name and ignore other named columns"
+    );
+    expect_stream_accepts(
+        stream_executable,
+        "raw_mv,timestamp_ms\n3452,100\n",
+        "100,tsw10,3452.000,",
+        "stream CLI should accept required columns in any order"
+    );
+
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,raw_mv\n100,,3350\n",
+        "stream CLI should reject an empty field"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,sensor,raw_mv\n100,,3452\n",
+        "stream CLI should reject an empty field in an ignored column"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,raw_mv\n100,3350,7\n",
+        "stream CLI should reject a row with more fields than the header"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,raw_mv\n100\n",
+        "stream CLI should reject a row with fewer fields than the header"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,raw_mv,note\n100,3452\n",
+        "stream CLI should reject a row missing an ignored column"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,raw_mv\n-5,3350\n",
+        "stream CLI should reject a negative timestamp"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,raw_mv\n99999999999999999999999,3350\n",
+        "stream CLI should reject a timestamp that overflows"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,raw_mv\n100, 3350\n",
+        "stream CLI should reject whitespace inside a field"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,raw_mv\n100,nan\n",
+        "stream CLI should reject a non-finite raw_mv"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,raw_mv\n\n",
+        "stream CLI should reject a blank row"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,value\n100,3350\n",
+        "stream CLI should reject a header without raw_mv"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,raw_mv,raw_mv\n100,3350,3350\n",
+        "stream CLI should reject a duplicate header column"
+    );
+    expect_stream_rejects(
+        stream_executable,
+        "timestamp_ms,,raw_mv\n100,x,3350\n",
+        "stream CLI should reject an empty header column"
+    );
+
+    snprintf(long_line, sizeof(long_line), "timestamp_ms,raw_mv\n1,%0600d\n", 5);
+    expect_stream_rejects(
+        stream_executable,
+        long_line,
+        "stream CLI should reject an over-long row without emitting a partial row"
+    );
+}
+
 int main(int argc, char **argv)
 {
     if (argc != 3) {
@@ -306,6 +505,7 @@ int main(int argc, char **argv)
     test_calibration_cli(argv[2]);
     test_stream_cli(argv[1]);
     test_stream_rejects_bad_header(argv[1]);
+    test_stream_input_contract(argv[1]);
 
     if (g_failures != 0) {
         fprintf(stderr, "Total failures: %d\n", g_failures);
