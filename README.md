@@ -21,6 +21,7 @@ This is an MVP built from vendor-datasheet curves that were digitized and fit of
 - `examples/`: host and Arduino examples
 - `data/calibration/`: raw vendor digitizations and generated calibration artifacts
 - `tests/`: unit, CLI-contract, and package smoke tests
+- `docs/hardware.md`: sensor interface: the SEN0189 adapter and bare wiring
 - `docs/bench/`: bench procedures
 - `docs/archive/`: preserved research, planning, and datasheet material
 
@@ -129,15 +130,7 @@ The log replays directly through `turbidity_stream`. `tools/capture_serial.py` (
 
 [`docs/bench/session-1.md`](docs/bench/session-1.md) is the first bench procedure: wiring checks, baselines, and a kaolin dilution series.
 
-The `TST-10` and `TSW-10` need two external resistors, per the datasheet test circuit:
-
-| Sensor pin | Function | Connect to |
-| --- | --- | --- |
-| 1 | VCC (emitter anode, phototransistor collector) | +5 V |
-| 2 | Output (phototransistor emitter) | ADC input, and `Ro` 4.7 kΩ to GND |
-| 3 | Emitter diode cathode | `Ri` 470 Ω to GND |
-
-Power the sensor from the same 5 V rail the ADC uses as its reference. The emitter current, and so the output, rises with the supply, so a shared reference cancels part of the supply variation. It is not fully ratiometric, because the diode forward voltage does not scale with the supply.
+The probe needs a load resistor and an emitter resistor. The default setup gets them from a DFRobot SEN0189 adapter with its switch at `A`: the adapter is the datasheet test circuit plus a unity-gain buffer, so its analog output is the probe voltage. Connect its signal to `A0`. [`docs/hardware.md`](docs/hardware.md) covers the adapter circuit, a check for boards from other sources, and bare wiring without an adapter.
 
 ## License
 
