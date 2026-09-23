@@ -2,8 +2,9 @@
 
 ## Goal
 
-Show that a `TSW-10` or `TST-10`, wired to a 5 V AVR board, produces a stable signal that
-decreases monotonically and repeatably as kaolin concentration rises.
+Show that a `TSW-10` or `TST-10`, read through a DFRobot SEN0189 adapter by a 5 V AVR
+board, produces a stable signal that decreases monotonically and repeatably as kaolin
+concentration rises.
 
 This session does **not** establish NTU. There is no formazin standard, and the NTU
 produced by a kaolin suspension depends on the kaolin batch, so concentrations are
@@ -15,8 +16,9 @@ suits a series that starts at clear water. Repeat with the `TST-10` if time allo
 
 ## Equipment
 
-- `TSW-10` and/or `TST-10`, an Arduino Uno or Nano, and a USB cable
-- 4.7 kΩ resistor (`Ro`) and 470 Ω resistor (`Ri`), breadboard, jumper wires
+- `TSW-10` and/or `TST-10` probe with its cable
+- DFRobot SEN0189 adapter board and a Gravity 3-pin cable (or three jumper wires)
+- Arduino Uno or Nano and a USB cable
 - Multimeter
 - Clamp or stand that holds the sensor at a fixed depth, with the optical gap submerged
   and the connector end dry
@@ -33,39 +35,45 @@ which is out of scope for this session.
 
 - Kaolin is a fine powder. Weigh and transfer it gently to avoid raising dust, and wear
   a dust mask if one is available. Follow your lab's SDS for kaolin and Tween 20.
-- Keep liquids away from the board and the breadboard. Only the sensor's optical end
-  goes in the water; its connector is not rated for immersion.
+- Keep liquids away from the adapter and the Arduino. Neither is waterproof. Only the
+  probe's optical end goes in the water; its connector is not rated for immersion.
 - Power everything from USB only.
 
-## 1. Wire the sensor
+## 1. Connect the hardware
 
-Use the datasheet test circuit in the README (Arduino Example section):
+See [`docs/hardware.md`](../hardware.md) for what the adapter does to the signal.
 
-| Sensor pin | Connect to |
-| --- | --- |
-| 1 | 5 V |
-| 2 | A0, and 4.7 kΩ to GND |
-| 3 | 470 Ω to GND |
+1. Plug the probe cable into the adapter's probe connector. Do not open the probe or
+   adjust the `RV` trimmer inside it (see `docs/hardware.md`).
+2. Set the adapter's switch to **`A`** (analog). Leave the potentiometer alone: it only
+   sets the digital-mode threshold and does nothing in `A` mode.
+3. Connect the adapter's Gravity output to the Arduino: signal to `A0`, `VCC` to `5V`,
+   `GND` to `GND`. On a DFRobot Gravity cable the wires are blue, red and black.
 
-**Optional ambient-light check:** wire the 470 Ω resistor to **D7** instead of GND and use
-the `uno_switched_emitter` build. The firmware then turns the emitter off briefly for
-every sample and logs `dark_adc_counts`, which is the reading from ambient light
-alone. This build targets the Uno. For a Nano, copy the env with `board = nanoatmega328new`.
+Without an adapter, use the bare wiring in `docs/hardware.md` instead. That path also
+allows the `uno_switched_emitter` build, which logs `dark_adc_counts` with the emitter
+off to measure ambient light. The adapter cannot switch its emitter.
 
 ## 2. Electrical checks (before any water)
 
-With the board powered over USB and the sensor dry:
+With the Arduino powered over USB, the probe dry and the switch at `A`:
 
-1. Measure the 5 V rail at the board. Record it; it is the ADC reference.
-2. Measure the voltage across `Ri` (pin 3 to GND). Emitter current is that voltage
-   divided by 470 Ω; it must be under the 30 mA rating. Record both.
-3. Measure pin 2 to GND with the gap open, then with an opaque card blocking the gap.
-   The voltage must drop clearly when blocked. If it does not, stop and recheck the wiring.
+1. Measure the 5 V rail at the Arduino. Record it; it is the ADC reference.
+2. Run the adapter check in `docs/hardware.md`: the probe's middle pin and the adapter's
+   signal output should agree within a few tens of millivolts. Record both, and label the
+   adapter if it came from a source other than DFRobot.
+3. Measure the adapter's signal output with the gap open, then with an opaque card
+   blocking it. The voltage must drop clearly when blocked. If it does not, stop and check
+   the connections and the switch position.
+
+The adapter sets the emitter current with its own 500 Ω resistor: at most 10 mA
+(5 V / 500 Ω), well under the probe's 30 mA rating, so there is no current check on this
+path.
 
 ## 3. Flash and capture
 
 ```sh
-just upload uno        # or: nano, nano_oldbootloader, uno_switched_emitter
+just upload uno        # or: nano, nano_oldbootloader
 just capture /dev/ttyACM0 data/bench/<date>/01_dry_open.csv --duration 60
 ```
 
@@ -134,8 +142,8 @@ before each dilution.
 
 Session 1 passes when all of the following hold:
 
-1. **Electrical:** the emitter current is under 30 mA, and pin 2 responds to blocking the
-   gap.
+1. **Electrical:** the adapter check passes (a unity-gain buffer), and the output drops
+   when the gap is blocked.
 2. **Stability:** the standard deviation of `adc_counts` in `05_blank_stability.csv` is
    recorded. Call it σ; 3σ is the resolution floor for this setup.
 3. **Monotonic trend:** in every repeat, mean `adc_counts` falls at each step up the
@@ -146,10 +154,11 @@ Session 1 passes when all of the following hold:
 Also record the following. They are findings, not pass or fail:
 
 - Whether the blank reading falls in the datasheet's 0 NTU envelope: 3.68–4.73 V for the
-  `TSW-10`, 3.78–4.55 V for the `TST-10`. At a 5.000 V reference that is about 754–969
-  and 775–932 counts. Outside it means something to explain (supply, wiring, or the part),
-  not a failed session.
-- The ambient-light difference (`03` vs `04`, or `dark_adc_counts`).
+  `TSW-10` and 3.78–4.55 V for the `TST-10`. At a 5.000 V reference that is about 754–969 and 775–932 counts. The adapter's 500 Ω
+  emitter resistor may put readings slightly lower. DFRobot's own figure for clear water
+  is 4.1 ± 0.3 V. Outside these means something to explain (supply, adapter, or the
+  part), not a failed session.
+- The ambient-light difference (`03` vs `04`).
 - The settling drift at 200 mg/L.
 
 ## 7. Analysis
@@ -175,12 +184,14 @@ Copy into `data/bench/<date>/notes.md`:
 # Bench session 1: <date>
 
 - Operator:
-- Sensor: TSW-10 / TST-10, marking or ID:
+- Sensor: TSW-10 / TST-10, source (DFRobot / DigiKey / Mouser), marking or ID:
+- Probe housing opened or RV adjusted? (should be no):
+- Adapter (source, revision, marking) and switch position:
+- Adapter check (probe middle pin / adapter output, V):
 - Board and firmware env:
 - Commit (`git rev-parse --short HEAD`):
 - 5 V rail (multimeter):
-- Voltage across Ri / emitter current:
-- Pin 2, gap open / blocked:
+- Adapter output, gap open / blocked (V):
 - Room temperature:
 - Kaolin (product, lot):
 - Tween 20 dose in diluent:
