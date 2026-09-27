@@ -22,6 +22,7 @@ This is an MVP built from vendor-datasheet curves that were digitized and fit of
 - `data/calibration/`: raw vendor digitizations and generated calibration artifacts
 - `tests/`: unit, CLI-contract, and package smoke tests
 - `docs/hardware.md`: sensor interface: the SEN0189 adapter and bare wiring
+- `hardware/case/`: printable flow-through case for the bare probe board and a clear tube (OpenSCAD)
 - `docs/bench/`: bench procedures
 - `docs/archive/`: preserved research, planning, and datasheet material
 

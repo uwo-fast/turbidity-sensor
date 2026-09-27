@@ -41,6 +41,11 @@ test: build
 regen:
     python3 tools/generate_vendor_calibration.py
 
+# Export the printed case STLs from the OpenSCAD source
+case:
+    openscad --export-format binstl -D 'part="base"' -D 'orient="print"' -o hardware/case/base.stl hardware/case/turbidity_case.scad
+    openscad --export-format binstl -D 'part="lid"' -D 'orient="print"' -o hardware/case/lid.stl hardware/case/turbidity_case.scad
+
 # Compile the Arduino example for every board in platformio.ini
 arduino:
     pio run -d examples/arduino
