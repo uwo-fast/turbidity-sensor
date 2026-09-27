@@ -17,13 +17,12 @@ the geometry is not.
 ## Parts
 
 - **Clear tube:** 5/16 in (7.94 mm) outside diameter. Acrylic, polycarbonate, or glass.
-  The bore is `tube_od + tube_fit` (0.2 mm over by default) for a snug slide fit. For
-  another tube, set `tube_od` to its measured diameter. The gap between the heads is
-  about 8.3 mm, so the tube cannot be much larger.
+  The bore is `tube_od + tube_fit` (0.2 mm over by default). That fit is snug enough
+  for the tube alone to hold the base and lid together. Loosen it and you will need tape
+  or a zip tie as well. For another tube, set `tube_od` to its measured diameter. The
+  gap between the heads is about 8.3 mm, so the tube cannot be much larger.
 - **Probe board:** the bare board from inside the stock housing, with its bracket, heads,
   and right-angle connector.
-- **Tape or a zip tie** to hold the lid on. The tube locks the parts in place
-  sideways, and the keys on the lid locate it on the base.
 
 ## Printing
 
@@ -38,9 +37,11 @@ the geometry is not.
 1. Open the stock housing. Before you touch anything, photograph both sides of the
    board and mark the position of the `RV` trimmer (see [`docs/hardware.md`](../../docs/hardware.md#probe-trimmer-rv)).
 2. Drop the board into the base, component side up. The pocket fits it only one way.
-3. Put the lid on, keys down, with its window over the connector.
-4. Push the tube through the lid, between the heads, and out through the base.
-5. Tape or zip-tie the case closed, and plug the probe cable in through the window.
+3. Put the lid on, keys down, with its window over the connector. The keys locate it
+   on the base.
+4. Push the tube through the lid, between the heads, and out through the base. The tube
+   holds the case closed.
+5. Plug the probe cable in through the window.
 
 The base has a hole under the `RV` trimmer. Leave the trimmer alone until it is
 characterized. To remove the hole, set `access_hole = false`.
@@ -53,10 +54,15 @@ readings (see the `uno_switched_emitter` build) before trusting low-turbidity nu
 
 ## Status
 
+- Printed at the default parameters and fitted to a real board. The board, keys and tube
+  all fit, and the tube holds the parts together without tape or a zip tie.
+- Print settings for that fit: Prusa MK3, PETG, 3 perimeters, 30% gyroid infill,
+  0.07 mm layers with adaptive variable layer height (quality/speed slider at 0.5,
+  smoothed with radius 5 and "keep min"). The fit clearances (`clr`, `tube_fit`,
+  `key_clr`) are proven only for this setup. On another printer or material, print the
+  base first and test the tube and board in it.
 - The board envelope in the source comes from a CAD model of the board, not from
-  calipers. Measure a board before relying on a fit. The heads' inner faces
-  (`head_x0`) and the PCB outline (`pcb_*`) matter most.
-- The fit was checked in CAD against that board model. Both parts clear it by at least
-  0.1 mm. The lid keys clear their grooves by at least 0.1 mm. A 5/16 in tube passes both
-  bores and clears the board.
-- It has not been printed or tested wet.
+  calipers. It matched the board used for the test print. If yours differs, measure the
+  heads' inner faces (`head_x0`) and the PCB outline (`pcb_*`) and adjust the Board
+  envelope parameters.
+- Not yet tested wet.
