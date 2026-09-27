@@ -19,7 +19,7 @@
 
 // which part(s) to render
 part = "assembly"; // [assembly, base, lid]
-// print: each part flat side down at z = 0
+// print: lay base or lid flat side down at z = 0 (ignored for the assembly)
 orient = "assembly"; // [assembly, print]
 
 /* [Fit] */
@@ -51,8 +51,6 @@ tube_y = 11.4;
 access_hole = true;
 
 /* [Alignment keys] */
-// key centreline, mirrored in x
-key_x = 12.42;
 // key start (y)
 key_y0 = 2.5;
 // key end (y)
@@ -128,23 +126,73 @@ trim_x = 0.4;
 // RV trimmer centre, underside (y)
 trim_y = -2.4;
 // access hole width (x)
-trim_w = 4.0;
+access_w = 4.0;
 // access hole length (y)
-trim_l = 5.0;
+access_l = 5.0;
 
 /* [Hidden] */
 eps = 0.01;
+// thinnest wall the asserts below accept
+min_wall = 0.8;
+
 bot_z = -(under_d + clr + floor_t);
 top_z = conn_top + clr + roof_t;
 bore_d = tube_od + tube_fit;
+// key centreline, halfway between the head pocket and the outer wall
+key_x = (case_w / 2 + head_x1 + clr) / 2;
+// widest pocket half-width and pocket y extents
+pocket_hw = max(pcb_hw, bracket_hw0, head_x1, conn_hw) + clr;
+pocket_y0 = min(pcb_y0, conn_y0) - clr;
+pocket_y1 = pcb_y1 + clr;
+
+assert(tube_od < 2 * head_x0, "tube_od: the tube must fit between the heads (2 * head_x0)");
+assert(min(floor_t, roof_t) >= min_wall, "floor_t, roof_t: thinner than min_wall");
+assert(case_w / 2 - pocket_hw >= min_wall, "case_w: the side walls are thinner than min_wall");
+assert(
+  pocket_y0 + case_l / 2 >= min_wall && case_l / 2 - pocket_y1 >= min_wall,
+  "case_l: the end walls are thinner than min_wall"
+);
+assert(
+  tube_y + bore_d / 2 + lead_in + min_wall <= case_l / 2,
+  "tube_y, tube_od: the tube bore breaks through the end wall"
+);
+assert(lead_in < min(split_z - bot_z, top_z - split_z), "lead_in: deeper than a part is thick");
+assert(
+  key_x - key_w / 2 - key_clr - (head_x1 + clr) >= min_wall
+  && case_w / 2 - (key_x + key_w / 2 + key_clr) >= min_wall,
+  "key_w, key_clr: the key groove walls are thinner than min_wall"
+);
+assert(
+  key_y0 < key_y1 && key_y0 - key_clr - (pcb_neck_y + clr) >= min_wall
+  && case_l / 2 - (key_y1 + key_clr) >= min_wall,
+  "key_y0, key_y1: the keys must run along the arms, clear of the PCB body and the end wall"
+);
+assert(
+  split_z - key_h - key_clr - bot_z >= min_wall,
+  "key_h: the key groove breaks through the floor"
+);
 
 module mirror_x() {
   children();
   mirror([1, 0, 0]) children();
 }
 
-module box(x0, x1, y0, y1, z0, z1) {
-  translate([x0, y0, z0]) cube([x1 - x0, y1 - y0, z1 - z0]);
+// Cuboid between two corners.
+module box(p0, p1) {
+  translate(p0) cube(p1 - p0);
+}
+
+// The case outline, from z0 to z1.
+module slab(z0, z1) {
+  box([-case_w / 2, -case_l / 2, z0], [case_w / 2, case_l / 2, z1]);
+}
+
+// Lay a part flat for printing when orient = "print": flip it if asked, then lift it by lift.
+module pose(lift, flip = false) {
+  if (orient == "print")
+    translate([0, 0, lift]) rotate([flip ? 180 : 0, 0, 0]) children();
+  else
+    children();
 }
 
 module pcb_outline() {
@@ -190,43 +238,47 @@ module board(c = 0) {
   // PCB
   translate([0, 0, -c]) linear_extrude(pcb_t + 2 * c) offset(delta=c) pcb_outline();
   // underside relief
-  box(-under_hw - c, under_hw + c, under_y0 - c, under_y1 + c, -under_d - c, eps);
-  mirror_x() box(under_arm_x0 - c, under_hw + c, under_arm_y0 - c, pcb_y1 + c, -under_d - c, eps);
-  // bracket, heads, connector
-  // (both overhang the PCB edge, so they get clearance underneath too)
-  translate([0, 0, pcb_t - c - eps]) linear_extrude(bracket_top - pcb_t + 2 * c + eps) offset(delta=c) bracket_outline();
-  mirror_x() box(head_x0 - c, head_x1 + c, flare_y1 - c, pcb_y1 + c, pcb_t, head_top + c);
-  box(-conn_hw - c, conn_hw + c, conn_y0 - c, conn_y1 + c, pcb_t - c - eps, conn_top + c);
+  box([-under_hw - c, under_y0 - c, -under_d - c], [under_hw + c, under_y1 + c, eps]);
+  mirror_x()
+    box([under_arm_x0 - c, under_arm_y0 - c, -under_d - c], [under_hw + c, pcb_y1 + c, eps]);
+  // bracket and heads; the bracket and the connector overhang the PCB edge,
+  // so they get clearance underneath too
+  translate([0, 0, pcb_t - c - eps])
+    linear_extrude(bracket_top - pcb_t + 2 * c + eps) offset(delta=c) bracket_outline();
+  mirror_x() box([head_x0 - c, flare_y1 - c, pcb_t], [head_x1 + c, pcb_y1 + c, head_top + c]);
+  // connector
+  box([-conn_hw - c, conn_y0 - c, pcb_t - c - eps], [conn_hw + c, conn_y1 + c, conn_top + c]);
 }
 
 module tube_bore() {
-  translate([0, tube_y, bot_z - 1]) cylinder(d=bore_d, h=top_z - bot_z + 2, $fn=facets);
+  $fn = facets;
+  translate([0, tube_y, bot_z - 1]) cylinder(d=bore_d, h=top_z - bot_z + 2);
   translate([0, tube_y, bot_z - eps])
-    cylinder(d1=bore_d + 2 * lead_in, d2=bore_d, h=lead_in + eps, $fn=facets);
+    cylinder(d1=bore_d + 2 * lead_in, d2=bore_d, h=lead_in + eps);
   translate([0, tube_y, top_z - lead_in])
-    cylinder(d1=bore_d, d2=bore_d + 2 * lead_in, h=lead_in + eps, $fn=facets);
+    cylinder(d1=bore_d, d2=bore_d + 2 * lead_in, h=lead_in + eps);
 }
 
-module keys(grow = 0, extra_h = 0) {
+// The lid's alignment keys, grown by c on every side but the top. c = key_clr cuts the grooves.
+module keys(c = 0) {
   mirror_x() box(
-      key_x - key_w / 2 - grow, key_x + key_w / 2 + grow,
-      key_y0 - grow, key_y1 + grow,
-      split_z - key_h - extra_h, split_z + eps
+      [key_x - key_w / 2 - c, key_y0 - c, split_z - key_h - c],
+      [key_x + key_w / 2 + c, key_y1 + c, split_z + eps]
     );
 }
 
 module base() {
   difference() {
-    box(-case_w / 2, case_w / 2, -case_l / 2, case_l / 2, bot_z, split_z);
+    slab(bot_z, split_z);
     board(clr);
     // open the PCB pocket to the parting plane so the board drops in
     linear_extrude(split_z + 1) offset(delta=clr) pcb_outline();
     tube_bore();
-    keys(grow=key_clr, extra_h=key_clr);
+    keys(key_clr);
     if (access_hole)
       box(
-        trim_x - trim_w / 2, trim_x + trim_w / 2, trim_y - trim_l / 2, trim_y + trim_l / 2,
-        bot_z - 1, 0
+        [trim_x - access_w / 2, trim_y - access_l / 2, bot_z - 1],
+        [trim_x + access_w / 2, trim_y + access_l / 2, 0]
       );
   }
 }
@@ -234,12 +286,12 @@ module base() {
 module lid() {
   difference() {
     union() {
-      box(-case_w / 2, case_w / 2, -case_l / 2, case_l / 2, split_z, top_z);
+      slab(split_z, top_z);
       keys();
     }
     board(clr);
     // connector window: the plug enters through the -y wall
-    box(-conn_hw - clr, conn_hw + clr, -case_l / 2 - 1, conn_y1, split_z - 1, conn_top + clr);
+    box([-conn_hw - clr, -case_l / 2 - 1, split_z - 1], [conn_hw + clr, conn_y1, conn_top + clr]);
     tube_bore();
   }
 }
@@ -249,15 +301,9 @@ module tube() {
 }
 
 if (part == "base") {
-  if (orient == "print")
-    translate([0, 0, -bot_z]) base();
-  else
-    base();
+  pose(-bot_z) base();
 } else if (part == "lid") {
-  if (orient == "print")
-    translate([0, 0, top_z]) rotate([180, 0, 0]) lid();
-  else
-    lid();
+  pose(top_z, flip=true) lid();
 } else {
   color("orange") base();
   color("gray", 0.5) lid();
