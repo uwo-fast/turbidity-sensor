@@ -45,3 +45,8 @@ venv/
 # Editor and temporary files
 *.swp
 *~
+
+# temporary files
+*.tmp
+*.temp
+*.bak
