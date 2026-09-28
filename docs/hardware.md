@@ -3,12 +3,33 @@
 ## Sensing chain
 
 ```text
-TSW-10 / TST-10 probe  ->  interface (adapter board or bare resistors)  ->  5 V AVR ADC (A0)
+TSW-10 / TST-10 probe  ->  interface (adapter board or bare resistors)  ->  5 V AVR ADC (A0-A3)
 ```
 
 The probe is an infrared emitter and phototransistor facing each other across a water gap.
 It needs a load resistor on its output and a current-limiting resistor on its emitter.
-Those come either from an adapter board or from two resistors on a breadboard.
+Those come either from an adapter board or from two resistors on a breadboard. The
+`arduino` example reads one head on `A0`; the `arduino-multichannel` logger reads up to
+four on `A0`–`A3`.
+
+## Setups
+
+The same probe board can see its sample in three ways. All of them use the same
+electronics and firmware.
+
+| Setup | Housing | Sample | Vendor curves apply |
+| --- | --- | --- | --- |
+| Stock `TSW-10` | Amphenol housing, made to mount in a washer's water path | Water flows past the head | Yes |
+| Stock `TST-10` | Amphenol housing, made to sit submerged in a tank | The head is immersed | Yes |
+| Tube | Housing removed; bare board in the printed case ([`hardware/case/`](../hardware/case/README.md)) | Flows through a clear tube in the optical slot | No |
+
+The stock housings are the supported default: most users will not open a probe. The tube
+setup trades the housing's optical window for two tube walls and a 6.5 mm water column
+(with 5/16 x 1/4 in tubing), so it needs its own calibration. It also fits into other
+builds: the case is a plain box that other OpenSCAD projects can `include`.
+
+Whatever the setup, per-head dark and clear-water references (see
+[`docs/bench/session-1.md`](bench/session-1.md)) make heads comparable with each other.
 
 ## Probe trimmer (RV)
 

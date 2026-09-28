@@ -2,114 +2,132 @@
 
 ## Goal
 
-Show that a `TSW-10` or `TST-10`, read through a DFRobot SEN0189 adapter by a 5 V AVR
-board, produces a stable signal that decreases monotonically and repeatably as kaolin
-concentration rises.
+Show that turbidity heads, read through DFRobot SEN0189 adapters by a 5 V AVR board,
+give stable signals that fall monotonically and repeatably as kaolin concentration rises.
+Then check whether several heads agree once each is normalized against its own dark and
+clear-water readings.
 
-This session does **not** establish NTU. There is no formazin standard, and the NTU
-produced by a kaolin suspension depends on the kaolin batch, so concentrations are
-recorded in mg/L of kaolin. The vendor-curve NTU the firmware prints is not evidence of
-anything yet. The raw ADC counts are the measurement.
+This session does **not** establish NTU. There is no formazin standard, and the NTU of a
+kaolin suspension depends on the kaolin batch, so concentrations are recorded in mg/L of
+kaolin. The ADC counts, and the transmittance computed from them, are the measurements.
 
-Run the `TSW-10` first: its vendor test range (0–1000 NTU) is the lower of the two, which
-suits a series that starts at clear water. Repeat with the `TST-10` if time allows.
+## Choose a setup
+
+Both setups use the same adapters, firmware and analysis. They differ in how the sample
+reaches the beam and how the references are taken. Run one setup per session.
+
+| Setup | Head | Sample |
+| --- | --- | --- |
+| **Tube** | Bare probe board in the printed case ([`hardware/case/`](../../hardware/case/README.md)) | Flows through a clear 5/16 x 1/4 in tube in the optical slot |
+| **Stock** | Unmodified `TSW-10` or `TST-10` in its own housing | The head is immersed in a container |
+
+Most users will run the stock housings, so both are supported equally. This lab starts with
+the tube setup. The vendor curves and the datasheet envelope apply only to the stock
+setup: the tube's optical path is different.
+
+**Heads:** up to four at once, on `A0`–`A3`, with the `arduino-multichannel` logger. One
+head with the single-channel `arduino` example also works; its log has one `adc_counts`
+column instead of `adc_counts_a0`…`a3`.
 
 ## Equipment
 
-- `TSW-10` and/or `TST-10` probe with its cable
-- DFRobot SEN0189 adapter board and a Gravity 3-pin cable (or three jumper wires)
-- Arduino Uno or Nano and a USB cable
+- Probes (with their cables) and one SEN0189 adapter per head
+- Arduino Nano (or Uno) and a USB cable; a breadboard to share 5 V and GND among adapters
 - Multimeter
-- Clamp or stand that holds the sensor at a fixed depth, with the optical gap submerged
-  and the connector end dry
-- One beaker that fits the sensor (use the same beaker throughout), stirring rod,
-  thermometer
-- Opaque cover for the beaker and sensor (a box or aluminium foil)
+- An opaque card (stock) or an opaque 5/16 in rod, such as a dowel wrapped in black tape (tube)
+- **Tube setup:** printed cases, tube, opaque sleeving or tape for the tube outside the
+  cases, a stand that holds the cases with the tube vertical, and a way to move sample
+  through the tube: a peristaltic pump recirculating from a stirred beaker (preferred), or
+  a large syringe
+- **Stock setup:** a clamp per head, and one container that holds every head at the same
+  depth with its optical gap submerged and its connector end dry
+- Opaque cover (a box or aluminium foil), stirring rod, thermometer
 - Kaolin, Tween 20, DI water, a balance, a graduated cylinder or pipettes
 
-Use only a **5 V** board. The sensor output reaches about 4.8 V, which exceeds the ADC
-input range of 3.3 V boards such as ESP32 or RP2040. Those need a voltage divider,
-which is out of scope for this session.
+Use only a **5 V** board. The output reaches about 4.8 V, beyond the ADC range of 3.3 V
+boards such as ESP32 or RP2040.
 
 ## Safety
 
 - Kaolin is a fine powder. Weigh and transfer it gently to avoid raising dust, and wear
   a dust mask if one is available. Follow your lab's SDS for kaolin and Tween 20.
-- Keep liquids away from the adapter and the Arduino. Neither is waterproof. Only the
-  probe's optical end goes in the water; its connector is not rated for immersion.
+- Keep liquids away from the adapters, the breadboard and the Arduino. None is
+  waterproof. Stock setup: only the probe's optical end goes in the water; its connector
+  is not rated for immersion. Tube setup: check the tube joints for leaks before running
+  kaolin.
 - Power everything from USB only.
 
 ## 1. Connect the hardware
 
 See [`docs/hardware.md`](../hardware.md) for what the adapter does to the signal.
 
-1. Plug the probe cable into the adapter's probe connector. Do not open the probe or
-   adjust the `RV` trimmer inside it (see `docs/hardware.md`).
-2. Set the adapter's switch to **`A`** (analog). Leave the potentiometer alone: it only
-   sets the digital-mode threshold and does nothing in `A` mode.
-3. Connect the adapter's Gravity output to the Arduino: signal to `A0`, `VCC` to `5V`,
-   `GND` to `GND`. On a DFRobot Gravity cable the wires are blue, red and black.
+1. Plug each probe cable into its adapter. Do not adjust the `RV` trimmer on any probe
+   (see `docs/hardware.md`).
+2. Set every adapter's switch to **`A`**. Leave its potentiometer alone; it does nothing
+   in `A` mode.
+3. Connect every adapter's `VCC` and `GND` to the Nano's `5V` and `GND`, and each
+   adapter's signal to its own input, `A0` to `A3`. Record which head is on which input.
 
-Without an adapter, use the bare wiring in `docs/hardware.md` instead. That path also
-allows the `uno_switched_emitter` build, which logs `dark_adc_counts` with the emitter
-off to measure ambient light. The adapter cannot switch its emitter.
+Four adapters draw well under 100 mA together (each emitter is capped at 10 mA by the
+adapter's 500 Ω resistor), which USB supplies.
 
 ## 2. Electrical checks (before any water)
 
-With the Arduino powered over USB, the probe dry and the switch at `A`:
+With the Nano powered over USB and every head dry:
 
-1. Measure the 5 V rail at the Arduino. Record it; it is the ADC reference.
-2. Run the adapter check in `docs/hardware.md`: the probe's middle pin and the adapter's
-   signal output should agree within a few tens of millivolts. Record both, and label the
-   adapter if it came from a source other than DFRobot.
-3. Measure the adapter's signal output with the gap open, then with an opaque card
-   blocking it. The voltage must drop clearly when blocked. If it does not, stop and check
-   the connections and the switch position.
-
-The adapter sets the emitter current with its own 500 Ω resistor: at most 10 mA
-(5 V / 500 Ω), well under the probe's 30 mA rating, so there is no current check on this
-path.
+1. Measure the 5 V rail at the Nano. Record it; it is the ADC reference.
+2. For each adapter, run the adapter check in `docs/hardware.md`: the probe's middle pin
+   and the adapter's signal output agree within a few tens of millivolts. Label and set
+   aside any adapter that fails.
+3. For each head, block the beam (the card in the gap, or the rod in the case bore) and
+   confirm its output drops clearly.
 
 ## 3. Flash and capture
 
 ```sh
-just upload uno        # or: nano, nano_oldbootloader
-just capture /dev/ttyACM0 data/bench/<date>/01_dry_open.csv --duration 60
+just upload nano arduino-multichannel   # or nano_oldbootloader for most clones
+just capture /dev/ttyUSB0 data/bench/<date>/01_air.csv --duration 60
 ```
 
-The port is usually `/dev/ttyACM0` for an Uno and `/dev/ttyUSB0` for a Nano clone.
-Opening the port resets the board. The capture starts at the CSV header and ends after
-`--duration` seconds, or at Ctrl+C.
+The port is usually `/dev/ttyUSB0` for a Nano clone and `/dev/ttyACM0` for an Uno. Opening
+the port resets the board. The capture starts at the CSV header and ends after
+`--duration` seconds, or at Ctrl+C. The tool creates the folder.
 
-Store each capture under `data/bench/<date>/` (the capture tool creates the folder)
-with a numbered step name, as in the steps below, plus a `notes.md` from the template at
-the end.
+Store every capture under `data/bench/<date>/` with a numbered step name, as below, plus a
+`notes.md` from the template at the end. Every file holds all heads, one column each.
 
-## 4. Baselines
+## 4. References and baselines
 
-Capture 60 s for each, with the sensor clamped in its measuring position:
+The references make heads comparable: each head's readings are later expressed as a
+transmittance between its own dark (0) and clear-water (1) readings.
 
-| File | Condition |
-| --- | --- |
-| `01_dry_open.csv` | Dry, in air, room light |
-| `02_dry_blocked.csv` | Dry, opaque card in the gap |
-| `03_blank_covered.csv` | In the blank diluent (below), covered |
-| `04_blank_uncovered.csv` | In the blank diluent, uncovered, room light |
-| `05_blank_stability.csv` | In the blank diluent, covered, **10 minutes**, untouched |
+| File | Stock setup | Tube setup |
+| --- | --- | --- |
+| `01_air.csv` | Heads dry, in air | Cases empty, no tube |
+| `02_dark.csv` | Opaque card in each gap | Opaque rod through each bore, before the tube goes in |
+| `03_clear.csv` | Heads in the blank diluent (below), covered | Tube in place, sleeved, filled with blank diluent, no bubbles |
+| `04_clear_uncovered.csv` | As `03`, uncovered, room light | As `03`, sleeving removed near the cases |
+| `05_clear_stability.csv` | As `03`, **10 minutes**, untouched | As `03`, **10 minutes**, no flow |
+
+`01_air` is a health check, not a reference: the optics are designed for water, so air
+readings need not resemble clear-water readings.
 
 If `03` and `04` differ by more than the noise in `05`, ambient light is reaching the
-detector. Keep the sensor covered for every step after this.
+detectors: keep everything covered or sleeved from here on.
+
+**Stock setup, crosstalk:** in the blank, block one head's gap with the card and confirm
+the other heads' readings do not change. Repeat for each head.
 
 ## 5. Kaolin series
 
 **Diluent:** DI water plus a small, fixed dose of Tween 20 (for example one drop per
-litre). Record exactly what you used. Every solution in the series, including the blank
-and the stock, is made with this same diluent, so the Tween 20 concentration stays constant
-and only the kaolin changes.
+litre). Record exactly what you used. Every solution, including the blank and the stock,
+is made with this same diluent, so the Tween 20 concentration stays constant and only the
+kaolin changes.
 
 **Stock (1000 mg/L):** 1.000 g kaolin made up to 1 L with diluent. Mix well.
 
-**Dilutions** (200 mL each, made from well-mixed stock):
+**Dilutions,** per 200 mL. Scale every volume by the same factor to fill your container:
 
 | Step | Kaolin (mg/L) | Stock (mL) | Diluent (mL) |
 | --- | ---: | ---: | ---: |
@@ -122,59 +140,82 @@ and only the kaolin changes.
 | `16_c0800` | 800 | 160 | 40 |
 | `17_c1000` | 1000 | 200 | 0 |
 
-For each step, from low to high concentration:
+Run the steps from low to high concentration. Stir gently throughout. **Avoid bubbles
+and foam:** Tween 20 foams, and a bubble in the beam reads as turbidity.
 
-1. Pour the solution into the beaker, clamp the sensor in its measuring position, and
-   cover.
-2. Stir gently for 10 s. **Avoid bubbles and foam:** Tween 20 foams, and bubbles in the
-   gap scatter light and read as turbidity.
-3. Capture 60 s. Record the water temperature.
-4. Empty the beaker. Rinse the beaker and sensor with diluent.
+**Tube setup,** with the cases in series on one vertical tube line:
 
-Kaolin settles, so the reading drifts upward (clearer) after stirring stops. That drift
-is expected. Once, at 200 mg/L, capture 5 minutes after stirring (`20_settling_c0200.csv`)
-to measure it.
+1. With a pump: recirculate from the stirred beaker through the tube, bottom to top, so
+   bubbles rise out. Let it run until readings settle, then capture 60 s while it flows.
+2. With a syringe: push at least three tube volumes of the new solution up through the
+   tube, then capture 30 s straight away. Kaolin settles in a still tube, so the reading
+   drifts clearer within seconds to minutes.
+3. Record the water temperature. Move to the next beaker without rinsing: the next
+   solution flushes the tube.
+
+**Stock setup:**
+
+1. Pour the solution into the container, clamp the heads in position, and cover.
+2. Stir gently for 10 s, then capture 60 s. Record the water temperature.
+3. Empty the container. Rinse the container and heads with diluent.
+
+**Settling:** once, at 200 mg/L, capture 5 minutes with no flow or stirring
+(`20_settling_c0200.csv`).
 
 **Repeat the whole series three times** (`r1`, `r2`, `r3` suffixes). Re-stir the stock
 before each dilution.
 
+**End of session:** capture the clear reference again (`30_clear_end.csv`) the same way as
+`03`, to measure drift.
+
 ## 6. Pass criteria
 
-Session 1 passes when all of the following hold:
+Session 1 passes when all of the following hold for every head that passed its adapter
+check:
 
-1. **Electrical:** the adapter check passes (a unity-gain buffer), and the output drops
-   when the gap is blocked.
-2. **Stability:** the standard deviation of `adc_counts` in `05_blank_stability.csv` is
-   recorded. Call it σ; 3σ is the resolution floor for this setup.
-3. **Monotonic trend:** in every repeat, mean `adc_counts` falls at each step up the
+1. **Electrical:** the output drops when the beam is blocked.
+2. **Stability:** the standard deviation of the head's counts in
+   `05_clear_stability.csv` is recorded. Call it σ; 3σ is that head's resolution floor.
+3. **Monotonic trend:** in every repeat, the head's mean counts fall at each step up the
    series, and each drop is larger than 3σ.
 4. **Repeatability:** the spread of the three repeats at each concentration is recorded.
-   There is no threshold yet; this number sets the target for session 2.
 
-Also record the following. They are findings, not pass or fail:
+Record these as findings, not pass or fail:
 
-- Whether the blank reading falls in the datasheet's 0 NTU envelope: 3.68–4.73 V for the
-  `TSW-10` and 3.78–4.55 V for the `TST-10`. At a 5.000 V reference that is about 754–969 and 775–932 counts. The adapter's 500 Ω
-  emitter resistor may put readings slightly lower. DFRobot's own figure for clear water
-  is 4.1 ± 0.3 V. Outside these means something to explain (supply, adapter, or the
-  part), not a failed session.
-- The ambient-light difference (`03` vs `04`).
-- The settling drift at 200 mg/L.
+- **Head agreement:** at each concentration, the spread of attenuation between heads.
+  If it is small, one curve can serve every head once each has its two references.
+  This sets the target for session 2.
+- **Drift:** `30_clear_end` against `03_clear`, per head.
+- **Ambient light:** `03` against `04`.
+- **Settling** at 200 mg/L.
+- **Stock setup only:** whether each head's clear reading falls in the datasheet's 0 NTU
+  envelope (3.68–4.73 V for the `TSW-10`, 3.78–4.55 V for the `TST-10`; about 754–969 and
+  775–932 counts at a 5.000 V reference). DFRobot's own figure is 4.1 ± 0.3 V. The
+  adapter's 500 Ω emitter resistor may put readings slightly lower.
 
 ## 7. Analysis
 
 ```sh
-just summarize data/bench/<date>/[0-9]*.csv > data/bench/<date>/summary.csv
+just summarize --dark data/bench/<date>/02_dark.csv --clear data/bench/<date>/03_clear.csv \
+  data/bench/<date>/[0-9]*.csv > data/bench/<date>/summary.csv
 ```
 
-The `[0-9]*` pattern matches only the numbered step files, so `summary.csv` is not
-summarized itself on a re-run. The output gives the count, mean, standard deviation, min
-and max of each signal column per file. Plot mean `adc_counts` against kaolin concentration, one line per repeat.
+For each file and head this gives the count, mean, standard deviation, min and max of the
+counts, plus:
 
-`raw_mv` assumes a 5000 mV reference. For volts, rescale by the 5 V rail measured in
-step 2: `mV = adc_counts × rail_mV / 1024`. `vcc_mv` is estimated from the chip's
-internal bandgap, which varies by about 10% between chips. Use it only to watch for
-supply drift within a session.
+- `transmittance`: `(mean - dark) / (clear - dark)`, from 1 in clear water toward 0 as
+  the beam is blocked;
+- `attenuation`: `-ln(transmittance)`, which starts at 0 in clear water and rises with
+  turbidity.
+
+The reference files appear in the output too; `02` should normalize to about 0 and `03`
+to 1. The command warns when a head's clear reading is within 5% of full scale, where it
+may clip. Plot attenuation against kaolin concentration, one line per head and repeat.
+The `[0-9]*` pattern matches only the numbered step files, so `summary.csv` is not
+summarized itself on a re-run.
+
+`vcc_mv` is estimated from the chip's internal bandgap, which varies by about 10% between
+chips. Use it only to watch for supply drift within a session.
 
 ## Notes template
 
@@ -184,18 +225,24 @@ Copy into `data/bench/<date>/notes.md`:
 # Bench session 1: <date>
 
 - Operator:
-- Sensor: TSW-10 / TST-10, source (DFRobot / DigiKey / Mouser), marking or ID:
-- Probe housing opened or RV adjusted? (should be no):
-- Adapter (source, revision, marking) and switch position:
-- Adapter check (probe middle pin / adapter output, V):
-- Board and firmware env:
+- Setup: tube / stock
+- Board and firmware (example and env):
 - Commit (`git rev-parse --short HEAD`):
 - 5 V rail (multimeter):
-- Adapter output, gap open / blocked (V):
 - Room temperature:
 - Kaolin (product, lot):
 - Tween 20 dose in diluent:
-- Beaker and sensor depth:
+- Tube setup: tube material and size, flow method (pump rate or syringe):
+- Stock setup: container and head depth:
+
+## Heads
+
+| Input | Sensor (TSW-10 / TST-10) | Source | ID | Adapter (source, marking) | Adapter check (probe / output, V) | Blocked drop OK |
+| --- | --- | --- | --- | --- | --- | --- |
+| A0 | | | | | | |
+| A1 | | | | | | |
+| A2 | | | | | | |
+| A3 | | | | | | |
 
 ## Step log
 

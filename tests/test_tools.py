@@ -140,6 +140,67 @@ class SummarizeCaptureTest(unittest.TestCase):
             ],
         )
 
+    def test_reports_each_channel_of_a_multichannel_log(self):
+        path = self.write(
+            "multi.csv",
+            "timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1\n"
+            "0,5010,800,700\n"
+            "100,5012,802,704\n",
+        )
+        result = self.run_summarize(path)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(
+            [line.split(",")[1] for line in result.stdout.splitlines()[1:]],
+            ["vcc_mv", "adc_counts_a0", "adc_counts_a1"],
+        )
+
+    def test_normalizes_each_channel_against_its_own_references(self):
+        dark = self.write("dark.csv", "timestamp_ms,adc_counts_a0,adc_counts_a1\n0,50,20\n100,50,20\n")
+        clear = self.write("clear.csv", "timestamp_ms,adc_counts_a0,adc_counts_a1\n0,850,620\n100,850,620\n")
+        sample = self.write("sample.csv", "timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1\n0,5000,450,170\n100,5000,450,170\n")
+        result = self.run_summarize("--dark", dark, "--clear", clear, sample)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(
+            result.stdout.splitlines(),
+            [
+                "file,column,n,duration_s,mean,std,min,max,transmittance,attenuation",
+                f"{sample},vcc_mv,2,0.1,5000.000,0.000,5000.000,5000.000,,",
+                f"{sample},adc_counts_a0,2,0.1,450.000,0.000,450.000,450.000,0.5000,0.6931",
+                f"{sample},adc_counts_a1,2,0.1,170.000,0.000,170.000,170.000,0.2500,1.3863",
+            ],
+        )
+
+    def test_rejects_clear_reference_not_above_dark(self):
+        dark = self.write("dark.csv", "timestamp_ms,adc_counts\n0,500\n")
+        clear = self.write("clear.csv", "timestamp_ms,adc_counts\n0,500\n")
+        sample = self.write("sample.csv", "timestamp_ms,adc_counts\n0,400\n")
+        result = self.run_summarize("--dark", dark, "--clear", clear, sample)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("adc_counts: clear reference is not above dark", result.stderr)
+
+    def test_rejects_reference_missing_a_channel(self):
+        dark = self.write("dark.csv", "timestamp_ms,adc_counts_a0\n0,50\n")
+        clear = self.write("clear.csv", "timestamp_ms,adc_counts_a0,adc_counts_a1\n0,850,800\n")
+        sample = self.write("sample.csv", "timestamp_ms,adc_counts_a0,adc_counts_a1\n0,450,400\n")
+        result = self.run_summarize("--dark", dark, "--clear", clear, sample)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("dark.csv has no adc_counts_a1 column", result.stderr)
+
+    def test_requires_dark_and_clear_together(self):
+        dark = self.write("dark.csv", "timestamp_ms,adc_counts\n0,50\n")
+        sample = self.write("sample.csv", "timestamp_ms,adc_counts\n0,400\n")
+        result = self.run_summarize("--dark", dark, sample)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("--dark and --clear go together", result.stderr)
+
+    def test_warns_when_clear_reference_is_near_full_scale(self):
+        dark = self.write("dark.csv", "timestamp_ms,adc_counts\n0,10\n")
+        clear = self.write("clear.csv", "timestamp_ms,adc_counts\n0,1000\n")
+        sample = self.write("sample.csv", "timestamp_ms,adc_counts\n0,900\n")
+        result = self.run_summarize("--dark", dark, "--clear", clear, sample)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("adc_counts: clear reference 1000.0 counts is near full scale", result.stderr)
+
     def test_rejects_malformed_row(self):
         path = self.write("bad.csv", "timestamp_ms,raw_mv\n1000,4150\n1500,oops\n")
         result = self.run_summarize(path)
