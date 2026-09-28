@@ -19,8 +19,8 @@ use <../probe/probe.scad>
 
 /* [Output] */
 
-// which part(s) to render
-part = "assembly"; // [assembly, base, lid]
+// which part(s) to render; "none" renders nothing, for files that include this one
+part = "assembly"; // [assembly, base, lid, none]
 // print: lay base or lid flat side down at z = 0 (ignored for the assembly)
 orient = "assembly"; // [assembly, print]
 
@@ -190,6 +190,8 @@ if (part == "base") {
   pose(-bot_z) base();
 } else if (part == "lid") {
   pose(top_z, flip=true) lid();
+} else if (part == "none") {
+  // include <turbidity_case.scad> for the modules and dimensions without geometry
 } else {
   color("orange") base();
   color("gray", 0.5) lid();

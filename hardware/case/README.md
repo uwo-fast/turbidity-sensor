@@ -17,10 +17,13 @@ the geometry is not.
 
 ## Parts
 
-- **Clear tube:** 5/16 in (7.94 mm) outside diameter. Acrylic, polycarbonate, or glass.
-  The one used is 1/4 in (6.35 mm) inside diameter: a 1/4 in drill shank fits it snugly.
-  Calipers read it 0.244-0.246 in, low, as they do in a small bore. The case does not depend
-  on the inside diameter, but the volume of liquid in the tube does: 0.032 mL per millimetre.
+- **Clear tube:** 5/16 in (7.94 mm) outside diameter. FEP, acrylic, polycarbonate, or
+  glass. FEP's refractive index (about 1.34) is close to water's, so the beam bends very
+  little where it crosses from the inner wall into the water; the outer surface, against
+  air, still bends it. The one used is 1/4 in (6.35 mm) inside diameter: a 1/4 in drill
+  shank fits it snugly. Calipers read it 0.244-0.246 in, low, as they do in a small bore.
+  The case does not depend on the inside diameter, but two things do: the length of water
+  in the beam, 6.35 mm, and the volume of liquid in the tube, 0.032 mL per millimetre.
   The bore is `tube_od + tube_fit` (0.2 mm over by default). That fit is snug enough
   for the tube alone to hold the base and lid together. Loosen it and you will need tape
   or a zip tie as well. For another tube, set `tube_od` to its measured diameter. The
@@ -53,8 +56,42 @@ characterized. To remove the hole, set `access_hole = false`.
 ## Light leaks
 
 A clear tube carries light along its walls, like a light pipe, from wherever its ends
-are lit. Sleeve the tube with opaque tubing or tape outside the case, and take dark
-readings (see the `uno_switched_emitter` build) before trusting low-turbidity numbers.
+are lit. Sleeve the tube with opaque tubing or tape outside the case, and check the dark
+reading before trusting low-turbidity numbers. With the SEN0189 adapter the emitter is
+always on, so take the dark reading with an opaque rod in place of the tube. The
+`uno_switched_emitter` build measures ambient light on every sample, but it needs the
+bare wiring in [`docs/hardware.md`](../../docs/hardware.md#alternative-bare-wiring), not the adapter.
+
+The optical path differs from the stock housings (tube walls and a 6.35 mm water column
+instead of the housing's own window), so the Amphenol vendor curves do not describe
+this setup. Calibrate it from its own dark and clear-water readings.
+
+## Using the case in another OpenSCAD project
+
+`include` the file with `part = "none"`. That brings in the case's modules (`base()`,
+`lid()`, `tube_bore()`, …) and dimensions, lets you override the case's parameters, and
+draws nothing on its own. The board library it uses, `../probe/probe.scad`, comes with it:
+`probe()` and the `probe_*()` functions work in your file. The board's own figures cannot
+be overridden from your file; change them in `probe.scad`.
+
+```openscad
+include <turbidity_case.scad>
+part = "none";   // draw nothing from this file
+tube_od = 8.0;   // any of the case's parameters can be overridden
+
+// The case is a box case_w x case_l, from z = bot_z to top_z, in this file's frame
+// (origin on the PCB centreline, z = 0 at the PCB underside). The tube axis runs
+// along z at (0, tube_y).
+difference() {
+  translate([-case_w / 2 - 5, -case_l / 2 - 5, bot_z - 5])
+    cube([case_w + 10, case_l + 10, 5]);
+  translate([0, tube_y, bot_z - 6]) cylinder(d=tube_od + 2, h=7);
+}
+base();
+```
+
+`use <turbidity_case.scad>` also works, but only at the default parameters: overrides are
+ignored and the dimensions are not readable.
 
 ## Status
 
