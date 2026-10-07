@@ -12,6 +12,10 @@ Those come either from an adapter board or from two resistors on a breadboard. T
 `arduino` example reads one head on `A0`; the `arduino-multichannel` logger reads up to
 four on `A0`–`A3`.
 
+The lab has several `TSW-10` and `TST-10` heads, bought from DFRobot and from DigiKey or
+Mouser. Heads of the same model from different vendors are nominally the same part, so a
+difference between two of them is unit-to-unit variation, not a difference in model.
+
 ## Setups
 
 The same probe board can see its sample in three ways. All of them use the same

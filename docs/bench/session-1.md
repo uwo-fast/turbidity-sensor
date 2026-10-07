@@ -101,6 +101,12 @@ Store every capture under `data/bench/<date>/` with a numbered step name, as bel
 The references make heads comparable: each head's readings are later expressed as a
 transmittance between its own dark (0) and clear-water (1) readings.
 
+The first readings are why. On 2026-09-27, stock heads in air read between about 700 and
+900, each one steady, but different from head to head. A DigiKey head (with a UL "RU"
+mark) matched one DFRobot head, and a second DFRobot head differed from both. Those
+readings were noted as "raw mV" without recording which column they came from, but
+either way, nominally identical heads disagreed.
+
 | File | Stock setup | Tube setup |
 | --- | --- | --- |
 | `01_air.csv` | Heads dry, in air | Cases empty, no tube |
