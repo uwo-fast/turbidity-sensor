@@ -7,7 +7,8 @@ the tube instead of around an immersed probe.
 
 | File | Contents |
 | --- | --- |
-| `turbidity_case.scad` | Parametric source for both parts |
+| `turbidity_case.scad` | Parametric source for both parts: the case's own choices |
+| `../probe/probe.scad` | The board it is built around: its figures, envelope and optical axis |
 | `base.stl`, `lid.stl` | Print-ready exports, flat side down |
 
 Regenerate the STLs after changing the source with `just case` (needs OpenSCAD). The
@@ -61,8 +62,10 @@ readings (see the `uno_switched_emitter` build) before trusting low-turbidity nu
   smoothed with radius 5 and "keep min"). The fit clearances (`clr`, `tube_fit`,
   `key_clr`) are proven only for this setup. On another printer or material, print the
   base first and test the tube and board in it.
-- The board envelope in the source comes from a CAD model of the board, not from
-  calipers. It matched the board used for the test print. If yours differs, measure the
-  heads' inner faces (`head_x0`) and the PCB outline (`pcb_*`) and adjust the Board
-  envelope parameters.
+- The board's figures live in `../probe/probe.scad`, from a CAD model drawn from caliper
+  measurements. They matched the board used for the test print, and the TSW-10 and TST-10
+  boards are the same. If yours differs, remeasure there: the heads' inner faces
+  (`head_x0`) and the PCB outline (`pcb_*`) first.
+- The tube's axis along the arms (`optical_y`, 11.4) is where this case put the tube,
+  between the heads, not a measurement of where the lenses sit.
 - Not yet tested wet.
