@@ -46,5 +46,7 @@ jobs:
       - name: Install PlatformIO
         run: python3 -m pip install platformio
 
-      - name: Compile Arduino example
-        run: pio run -d examples/arduino
+      - name: Compile Arduino examples
+        run: |
+          pio run -d examples/arduino
+          pio run -d examples/arduino-multichannel

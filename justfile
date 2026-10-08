@@ -46,13 +46,14 @@ case:
     openscad --export-format binstl -D 'part="base"' -D 'orient="print"' -o hardware/case/base.stl hardware/case/turbidity_case.scad
     openscad --export-format binstl -D 'part="lid"' -D 'orient="print"' -o hardware/case/lid.stl hardware/case/turbidity_case.scad
 
-# Compile the Arduino example for every board in platformio.ini
+# Compile both Arduino examples for every board in their platformio.ini
 arduino:
     pio run -d examples/arduino
+    pio run -d examples/arduino-multichannel
 
-# Flash the Arduino example to a connected board (env: uno, nano, nano_oldbootloader, uno_switched_emitter)
-upload env="uno":
-    pio run -d examples/arduino -e {{env}} -t upload
+# Flash an Arduino example (arduino: single head with the model; arduino-multichannel: raw counts from A0-A3)
+upload env="uno" example="arduino":
+    pio run -d examples/{{example}} -e {{env}} -t upload
 
 # Record the board's CSV log to a file until Ctrl+C (or pass --duration SECONDS)
 capture port output *args:

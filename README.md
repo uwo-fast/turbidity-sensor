@@ -37,10 +37,10 @@ just test     # build and run the test suite
 just check    # clang-format check + clang-tidy (CI-equivalent)
 just fmt      # format C/C++ sources in place
 just regen    # regenerate calibration artifacts
-just arduino  # compile the Arduino example for every board
-just upload   # flash the Arduino example (default env: uno)
+just arduino  # compile both Arduino examples for every board
+just upload   # flash an Arduino example (default: uno, arduino)
 just capture  # record a board's serial log to CSV
-just summarize  # per-file statistics for captured logs
+just summarize  # per-file statistics; --dark/--clear add per-head transmittance
 ```
 
 `fmt`, `check` and CI use clang-format and clang-tidy 18.1.8.
@@ -130,7 +130,9 @@ Every 100 ms it logs one CSV row over serial at 115200 baud:
 
 The log replays directly through `turbidity_stream`. `tools/capture_serial.py` (`just capture`) records it to a file, starting at the header and dropping a truncated last line.
 
-[`docs/bench/session-1.md`](docs/bench/session-1.md) is the first bench procedure: wiring checks, baselines, and a kaolin dilution series.
+`examples/arduino-multichannel/` is a bench logger for up to four heads at once on `A0`–`A3`. It logs `vcc_mv` and one `adc_counts_<pin>` column per head, with no model: `just summarize --dark … --clear …` normalizes each head against its own dark and clear-water captures.
+
+[`docs/bench/session-1.md`](docs/bench/session-1.md) is the first bench procedure, for the stock housings or the printed tube case: wiring checks, per-head references, and a kaolin dilution series.
 
 The probe needs a load resistor and an emitter resistor. The default setup gets them from a DFRobot SEN0189 adapter with its switch at `A`: the adapter is the datasheet test circuit plus a unity-gain buffer, so its analog output is the probe voltage. Connect its signal to `A0`. [`docs/hardware.md`](docs/hardware.md) covers the adapter circuit, a check for boards from other sources, and bare wiring without an adapter.
 
