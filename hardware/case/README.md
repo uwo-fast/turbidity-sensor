@@ -17,6 +17,9 @@ the geometry is not.
 ## Parts
 
 - **Clear tube:** 5/16 in (7.94 mm) outside diameter. Acrylic, polycarbonate, or glass.
+  The one used is 1/4 in (6.35 mm) inside diameter: a 1/4 in drill shank fits it snugly.
+  Calipers read it 0.244-0.246 in, low, as they do in a small bore. The case does not depend
+  on the inside diameter, but the volume of liquid in the tube does: 0.032 mL per millimetre.
   The bore is `tube_od + tube_fit` (0.2 mm over by default). That fit is snug enough
   for the tube alone to hold the base and lid together. Loosen it and you will need tape
   or a zip tie as well. For another tube, set `tube_od` to its measured diameter. The
