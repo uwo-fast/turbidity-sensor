@@ -9,7 +9,8 @@
 // toward the connector, whose plug enters from -y.
 //
 // The figures come from a CAD model drawn from caliper measurements, and matched the board used
-// for the first printed case. Remeasure and change them here; every housing follows.
+// for the first printed case. Remeasure and change them here; every housing follows. The bracket's
+// and the heads' heights were measured from the PCB's top face, and are kept that way.
 //
 // Use it with `use <probe.scad>`:
 //   probe(c)               the board grown by c on every side, to subtract from a housing
@@ -40,8 +41,8 @@ pcb_slot_y = 4.0;
 // arm tips (y)
 pcb_y1 = 17.7;
 
-// top of the black head bracket (z)
-bracket_top = 4.5;
+// the black head bracket's height above the PCB's top face
+bracket_h = 4.5;
 // bracket root edge (y)
 bracket_y0 = -4.0;
 // bracket half-width at the root
@@ -57,8 +58,8 @@ head_x1 = 9.65;
 // bottom of the bracket slot (y)
 bracket_slot_y = 5.0;
 
-// top of the emitter and detector heads (z), over y flare_y1..pcb_y1
-head_top = 7.5;
+// the emitter and detector heads' height above the PCB's top face, over y flare_y1..pcb_y1
+head_h = 7.5;
 
 // The emitter and detector's optical axis along the arms (y). Not yet measured: this is where the
 // first case put its tube, between the heads. Measure where the lenses sit and replace it.
@@ -91,6 +92,9 @@ trim_x = 0.4;
 trim_y = -2.4;
 
 eps = 0.01;
+
+bracket_top = pcb_t + bracket_h;
+head_top = pcb_t + head_h;
 
 function probe_optical_axis() = [0, optical_y];
 function probe_gap() = 2 * head_x0;
