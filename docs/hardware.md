@@ -28,7 +28,7 @@ electronics and firmware.
 | Tube | Housing removed; bare board in the printed case ([`hardware/case/`](../hardware/case/README.md)) | Flows through a clear tube in the optical slot | No |
 
 The stock housings are the supported default: most users will not open a probe. The tube
-setup trades the housing's optical window for two tube walls and a 6.5 mm water column
+setup trades the housing's optical window for two tube walls and a 6.35 mm water column
 (with 5/16 x 1/4 in tubing), so it needs its own calibration. It also fits into other
 builds: the case is a plain box that other OpenSCAD projects can `include`.
 
