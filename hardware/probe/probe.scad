@@ -25,7 +25,7 @@
 //   probe_trimmer()        [x, y] of the RV trimmer's centre, under the PCB
 
 // PCB thickness
-pcb_t = 1.5;
+pcb_t = 1.60;
 // half-width of the PCB body
 pcb_hw = 12.15;
 // connector-end edge (y)
@@ -70,7 +70,7 @@ conn_hw = 5.0;
 // connector plug face (y)
 conn_y0 = -16.6;
 // connector back face (y)
-conn_y1 = -9.4;
+conn_y1 = -8.0;
 // connector top (z)
 conn_top = 11.0;
 
