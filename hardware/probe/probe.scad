@@ -61,9 +61,9 @@ bracket_slot_y = 5.0;
 // the emitter and detector heads' height above the PCB's top face, over y flare_y1..pcb_y1
 head_h = 7.5;
 
-// The emitter and detector's optical axis along the arms (y). Not yet measured: this is where the
-// first case put its tube, between the heads. Measure where the lenses sit and replace it.
-optical_y = 11.4;
+// The emitter and detector's optical axis along the arms (y): the centre of the lens windows on the
+// heads' inner faces, measured from the arms' root. The windows are 1.4 wide by 2.6 tall.
+optical_y = 10.8;
 
 // right-angle connector half-width; the plug enters from -y
 conn_hw = 5.0;

@@ -106,6 +106,6 @@ ignored and the dimensions are not readable.
   measurements. They matched the board used for the test print, and the TSW-10 and TST-10
   boards are the same. If yours differs, remeasure there: the heads' inner faces
   (`head_x0`) and the PCB outline (`pcb_*`) first.
-- The tube's axis along the arms (`optical_y`, 11.4) is where this case put the tube,
-  between the heads, not a measurement of where the lenses sit.
+- The tube's axis along the arms (`optical_y`, 10.8) is the centre of the lens windows,
+  measured from the arms' root. The first print put the tube at 11.4, before it was measured.
 - Not yet tested wet.
