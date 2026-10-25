@@ -24,6 +24,7 @@ This is an MVP built from vendor-datasheet curves that were digitized and fit of
 - `docs/hardware.md`: sensor interface: the SEN0189 adapter and bare wiring
 - `hardware/probe/`: the probe board inside a TSW-10 or TST-10 as an OpenSCAD library: its envelope to cut, and the figures a housing sizes itself from
 - `hardware/case/`: printable flow-through case for the bare probe board and a clear tube (OpenSCAD), built on `hardware/probe/`
+- `hardware/tst-flange/`: printable flange that holds a TST-10 over a beaker
 - `docs/bench/`: bench procedures
 - `docs/archive/`: preserved research, planning, and datasheet material
 
