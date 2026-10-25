@@ -111,6 +111,7 @@ either way, nominally identical heads disagreed.
 | --- | --- | --- |
 | `01_air.csv` | Heads dry, in air | Cases empty, no tube |
 | `02_dark.csv` | Opaque card in each gap | Opaque rod through each bore, before the tube goes in |
+| `03a_clear_di.csv` | As `03`, in plain DI water | As `03`, filled with plain DI water |
 | `03_clear.csv` | Heads in the blank diluent (below), covered | Tube in place, sleeved, filled with blank diluent, no bubbles |
 | `04_clear_uncovered.csv` | As `03`, uncovered, room light | As `03`, sleeving removed near the cases |
 | `05_clear_stability.csv` | As `03`, **10 minutes**, untouched | As `03`, **10 minutes**, no flow |
@@ -126,10 +127,33 @@ the other heads' readings do not change. Repeat for each head.
 
 ## 5. Kaolin series
 
-**Diluent:** DI water plus a small, fixed dose of Tween 20 (for example one drop per
-litre). Record exactly what you used. Every solution, including the blank and the stock,
-is made with this same diluent, so the Tween 20 concentration stays constant and only the
-kaolin changes.
+**Diluent:** DI water with 0.01 % v/v Tween 20. Every solution, including the blank and
+the stock, is made with this same diluent, so the Tween 20 concentration stays constant and
+only the kaolin changes.
+
+1. **1 % stock:** 1 mL Tween 20 in 99 mL DI water. Mix by gentle inversion, not shaking.
+   Tween 20 is too viscous to dose accurately by drops.
+2. **Diluent:** 10 mL of the 1 % stock made up to 1 L with DI water. Make one batch for
+   the day's work.
+3. Record the dose and the Tween 20 product and lot in the notes.
+
+Why this dose: Tween 20 wets the kaolin powder so the stock disperses without clumps.
+Above its critical micelle concentration (CMC), about 0.06 mM or 0.0074 % w/v
+([Thermo Fisher 28320](https://www.thermofisher.com/order/catalog/product/28320),
+[OpenWetWare](https://openwetware.org/wiki/Critical_micelle_concentration_(CMC)),
+[Sigma-Aldrich 11332465001](https://www.sigmaaldrich.com/deepweb/assets/sigmaaldrich/product/documents/130/724/11332465001.pdf);
+molecular weight 1228, nonionic, 20–25 °C), further surfactant mostly forms micelles and foam, and bubbles read
+as turbidity. 0.01 % v/v is about 0.011 % w/v, taking Tween 20's density as about
+1.1 g/mL (the SDS gives the exact figure), so about 1.5 × the CMC. No published dose for
+Tween 20 in dilute kaolin suspensions was found. Kaolin dispersant doses in the literature,
+about 0.5–1 wt % of the clay, are for concentrated slurries
+([Ceramics 2024](https://doi.org/10.3390/ceramics7030076)) and do not carry over to
+tens of mg/L.
+
+**Check that the diluent does not change the reading:** before `03_clear`, capture the
+same setup in plain DI water as `03a_clear_di.csv` (60 s). It should match `03_clear`
+within the noise. If it does not, Tween 20 is changing the optics, so record that before
+the series.
 
 **Stock (1000 mg/L):** 1.000 g kaolin made up to 1 L with diluent. Mix well.
 
@@ -237,7 +261,7 @@ Copy into `data/bench/<date>/notes.md`:
 - 5 V rail (multimeter):
 - Room temperature:
 - Kaolin (product, lot):
-- Tween 20 dose in diluent:
+- Tween 20 (product, lot) and dose in diluent:
 - Tube setup: tube material and size, flow method (pump rate or syringe):
 - Stock setup: container and head depth:
 
