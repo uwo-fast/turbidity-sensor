@@ -1,17 +1,24 @@
 # turbidity
 
-Portable C turbidity modeling and calibration utilities for the Amphenol `TSW-10` and `TST-10` sensors.
+Open-source tools for modeling, calibrating, and evaluating Amphenol `TSW-10` and `TST-10` turbidity sensors.
 
-This repository is now organized as a small code-first open source project:
+## Goal
 
-- a stateless C library for the sensor model and 3-point calibration solve
-- a calibration CLI that emits a machine-readable JSON profile
-- a strict CSV stream example for host-side validation and replay
-- an Arduino example that applies the same model to a conditioned analog input
+This project aims to characterize these low-cost sensors and develop a reproducible approach to turbidity measurement, including calibration, data acquisition, and validation across different sensors and optical configurations.
+
+Obtaining a sensor voltage, as in DFRobot's example, is trivially easy (just an analog read away), but it does not establish measurement accuracy, repeatability, or consistency between individual sensors. Establishing those is the aim here.
+
+## Features
+
+- A portable, stateless C library for sensor modeling and 3-point calibration
+- A calibration CLI that generates machine-readable JSON profiles
+- CSV acquisition, analysis, and replay tools for experimental validation
+- Arduino examples for single- and multi-sensor measurements
+- Parametric OpenSCAD models of the sensor hardware and a printable flow-through housing
 
 ## Status
 
-This is an MVP built from vendor-datasheet curves that were digitized and fit offline. It is useful for software integration, bench validation, and unit-specific 3-point profiling, but it is not a substitute for empirical end-to-end optical calibration on finished hardware.
+The software is an MVP based on digitized and fitted manufacturer curves. The acquisition tools and hardware models support experimental characterization, but measurement accuracy and repeatability have not yet been established through end-to-end calibration of the finished hardware.
 
 ## Repository Map
 
