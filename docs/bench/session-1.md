@@ -120,7 +120,8 @@ either way, nominally identical heads disagreed.
 readings need not resemble clear-water readings.
 
 If `03` and `04` differ by more than the noise in `05`, ambient light is reaching the
-detectors: keep everything covered or sleeved from here on.
+detectors: keep everything covered or sleeved from here on. If `03a` and `03` differ, the
+Tween 20 is changing the reading: record it before the series.
 
 **Stock setup, crosstalk:** in the blank, block one head's gap with the card and confirm
 the other heads' readings do not change. Repeat for each head.
@@ -135,36 +136,8 @@ only the kaolin changes.
    Tween 20 is too viscous to dose accurately by drops.
 2. **Diluent:** 10 mL of the 1 % stock made up to 1 L with DI water. Make one batch for
    the day's work.
-3. Record the dose and the Tween 20 product and lot in the notes.
 
-Why this dose: 0.01 % is a chosen value, not one taken from the literature. No published
-dose for Tween 20 in dilute kaolin suspensions was found. Kaolin dispersant doses in the
-literature, about 0.5–1 wt % of the clay, are for concentrated slurries
-([Ceramics 2024](https://doi.org/10.3390/ceramics7030076)) and do not carry over to
-tens of mg/L. The choice is anchored to Tween 20's critical micelle concentration (CMC),
-about 0.06 mM or 0.0074 % w/v
-([Thermo Fisher 28320](https://www.thermofisher.com/order/catalog/product/28320),
-[OpenWetWare](https://openwetware.org/wiki/Critical_micelle_concentration_(CMC)),
-[Sigma-Aldrich 11332465001](https://www.sigmaaldrich.com/deepweb/assets/sigmaaldrich/product/documents/130/724/11332465001.pdf);
-molecular weight 1228, nonionic, 20–25 °C):
-
-- Tween 20 is there to wet the kaolin powder so the stock disperses without clumps.
-  Surfactant adsorption on a solid generally levels off at or near the CMC, so a dose
-  just above it gives the particles what they can take up.
-- Above the CMC, further surfactant mostly forms micelles and foam, and bubbles read as
-  turbidity, so the dose stays close to it.
-- 0.01 % v/v is about 0.011 % w/v, taking Tween 20's density as about 1.1 g/mL (the SDS
-  gives the exact figure), so about 1.5 × the CMC, and a round number that the two
-  1-in-100 dilutions make accurately.
-
-The exact value matters less than keeping it the same everywhere. Every dilution is made
-from the one kaolin stock, so the particles' surface state is set there and is the same
-at every concentration; only the small amount of free Tween 20 varies.
-
-**Check that the diluent does not change the reading:** before `03_clear`, capture the
-same setup in plain DI water as `03a_clear_di.csv` (60 s). It should match `03_clear`
-within the noise. If it does not, Tween 20 is changing the optics, so record that before
-the series.
+[`../test-solutions.md`](../test-solutions.md) gives the reasons for the dose.
 
 **Stock (1000 mg/L):** 1.000 g kaolin made up to 1 L with diluent. Mix well.
 
