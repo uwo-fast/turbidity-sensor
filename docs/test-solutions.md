@@ -24,6 +24,6 @@ The dose is set against Tween 20's critical micelle concentration (CMC): about 0
 - 0.01 % v/v is about 0.011 % w/v (density about 1.1 g/mL; the SDS gives the exact
   figure), or about 1.5 × the CMC.
 
-Every dilution comes from the one kaolin stock, so the particles' surface state is the same
+Every concentration comes from the one kaolin stock, so the particles' surface state is the same
 at every concentration. `03a_clear_di` against `03_clear` checks that the diluent itself
 does not change the reading.

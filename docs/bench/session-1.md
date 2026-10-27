@@ -42,7 +42,7 @@ column instead of `adc_counts_a0`…`a3`.
 - **Stock setup:** a clamp per head, and one container that holds every head at the same
   depth with its optical gap submerged and its connector end dry
 - Opaque cover (a box or aluminium foil), stirring rod, thermometer
-- Kaolin, Tween 20, DI water, a balance, a graduated cylinder or pipettes
+- Kaolin, Tween 20, DI water, a balance, a graduated cylinder, and a pipette or small syringe for volumes under 1 mL
 
 Use only a **5 V** board. The output reaches about 4.8 V, beyond the ADC range of 3.3 V
 boards such as ESP32 or RP2040.
@@ -139,45 +139,49 @@ only the kaolin changes.
 
 [`../test-solutions.md`](../test-solutions.md) gives the reasons for the dose.
 
-**Stock (1000 mg/L):** 1.000 g kaolin made up to 1 L with diluent. Mix well.
+**Stock (10 g/L):** 1.500 g kaolin made up to 150 mL with diluent, enough for three
+repeats at 300 mL. Mix well, and stir it again before every draw.
 
-**Dilutions,** per 200 mL. Scale every volume by the same factor to fill your container:
+**Series:** each repeat runs in one beaker of fresh diluent, raising the concentration
+step by step at constant volume. At each step, stir, remove the volume below from the
+beaker, then add the same volume of stock. Volumes are for 300 mL; for a beaker volume V,
+the step from C_old to C_new is V × (C_new − C_old) / (10000 − C_old) mL.
 
-| Step | Kaolin (mg/L) | Stock (mL) | Diluent (mL) |
-| --- | ---: | ---: | ---: |
-| `10_c0000` | 0 | 0 | 200 |
-| `11_c0025` | 25 | 5 | 195 |
-| `12_c0050` | 50 | 10 | 190 |
-| `13_c0100` | 100 | 20 | 180 |
-| `14_c0200` | 200 | 40 | 160 |
-| `15_c0400` | 400 | 80 | 120 |
-| `16_c0800` | 800 | 160 | 40 |
-| `17_c1000` | 1000 | 200 | 0 |
+| Step | Kaolin (mg/L) | Remove, then add stock (mL) |
+| --- | ---: | ---: |
+| `10_c0000` | 0 | 0 |
+| `11_c0025` | 25 | 0.75 |
+| `12_c0050` | 50 | 0.75 |
+| `13_c0100` | 100 | 1.51 |
+| `14_c0200` | 200 | 3.03 |
+| `15_c0400` | 400 | 6.12 |
+| `16_c0800` | 800 | 12.50 |
+| `17_c1000` | 1000 | 6.52 |
 
-Run the steps from low to high concentration. Stir gently throughout. **Avoid bubbles
-and foam:** Tween 20 foams, and a bubble in the beam reads as turbidity.
+Record any volume that differs from the table, so the concentration can be recomputed.
+Stir gently. **Avoid bubbles and foam:** Tween 20 foams, and a bubble in the beam reads as
+turbidity.
 
-**Tube setup,** with the cases in series on one vertical tube line:
+**Stock setup:** the heads stay clamped in the covered beaker for the whole repeat. After
+each addition, stir gently for 10 s, then capture.
 
-1. With a pump: recirculate from the stirred beaker through the tube, bottom to top, so
-   bubbles rise out. Let it run until readings settle, then capture 60 s while it flows.
-2. With a syringe: push at least three tube volumes of the new solution up through the
-   tube, then capture 30 s straight away. Kaolin settles in a still tube, so the reading
-   drifts clearer within seconds to minutes.
-3. Record the water temperature. Move to the next beaker without rinsing: the next
-   solution flushes the tube.
+**Tube setup,** with the cases in series on one vertical tube line, fed from the beaker
+and returning to it:
 
-**Stock setup:**
+1. With a pump: recirculate bottom to top, so bubbles rise out. Let it run until
+   readings settle, then capture 60 s while it flows.
+2. With a syringe: push at least three tube volumes up through the tube, then capture
+   30 s straight away. Kaolin settles in a still tube, so the reading drifts clearer
+   within seconds to minutes.
 
-1. Pour the solution into the container, clamp the heads in position, and cover.
-2. Stir gently for 10 s, then capture 60 s. Record the water temperature.
-3. Empty the container. Rinse the container and heads with diluent.
+When both setups share the beaker, fill the tube after stirring and capture 30 s. Record
+the water temperature at each step.
 
 **Settling:** once, at 200 mg/L, capture 5 minutes with no flow or stirring
 (`20_settling_c0200.csv`).
 
-**Repeat the whole series three times** (`r1`, `r2`, `r3` suffixes). Re-stir the stock
-before each dilution.
+**Repeat the whole series three times** (`r1`, `r2`, `r3` suffixes), each from fresh
+diluent.
 
 **End of session:** capture the clear reference again (`30_clear_end.csv`) the same way as
 `03`, to measure drift.
