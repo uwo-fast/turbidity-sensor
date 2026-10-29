@@ -14,8 +14,8 @@ tables come from `tools/plot_series.py` (`just plot`).
   not respond to blocking the beam. A probe-cable swap pins the first fault to the probe; the
   second was tested on one adapter only.
 - **Unit-to-unit spread (10-25):** three working heads read 636, 749 and 978 counts in air, and
-  800, 957 and 980 in clear water. The TSW-10 and TST-10 contain the same board, so this is
-  spread between identical parts.
+  800, 957 and 980 in clear water. All three are DFRobot TST-10s, so this is spread between
+  units of one part.
 - **`RV` sets brightness.** Counter-clockwise dims a head. A0 read 980 in clear water, on the
   ADC's ceiling, and moved under 1 count up to 2000 mg/L in repeat 1; turned down to 787, it
   responded like the others ([`docs/hardware.md`](../hardware.md#probe-trimmer-rv)).
