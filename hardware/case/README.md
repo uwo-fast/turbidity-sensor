@@ -58,8 +58,8 @@ The base has a hole under the `RV` trimmer, for the setup below. To remove the h
 
 Filled with water, the tube acts as a cylindrical lens and concentrates the emitter's beam
 on the detector. With the load fixed, one board read 1.87 times as much with water in the
-tube as with it empty. Boards in the stock housings read 1.26–1.27 times more in water than
-in air. `tools/tube_raytrace.py` models this cross-section and predicts 1.52 times for water
+tube as with it empty. A board in its stock housing read 1.26 times as much in water as in
+air. `tools/tube_raytrace.py` models this cross-section and predicts 1.52 times for water
 over air, the same for emitter half-angles from 10 to 45°.
 
 So a board that reads well in its stock housing sits near the ADC's ceiling in the case:

@@ -47,9 +47,9 @@ Four captures taken while a load resistor was missing or on the wrong adapter we
 
 - **Why every board saturates in the tube:** the water-filled tube acts as a cylindrical
   lens and concentrates the beam on the detector. With the load fixed, water raised A1 1.87 ×
-  over air in the tube (`45_a1_tube_load_air` → `_clear`), against 1.26–1.27 × for the
-  stock-housing heads on 10-25. A 2D ray trace of this geometry (windows ±4.15 mm, 1.4 mm
-  wide; FEP tube 7.94 mm OD, 6.35 mm ID) predicts 1.51 ×, the same for emitter half-angles of
+  over air in the tube (`45_a1_tube_load_air` → `_clear`), against 1.26 × for A1 in its
+  stock housing on 10-25 (A2's 1.28 × that day was in the case, near the ceiling). A 2D ray trace of this geometry (windows ±4.15 mm, 1.4 mm
+  wide; FEP tube 7.94 mm OD, 6.35 mm ID; `tools/tube_raytrace.py`) predicts 1.52 ×, the same for emitter half-angles of
   10–45°. The isopropanol test below does not isolate the effect.
 
 ### Two tube heads, evening
