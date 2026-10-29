@@ -34,14 +34,17 @@ column instead of `adc_counts_a0`…`a3`.
 - Probes (with their cables) and one SEN0189 adapter per head
 - Arduino Nano (or Uno) and a USB cable; a breadboard to share 5 V and GND among adapters
 - Multimeter
-- An opaque card (stock) or an opaque 5/16 in rod, such as a dowel wrapped in black tape (tube)
+- A metal block for each gap and bore, such as black-oxide Allen keys. A card in a stock
+  head's gap let 3–7 counts through; metal reads 0.
 - **Tube setup:** printed cases, tube, opaque sleeving or tape for the tube outside the
   cases, a stand that holds the cases with the tube vertical, and a way to move sample
   through the tube: a peristaltic pump recirculating from a stirred beaker (preferred), or
   a large syringe
 - **Stock setup:** a clamp per head, and one container that holds every head at the same
   depth with its optical gap submerged and its connector end dry
-- Opaque cover (a box or aluminium foil), stirring rod, thermometer
+- Opaque cover (a box or aluminium foil) over the whole beaker: a clear beaker under a
+  translucent lid or flange still lets room light reach the stock heads. Stirring rod,
+  thermometer.
 - Kaolin, Tween 20, DI water, a balance, a graduated cylinder, and a pipette or small syringe for volumes under 1 mL
 
 Use only a **5 V** board. The output reaches about 4.8 V, beyond the ADC range of 3.3 V
@@ -79,7 +82,7 @@ With the Nano powered over USB and every head dry:
 2. For each adapter, run the adapter check in `docs/hardware.md`: the probe's middle pin
    and the adapter's signal output agree within a few tens of millivolts. Label and set
    aside any adapter that fails.
-3. For each head, block the beam (the card in the gap, or the rod in the case bore) and
+3. For each head, block the beam (a metal block in the gap, or a metal rod in the case bore) and
    confirm its output drops clearly.
 
 ## 3. Flash and capture
@@ -110,7 +113,7 @@ either way, nominally identical heads disagreed.
 | File | Stock setup | Tube setup |
 | --- | --- | --- |
 | `01_air.csv` | Heads dry, in air | Cases empty, no tube |
-| `02_dark.csv` | Opaque card in each gap | Opaque rod through each bore, before the tube goes in |
+| `02_dark.csv` | Metal block in each gap | Metal rod through each bore, before the tube goes in |
 | `03a_clear_di.csv` | As `03`, in plain DI water | As `03`, filled with plain DI water |
 | `03_clear.csv` | Heads in the blank diluent (below), covered | Tube in place, sleeved, filled with blank diluent, no bubbles |
 | `04_clear_uncovered.csv` | As `03`, uncovered, room light | As `03`, sleeving removed near the cases |
@@ -123,7 +126,7 @@ If `03` and `04` differ by more than the noise in `05`, ambient light is reachin
 detectors: keep everything covered or sleeved from here on. If `03a` and `03` differ, the
 Tween 20 is changing the reading: record it before the series.
 
-**Stock setup, crosstalk:** in the blank, block one head's gap with the card and confirm
+**Stock setup, crosstalk:** in the blank, block one head's gap with a metal block and confirm
 the other heads' readings do not change. Repeat for each head.
 
 ## 5. Kaolin series
@@ -139,8 +142,9 @@ only the kaolin changes.
 
 [`../test-solutions.md`](../test-solutions.md) gives the reasons for the dose.
 
-**Stock (10 g/L):** 1.500 g kaolin made up to 150 mL with diluent, enough for three
-repeats at 300 mL. Mix well, and stir it again before every draw.
+**Stock (10 g/L):** 4.500 g kaolin made up to 450 mL with diluent, enough for three
+repeats at 300 mL (140 mL each). **Shake it hard before every draw:** at 10 g/L the kaolin
+settles in the bottle within minutes, and a draw from a settled bottle is mostly diluent.
 
 **Series:** each repeat runs in one beaker of fresh diluent, raising the concentration
 step by step at constant volume. At each step, stir, remove the volume below from the
@@ -157,25 +161,55 @@ the step from C_old to C_new is V × (C_new − C_old) / (10000 − C_old) mL.
 | `15_c0400` | 400 | 6.12 |
 | `16_c0800` | 800 | 12.50 |
 | `17_c1000` | 1000 | 6.52 |
+| `18_c2000` | 2000 | 33.33 |
+| `19_c4000` | 4000 | 75.00 |
 
 Record any volume that differs from the table, so the concentration can be recomputed.
-Stir gently. **Avoid bubbles and foam:** Tween 20 foams, and a bubble in the beam reads as
-turbidity.
+**Avoid bubbles and foam:** Tween 20 foams, and a bubble in the beam reads as turbidity.
 
 **Stock setup:** the heads stay clamped in the covered beaker for the whole repeat. After
-each addition, stir gently for 10 s, then capture.
+each addition:
 
-**Tube setup,** with the cases in series on one vertical tube line, fed from the beaker
-and returning to it:
+1. Stir slowly to the bottom without breaking the surface. After a pause of more than a
+   few minutes, stir longer: a cloud of settled kaolin stirred up around the heads reads as
+   far more turbid than the beaker is.
+2. Check each head's gap for bubbles. Lower heads in at an angle, and clear clinging
+   bubbles with a squirt of diluent, not a finger.
+3. Cover, wait 30 s, then capture.
 
-1. With a pump: recirculate bottom to top, so bubbles rise out. Let it run until
-   readings settle, then capture 60 s while it flows.
-2. With a syringe: push at least three tube volumes up through the tube, then capture
-   30 s straight away. Kaolin settles in a still tube, so the reading drifts clearer
-   within seconds to minutes.
+Bubbles in the gaps caused the two bad captures in repeat 1. Both read far lower than the
+trend and recovered when repeated (`data/bench/2026-10-26/photos/`).
 
-When both setups share the beaker, fill the tube after stirring and capture 30 s. Record
-the water temperature at each step.
+**Tube setup,** with the cases in series on one vertical tube line. Set each tube head up
+first ([`hardware/case/README.md`](../../hardware/case/README.md#optics-and-setup)): out of
+the box, a board in the case sits near the ADC ceiling and barely responds.
+
+Use separate standards rather than the beaker: each fill is then an independent sample,
+and nothing settles onto the heads. Make each standard in its own capped bottle from the
+10 g/L stock (shaken), made up with diluent:
+
+| Kaolin (mg/L) | Stock (mL) | Diluent (mL) | Files |
+| ---: | ---: | ---: | --- |
+| 250 | 7.5 | 292.5 | `48_tube_c0250_1` … `_5` |
+| 500 | 15 | 285 | `48_tube_c0500_1` … `_5` |
+| 1000 | 30 | 270 | `48_tube_c1000_1` … `_5` |
+| 2000 | 60 | 240 | `48_tube_c2000_1` … `_5` |
+| 4000 | 120 | 180 | `48_tube_c4000_1` … `_5` |
+
+1. Clear reference: five separate fills of clear water (`47_tube_clear_1` … `_5`),
+   draining and refilling between them.
+2. For each standard, low to high, five fills: shake the bottle, push at least 15 mL up
+   through the tube (the last syringe slow and bubble-free), cover or sleeve, and capture
+   30 s straight away. No DI rinse between standards: the next standard flushes the last.
+3. Finish with a DI flush and one clear fill (`49_tube_clear_end`), to check for drift and
+   for kaolin left on the tube.
+
+With a pump instead of a syringe, recirculate from the stirred bottle, bottom to top, and
+capture 60 s while it flows. Record the water temperature at each step.
+
+If a capture disagrees with the trend, take it again under a `b` suffix, keep both, and
+note which is used. Never re-run a capture under a name you want to keep: a capture that
+fails before the header empties its output file (#21).
 
 **Settling:** once, at 200 mg/L, capture 5 minutes with no flow or stirring
 (`20_settling_c0200.csv`).
