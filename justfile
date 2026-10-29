@@ -63,6 +63,10 @@ capture port output *args:
 summarize +files:
     python3 tools/summarize_capture.py {{files}}
 
+# Plot a concentration series to SVG in build/plots (tools/plot_series.py --help)
+plot +args:
+    python3 tools/plot_series.py {{args}}
+
 # Remove build artifacts
 clean:
     rm -rf {{build_dir}}
