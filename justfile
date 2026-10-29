@@ -41,10 +41,11 @@ test: build
 regen:
     python3 tools/generate_vendor_calibration.py
 
-# Export the printed case STLs from the OpenSCAD source
+# Export the printed case and flange STLs from the OpenSCAD source
 case:
     openscad --export-format binstl -D 'part="base"' -D 'orient="print"' -o hardware/case/base.stl hardware/case/turbidity_case.scad
     openscad --export-format binstl -D 'part="lid"' -D 'orient="print"' -o hardware/case/lid.stl hardware/case/turbidity_case.scad
+    openscad --export-format binstl -o hardware/tst-flange/flange.stl hardware/tst-flange/flange.scad
 
 # Compile both Arduino examples for every board in their platformio.ini
 arduino:
