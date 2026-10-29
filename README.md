@@ -24,7 +24,7 @@ The software is an MVP based on digitized and fitted manufacturer curves. The ac
 
 - `include/`: public C API
 - `src/`: core implementation plus the generated vendor-fit header used at runtime
-- `tools/`: offline utilities: the 3-point calibration CLI, the calibration generator, and the serial capture and summary scripts
+- `tools/`: offline utilities: the 3-point calibration CLI, the calibration generator, the serial capture, summary and plot scripts, and the tube-case ray trace
 - `examples/`: host and Arduino examples
 - `data/calibration/`: raw vendor digitizations and generated calibration artifacts
 - `tests/`: unit, CLI-contract, and package smoke tests

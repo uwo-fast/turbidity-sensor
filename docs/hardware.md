@@ -39,17 +39,24 @@ Whatever the setup, per-head dark and clear-water references (see
 
 Every probe in the lab (TSW-10 and TST-10, from DFRobot, DigiKey and Mouser) has a trimmer
 labelled `RV` on a small board inside its plastic housing. The Amphenol datasheet
-schematic does not show it, so what it adjusts is **not yet known**. A factory trim of
-the emitter current or output level is plausible, since the datasheet allows a ±20%
-spread in output between units, but that is unconfirmed.
+schematic does not show it. On the bench it sets how bright the head reads: **turning it
+counter-clockwise, viewed from above, lowers the output**, and clockwise raises it
+(`data/bench/2026-10-26/notes.md`, `data/bench/2026-10-28/notes.md`). The
+counter-clockwise end stop is the dimmest setting.
 
-Until it is characterized:
+Heads ship with it set anywhere. One stock head read 980 counts of 1023 in clear water,
+on the ADC's ceiling, and moved less than 1 count at kaolin concentrations that moved
+another head by 6 %. After its `RV` was turned down, it read 787 and responded like the
+other head.
 
-- **Do not adjust `RV`**, and do not open probes that are in use. Turning it changes that
-  unit's transfer function, and its original setting cannot be recovered unless it was
-  marked first.
-- If a probe is opened, photograph both sides of its board and mark the trimmer's
-  position before touching anything.
+- Check each head's clear-water reading. Above about 950 counts it sits near the
+  ceiling and barely responds. Turn `RV` counter-clockwise until it reads about 800–880.
+- Before turning it, photograph both sides of the board and mark the trimmer's position,
+  and record the change with the head's data.
+- After a turn, let the head settle in clear water: one head moved about 35 counts over
+  ten minutes before it steadied. Take references once it is steady.
+- In the printed tube case, `RV` alone is not enough; see
+  [`hardware/case/README.md`](../hardware/case/README.md#optics-and-setup).
 
 ## Default path: DFRobot SEN0189 adapter
 
@@ -91,6 +98,9 @@ What this means in practice:
 - **Adapter to Arduino:** use the 3-pin Gravity output connector. On a DFRobot Gravity
   cable the signal wire is blue (to `A0`), `VCC` is red (to `5V`) and `GND` is black
   (to `GND`). If the board is marked, go by its markings.
+- **Unused inputs:** an unconnected input does not read 0. It reads the charge left by
+  the input sampled before it, so on the multichannel logger an empty `A3` follows `A2`.
+  Ignore its column, or tie it to GND.
 
 ### Checking an adapter
 
