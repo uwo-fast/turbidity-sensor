@@ -12,11 +12,20 @@ Those come either from an adapter board or from two resistors on a breadboard. T
 `arduino` example reads one head on `A0`; the `arduino-multichannel` logger reads up to
 four on `A0`–`A3`.
 
-The lab has several `TSW-10` and `TST-10` heads, bought from DFRobot and from DigiKey or
-Mouser. They are not all the same board: the DFRobot heads have a 150 Ω resistor (marked
-`151`) in series with the signal on the probe board, and the lab's TSW-10 and the
-non-DFRobot heads do not. Its effect on the reading has not been measured. Record each
-head's model and source with its data.
+The lab has several `TSW-10` and `TST-10` heads, bought from
+[DFRobot](https://www.dfrobot.com/product-1394.html) (with the SEN0189 adapter), from DigiKey
+([TST-10](https://www.digikey.ca/en/products/detail/amphenol-advanced-sensors/TST-10/4767842),
+[TSW-10](https://www.digikey.ca/en/products/detail/amphenol-advanced-sensors/TSW-10/4250485))
+and from Mouser. The probe board inside differs by source:
+
+![Probe boards out of their housings: DFRobot's (top, with its cable) and Amphenol's from DigiKey (bottom)](images/probe-boards.jpg)
+
+- **DFRobot:** a different trace layout, and a 150 Ω resistor (marked `151`) in series with
+  the signal.
+- **Amphenol, from DigiKey:** no `151`; the trimmer is silkscreened `VR`.
+
+The lab's TSW-10 and the other non-DFRobot heads also lack the resistor. Its effect on the
+reading has not been measured. Record each head's model and source with its data.
 
 ## Setups
 
@@ -40,7 +49,8 @@ Whatever the setup, per-head dark and clear-water references (see
 ## Probe trimmer (RV)
 
 Every probe in the lab (TSW-10 and TST-10, from DFRobot, DigiKey and Mouser) has a trimmer
-labelled `RV` on a small board inside its plastic housing. The Amphenol datasheet
+on a small board inside its plastic housing (silkscreened `VR` on the Amphenol board;
+these docs call it `RV`). The Amphenol datasheet
 schematic does not show it. On the bench it sets how bright the head reads: **turning it
 counter-clockwise, viewed from above, lowers the output**, and clockwise raises it
 (`data/bench/2026-10-26/notes.md`, `data/bench/2026-10-28/notes.md`). The
