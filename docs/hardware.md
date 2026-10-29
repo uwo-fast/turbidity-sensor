@@ -13,8 +13,10 @@ Those come either from an adapter board or from two resistors on a breadboard. T
 four on `A0`–`A3`.
 
 The lab has several `TSW-10` and `TST-10` heads, bought from DFRobot and from DigiKey or
-Mouser. Heads of the same model from different vendors are nominally the same part, so a
-difference between two of them is unit-to-unit variation, not a difference in model.
+Mouser. They are not all the same board: the DFRobot heads have a 150 Ω resistor (marked
+`151`) in series with the signal on the probe board, and the lab's TSW-10 and the
+non-DFRobot heads do not. Its effect on the reading has not been measured. Record each
+head's model and source with its data.
 
 ## Setups
 
