@@ -72,7 +72,7 @@ stayed there with `RV` at its dimmest end. Lowering the load on the probe's outp
    the clear reading is about 850–880 counts. Boards differ: one needed 15 kΩ, another 6.8 kΩ.
 3. Record the resistor value with the board's data.
 
-Set up this way, two boards in cases on one tube read −8.6 % and −4.9 % at 250 mg/L kaolin,
+Set up this way, two boards, each in its own case and tube, read −8.6 % and −4.9 % at 250 mg/L kaolin,
 and −85.7 % and −85.3 % at 4000 mg/L, with standard deviations of 0.1–1.0 points across five
 fills per point (`data/bench/2026-10-28/notes.md`). Before the resistor, a board in the case moved −1.7 % at
 4000 mg/L.

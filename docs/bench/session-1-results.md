@@ -8,6 +8,17 @@ Each head is normalized against its own captures: transmittance T = (mean − da
 dark), reported as percent change from clear, (T − 1) × 100, and as attenuation −ln T. The
 tables come from `tools/plot_series.py` (`just plot`).
 
+## Setup
+
+![The bench: logger tray with the Nano and three SEN0189 adapters, A2's tube case in the grey autosampler arm, A1's tube case under its syringe, A0 in its beaker, and the standards](../../data/bench/2026-10-28/photos/bench_overview.jpg)
+
+A0 sits in its stock housing in a beaker; A1 and A2 are bare boards in printed tube cases,
+each with its own tube and syringe. A2's case sits in a grey arm built for automated
+sampling; the case, tube, syringe and light path are the same as A1's. More photos, including
+the adapters with their load resistors, are in `data/bench/2026-10-28/photos/`.
+
+![A0 in its 100 mL beaker: the level covers the emitter and detector and stays below the rear cap](../../data/bench/2026-10-28/photos/a0_stock_beaker_side.jpg)
+
 ## Heads
 
 - **Screening (10-24):** of five heads, two hold a fixed output (788 and 709 counts) and do
@@ -40,7 +51,7 @@ beaker at constant volume (`data/bench/2026-10-26/`, `data/bench/2026-10-28/`).
   4000 mg/L.
 - **Runs do not:** A1 differs by up to 5.2 points between repeats.
 - **The concentrations are uncertain.** The same head, A0, read −15.1 % at 4000 mg/L here and
-  −79.1 % in a 25 mL container of a bottled 4000 mg/L standard (below). Either the beaker draws
+  −79.1 % in a beaker of a bottled 4000 mg/L standard (below). Either the beaker draws
   carried less kaolin than intended (the 10 g/L stock settles within minutes, and was not
   shaken before every draw until partway through repeat 2), or the container changes the
   reading. These data show the direction of the response and the agreement within a run, not
@@ -50,12 +61,13 @@ beaker at constant volume (`data/bench/2026-10-26/`, `data/bench/2026-10-28/`).
 
 ## Tube case
 
-Two boards in two printed cases on one vertical FEP tube (6.35 mm ID), set up per
+Two boards, each in a printed case on its own vertical FEP tube (6.35 mm ID) and syringe, set up per
 [`hardware/case/README.md`](../../hardware/case/README.md#optics-and-setup): `RV` fully
 counter-clockwise, and a load resistor chosen for 850–880 counts in clear water (15 kΩ on A1,
 6.8 kΩ on A2). Separate standards in capped bottles, five fills each, mean ± SD
-(`data/bench/2026-10-28/`, captures `47_` to `49_`). A0 is a stock-housing head in a 25 mL
-container filled from the same bottle each time.
+(`data/bench/2026-10-28/`, captures `47_` to `49_`). A0 is a stock-housing head in a 100 mL
+plastic beaker with 25–35 mL from the same bottle each time: enough to cover the emitter and
+detector, below the rear cap where liquid would enter the housing.
 
 | mg/L | A1 (tube) | A2 (tube) | A0 (stock, container) |
 | ---: | ---: | ---: | ---: |
@@ -84,6 +96,10 @@ container filled from the same bottle each time.
 
 ## Conditions
 
+- **Darkness:** A0's stock housing and A1's tube case are not dark by construction. Every
+  covered capture ran under a large opaque plastic bin over the heads, with the room lights
+  off and the shades drawn after dark; repeat 2 ran in the morning in a windowless room, under
+  the same bin. The exceptions are named in the day's notes.
 - **Room light** reaches the stock heads through a clear beaker: uncovered, A1 read 6.2 counts
   (0.8 %) higher, with its noise up from 0.16 to 0.42 counts (10-25); a blank taken with room
   light reaching the beaker read 25 counts (3.2 %) higher (10-26). The case head read the same

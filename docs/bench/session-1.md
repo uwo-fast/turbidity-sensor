@@ -180,7 +180,7 @@ each addition:
 Bubbles in the gaps caused the two bad captures in repeat 1. Both read far lower than the
 trend and recovered when repeated (`data/bench/2026-10-26/photos/`).
 
-**Tube setup,** with the cases in series on one vertical tube line. Set each tube head up
+**Tube setup,** each case on its own vertical tube and syringe, filled from the same standard. Set each tube head up
 first ([`hardware/case/README.md`](../../hardware/case/README.md#optics-and-setup)): out of
 the box, a board in the case sits near the ADC ceiling and barely responds.
 
