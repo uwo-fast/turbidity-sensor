@@ -61,8 +61,8 @@ boards such as ESP32 or RP2040.
 
 See [`docs/hardware.md`](../hardware.md) for what the adapter does to the signal.
 
-1. Plug each probe cable into its adapter. Do not adjust the `RV` trimmer on any probe
-   (see `docs/hardware.md`).
+1. Plug each probe cable into its adapter. A head reading above about 950 counts in clear
+   water needs its `RV` trimmer turned down first (see `docs/hardware.md`).
 2. Set every adapter's switch to **`A`**. Leave its potentiometer alone; it does nothing
    in `A` mode.
 3. Connect every adapter's `VCC` and `GND` to the Nano's `5V` and `GND`, and each

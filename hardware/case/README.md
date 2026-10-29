@@ -42,7 +42,8 @@ the geometry is not.
 ## Assembly
 
 1. Open the stock housing. Before you touch anything, photograph both sides of the
-   board and mark the position of the `RV` trimmer (see [`docs/hardware.md`](../../docs/hardware.md#probe-trimmer-rv)).
+   board and mark the position of the `RV` trimmer (see [`docs/hardware.md`](../../docs/hardware.md#probe-trimmer-rv)),
+   so the board can go back in its housing at its original setting.
 2. Drop the board into the base, component side up. The pocket fits it only one way.
 3. Put the lid on, keys down, with its window over the connector. The keys locate it
    on the base.
@@ -50,8 +51,36 @@ the geometry is not.
    holds the case closed.
 5. Plug the probe cable in through the window.
 
-The base has a hole under the `RV` trimmer. Leave the trimmer alone until it is
-characterized. To remove the hole, set `access_hole = false`.
+The base has a hole under the `RV` trimmer, for the setup below. To remove the hole, set
+`access_hole = false`.
+
+## Optics and setup
+
+Filled with water, the tube acts as a cylindrical lens and concentrates the emitter's beam
+on the detector. With the load fixed, one board read 1.87 times as much with water in the
+tube as with it empty. Boards in the stock housings read 1.26–1.27 times more in water than
+in air. `tools/tube_raytrace.py` models this cross-section and predicts 1.52 times for water
+over air, the same for emitter half-angles from 10 to 45°.
+
+So a board that reads well in its stock housing sits near the ADC's ceiling in the case:
+940–970 counts of 1023 in clear water, where it barely responds to turbidity. Two boards
+stayed there with `RV` at its dimmest end. Lowering the load on the probe's output fixes it:
+
+1. Turn `RV` fully counter-clockwise (viewed from above), its dimmest end.
+2. With clear water in the tube, add a resistor from the probe's output (the middle pin of
+   the probe connector) to GND, in parallel with the adapter's 4.7 kΩ load. Choose it so
+   the clear reading is about 850–880 counts. Boards differ: one needed 15 kΩ, another 6.8 kΩ.
+3. Record the resistor value with the board's data.
+
+Set up this way, two boards in cases on one tube read −8.6 % and −4.9 % at 250 mg/L kaolin,
+and −85.7 % and −85.3 % at 4000 mg/L, with standard deviations of 0.1–1.0 points across five
+fills per point (`data/bench/2026-10-28/notes.md`). Before the resistor, a board in the case moved −1.7 % at
+4000 mg/L.
+
+Replacing the water with isopropanol (refractive index 1.377) was meant to confirm the lens:
+the model predicts +4.5 % over water. The tube heads rose 2.4–3.0 %, but a stock-housing head
+with no tube in its path rose 14 %, so something else changes with the liquid too, and the
+test does not isolate the lens effect.
 
 ## Light leaks
 
@@ -108,4 +137,5 @@ ignored and the dimensions are not readable.
   (`head_x0`) and the PCB outline (`pcb_*`) first.
 - The tube's axis along the arms (`optical_y`, 10.8) is the centre of the lens windows,
   measured from the arms' root. The first print put the tube at 11.4, before it was measured.
-- Not yet tested wet.
+- Tested wet on 2026-10-28 with kaolin standards from 250 to 4000 mg/L, after the setup in
+  [Optics and setup](#optics-and-setup).
