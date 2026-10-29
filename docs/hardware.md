@@ -49,9 +49,12 @@ on the ADC's ceiling, and moved less than 1 count at kaolin concentrations that 
 another head by 6 %. After its `RV` was turned down, it read 787 and responded like the
 other head.
 
+- Before turning it, mark the trimmer's position (a fine-tip permanent marker across the
+  slot and onto the board) and photograph both sides of the board. Then take air,
+  clear-water and dark references in the setup the head will run in, stock housing or
+  tube case, so the setting it shipped with stays on record.
 - Check each head's clear-water reading. Above about 950 counts it sits near the
-  ceiling and barely responds. Turn `RV` counter-clockwise until it reads about 800–880.
-- Before turning it, photograph both sides of the board and mark the trimmer's position,
+  ceiling and barely responds. Turn `RV` counter-clockwise until it reads about 800–880,
   and record the change with the head's data.
 - After a turn, let the head settle in clear water: one head moved about 35 counts over
   ten minutes before it steadied. Take references once it is steady.
