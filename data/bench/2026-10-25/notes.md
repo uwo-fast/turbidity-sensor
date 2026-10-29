@@ -5,7 +5,7 @@ Same hardware and wiring as the end of `../2026-10-24/`.
 - **Board:** Arduino Nano, `arduino-multichannel` logger, `/dev/ttyUSB0`
 - **Adapters:** DFRobot SEN0189 V1.0, switch at A
 - **Supply:** `vcc_mv` 4712–4732 (bandgap estimate, not measured with a multimeter)
-- **Heads:** **A0** = TST-10 (stock, in a covered beaker), **A1** = new head (model not recorded), **A2** = case head (tube), **A3** = unconnected, ignore it
+- **Heads:** **A0** = TST-10 (stock, in a covered beaker), **A1** = TST-10 (stock), **A2** = TST-10 board in the case (tube), all three from DFRobot, **A3** = unconnected, ignore it
 - **Diluent:** 0.01 % v/v Tween 20 in DI water, from a 1 % stock (`docs/bench/session-1.md`, section 5)
 - **Tween 20 (product, lot):**
 - **Kaolin (product, lot):**

@@ -12,9 +12,20 @@ Those come either from an adapter board or from two resistors on a breadboard. T
 `arduino` example reads one head on `A0`; the `arduino-multichannel` logger reads up to
 four on `A0`–`A3`.
 
-The lab has several `TSW-10` and `TST-10` heads, bought from DFRobot and from DigiKey or
-Mouser. Heads of the same model from different vendors are nominally the same part, so a
-difference between two of them is unit-to-unit variation, not a difference in model.
+The lab has several `TSW-10` and `TST-10` heads, bought from
+[DFRobot](https://www.dfrobot.com/product-1394.html) (with the SEN0189 adapter), from DigiKey
+([TST-10](https://www.digikey.ca/en/products/detail/amphenol-advanced-sensors/TST-10/4767842),
+[TSW-10](https://www.digikey.ca/en/products/detail/amphenol-advanced-sensors/TSW-10/4250485))
+and from Mouser. The probe board inside differs by source:
+
+![Probe boards out of their housings: DFRobot's (top, with its cable) and Amphenol's from DigiKey (bottom)](images/probe-boards.jpg)
+
+- **DFRobot:** a different trace layout, and a 150 Ω resistor (marked `151`) in series with
+  the signal.
+- **Amphenol, from DigiKey:** no `151`; the trimmer is silkscreened `VR`.
+
+The lab's TSW-10 and the other non-DFRobot heads also lack the resistor. Its effect on the
+reading has not been measured. Record each head's model and source with its data.
 
 ## Setups
 
@@ -38,7 +49,8 @@ Whatever the setup, per-head dark and clear-water references (see
 ## Probe trimmer (RV)
 
 Every probe in the lab (TSW-10 and TST-10, from DFRobot, DigiKey and Mouser) has a trimmer
-labelled `RV` on a small board inside its plastic housing. The Amphenol datasheet
+on a small board inside its plastic housing (silkscreened `VR` on the Amphenol board;
+these docs call it `RV`). The Amphenol datasheet
 schematic does not show it. On the bench it sets how bright the head reads: **turning it
 counter-clockwise, viewed from above, lowers the output**, and clockwise raises it
 (`data/bench/2026-10-26/notes.md`, `data/bench/2026-10-28/notes.md`). The
@@ -49,9 +61,12 @@ on the ADC's ceiling, and moved less than 1 count at kaolin concentrations that 
 another head by 6 %. After its `RV` was turned down, it read 787 and responded like the
 other head.
 
+- Before turning it, mark the trimmer's position (a fine-tip permanent marker across the
+  slot and onto the board) and photograph both sides of the board. Then take air,
+  clear-water and dark references in the setup the head will run in, stock housing or
+  tube case, so the setting it shipped with stays on record.
 - Check each head's clear-water reading. Above about 950 counts it sits near the
-  ceiling and barely responds. Turn `RV` counter-clockwise until it reads about 800–880.
-- Before turning it, photograph both sides of the board and mark the trimmer's position,
+  ceiling and barely responds. Turn `RV` counter-clockwise until it reads about 800–880,
   and record the change with the head's data.
 - After a turn, let the head settle in clear water: one head moved about 35 counts over
   ten minutes before it steadied. Take references once it is steady.

@@ -47,7 +47,7 @@ floor_t = 1.0;
 roof_t = 1.0;
 // base/lid parting plane; the PCB top is probe_pcb()[0], so the PCB sits recessed
 split_z = 2.0;
-// hole under the RV trimmer (docs/hardware.md: do not adjust RV)
+// hole under the RV trimmer; before turning RV, mark its position and take air, clear and dark references in this case (docs/hardware.md)
 access_hole = true;
 // access hole width (x)
 access_w = 4.0;

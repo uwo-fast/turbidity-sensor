@@ -16,10 +16,10 @@ series) starts fresh in `../2026-10-25/`.
 | TSW-10 (stock) | **Faulty.** Output fixed at ~788 counts whatever the light or the RV pot setting. The fault follows the probe, not the pin or the adapter. Removed. |
 | Second TST-10 (stock) | **Faulty.** Fixed at ~709, no response to blocking. Removed. |
 | TST-10 (stock) | Good. Air ~978, blocked ~1. |
-| New head (model not recorded) | Good. Air ~630, blocked ~0. |
+| New TST-10 (stock) | Good. Air ~630, blocked ~0. |
 | Case head | Good. Air ~746, blocked 0. |
 
-Final wiring: **A0** = TST-10 (its probe on the adapter first used for the TSW), **A1** = new head, **A2** = case, **A3** = unconnected. A3 reads leftover charge from A2 (`00_new_blk_3_baseline`: it fell to ~7 while A2 was blocked), so ignore that column.
+Final wiring: **A0** = TST-10 (its probe on the adapter first used for the TSW), **A1** = new TST-10, **A2** = case, **A3** = unconnected. The three working heads are all DFRobot TST-10s; their probe boards have a 150 Ω resistor (marked `151`) in series with the signal, which the TSW-10 and the non-DFRobot heads lack. A3 reads leftover charge from A2 (`00_new_blk_3_baseline`: it fell to ~7 while A2 was blocked), so ignore that column.
 
 ## Captures
 

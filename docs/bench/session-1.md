@@ -108,7 +108,7 @@ The first readings are why. On 2026-09-27, stock heads in air read between about
 900, each one steady, but different from head to head. A DigiKey head (with a UL "RU"
 mark) matched one DFRobot head, and a second DFRobot head differed from both. Those
 readings were noted as "raw mV" without recording which column they came from, but
-either way, nominally identical heads disagreed.
+either way, heads of the same model disagreed, including two from DFRobot.
 
 | File | Stock setup | Tube setup |
 | --- | --- | --- |
