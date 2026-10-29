@@ -41,6 +41,7 @@ just arduino  # compile both Arduino examples for every board
 just upload   # flash an Arduino example (default: uno, arduino)
 just capture  # record a board's serial log to CSV
 just summarize  # per-file statistics; --dark/--clear add per-head transmittance
+just plot       # SVG plots of a concentration series, in build/plots
 ```
 
 `fmt`, `check` and CI use clang-format and clang-tidy 18.1.8.
