@@ -24,8 +24,12 @@ import sys
 
 from summarize_capture import is_adc, read_capture
 
-COLOURS = ("#0072B2", "#D55E00", "#009E73", "#CC79A7")
-W, H, LEFT, RIGHT, TOP, BOTTOM = 640, 420, 70, 20, 40, 50
+# Validated categorical slots (CVD and normal-vision separation, all pairs); the marker
+# shape repeats the identity for greyscale print and colour-vision deficiency.
+COLOURS = ("#2a78d6", "#eb6834", "#1baf7a", "#6250d6")
+SHAPES = ("circle", "square", "triangle", "diamond")
+INK, MUTED, GRID, SURFACE = "#0b0b0b", "#52514e", "#e4e3df", "#ffffff"
+W, H, LEFT, RIGHT, TOP, BOTTOM = 720, 500, 78, 24, 82, 58
 
 
 def column_means(paths):
@@ -45,48 +49,99 @@ def concentration(path):
     return int(match.group(1))
 
 
-def svg(path, title, xlabel, ylabel, series):
-    """series: [(label, [(x, y, sd_or_None)])]"""
+def nice_ticks(lo, hi, count=6):
+    span = hi - lo or 1
+    step = 10 ** math.floor(math.log10(span / count))
+    step *= next(m for m in (1, 2, 2.5, 5, 10) if span / (step * m) <= count)
+    first = math.ceil(lo / step - 1e-9) * step
+    return [round(first + i * step, 10) for i in range(int((hi - first) / step + 1e-9) + 1)]
+
+
+def marker(shape, x, y, colour):
+    ring = f'stroke="{SURFACE}" stroke-width="2"'
+    if shape == "square":
+        return f'<rect x="{x - 4.5}" y="{y - 4.5}" width="9" height="9" fill="{colour}" {ring}/>'
+    if shape == "triangle":
+        return f'<polygon points="{x},{y - 5.5} {x + 5.5},{y + 4.5} {x - 5.5},{y + 4.5}" fill="{colour}" {ring}/>'
+    if shape == "diamond":
+        return f'<polygon points="{x},{y - 6} {x + 6},{y} {x},{y + 6} {x - 6},{y}" fill="{colour}" {ring}/>'
+    return f'<circle cx="{x}" cy="{y}" r="5" fill="{colour}" {ring}/>'
+
+
+def svg(path, title, subtitle, xlabel, ylabel, series, y_range, log_x, legend_at_bottom):
+    """series: [(label, [(x, y, sd_or_None)])]; y_range: (low, high) or None to fit."""
     points = [p for _, pts in series for p in pts]
-    x_max = max(x for x, _, _ in points) or 1
-    lows = [y - (sd or 0) for _, y, sd in points] + [0]
-    highs = [y + (sd or 0) for _, y, sd in points] + [0]
-    y_min, y_max = min(lows), max(highs)
-    pad = (y_max - y_min) * 0.05 or 1
-    y_min, y_max = y_min - pad, y_max + pad
+    xs = sorted({x for x, _, _ in points})
+    if log_x:
+        tx = math.log2
+        x_lo, x_hi = tx(xs[0]) - 0.3, tx(xs[-1]) + 0.3
+        x_ticks = xs
+    else:
+        tx = float
+        x_lo, x_hi = 0.0, xs[-1] * 1.04
+        x_ticks = nice_ticks(0, xs[-1])
+    exponent = 0 if xs[-1] < 1e4 else int(math.floor(math.log10(xs[-1])))
+    scale = 10 ** exponent
+    if exponent:
+        xlabel = f"{xlabel} (×10{str(exponent).translate(str.maketrans('-0123456789', '⁻⁰¹²³⁴⁵⁶⁷⁸⁹'))})"
+
+    if y_range:
+        y_lo, y_hi = y_range
+    else:
+        y_lo = min([0] + [y - (sd or 0) for _, y, sd in points])
+        y_hi = max([0] + [y + (sd or 0) for _, y, sd in points])
+        pad = (y_hi - y_lo) * 0.05 or 1
+        y_lo, y_hi = (y_lo - pad if y_lo < 0 else y_lo), (y_hi + pad if y_hi > 0 else y_hi)
+    y_ticks = nice_ticks(y_lo, y_hi)
 
     def px(x):
-        return LEFT + x / x_max * (W - LEFT - RIGHT)
+        return LEFT + (tx(x) - x_lo) / (x_hi - x_lo) * (W - LEFT - RIGHT)
 
     def py(y):
-        return TOP + (y_max - y) / (y_max - y_min) * (H - TOP - BOTTOM)
+        return TOP + (y_hi - y) / (y_hi - y_lo) * (H - TOP - BOTTOM)
 
-    out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" font-family="sans-serif" font-size="12">',
-           f'<rect width="{W}" height="{H}" fill="white"/>',
-           f'<text x="{W / 2}" y="22" text-anchor="middle" font-size="14">{title}</text>',
-           f'<line x1="{LEFT}" y1="{py(0)}" x2="{W - RIGHT}" y2="{py(0)}" stroke="#999"/>',
-           f'<line x1="{LEFT}" y1="{TOP}" x2="{LEFT}" y2="{H - BOTTOM}" stroke="#333"/>',
-           f'<text x="{W / 2}" y="{H - 10}" text-anchor="middle">{xlabel}</text>',
-           f'<text x="16" y="{H / 2}" text-anchor="middle" transform="rotate(-90 16 {H / 2})">{ylabel}</text>']
-    for i in range(5):
-        x = x_max * i / 4
-        out.append(f'<text x="{px(x)}" y="{H - BOTTOM + 16}" text-anchor="middle">{x:g}</text>')
-    step = 10 ** math.floor(math.log10((y_max - y_min) / 5))
-    step *= next(m for m in (1, 2, 5, 10) if (y_max - y_min) / (step * m) <= 6)
-    y = math.ceil(y_min / step) * step
-    while y <= y_max:
-        out.append(f'<text x="{LEFT - 6}" y="{py(y) + 4}" text-anchor="end">{y:g}</text>')
-        out.append(f'<line x1="{LEFT - 3}" y1="{py(y)}" x2="{LEFT}" y2="{py(y)}" stroke="#333"/>')
-        y = round(y + step, 10)
-    for n, (label, pts) in enumerate(series):
+    def fmt(v):
+        return f"{v:g}".replace("-", "−")
+
+    out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
+           f'font-family="Helvetica, Arial, sans-serif" font-size="13" fill="{INK}">',
+           f'<rect width="{W}" height="{H}" fill="{SURFACE}"/>',
+           f'<text x="{LEFT}" y="24" font-size="16" font-weight="600">{title}</text>',
+           *(f'<text x="{LEFT}" y="{44 + 16 * i}" fill="{MUTED}" font-size="12">{line}</text>'
+             for i, line in enumerate(subtitle))]
+    for y in y_ticks:
+        out.append(f'<line x1="{LEFT}" y1="{py(y)}" x2="{W - RIGHT}" y2="{py(y)}" stroke="{GRID}" stroke-width="1"/>')
+        out.append(f'<text x="{LEFT - 8}" y="{py(y) + 4}" text-anchor="end" fill="{MUTED}">{fmt(y)}</text>')
+    for x in x_ticks:
+        out.append(f'<line x1="{px(x)}" y1="{TOP}" x2="{px(x)}" y2="{H - BOTTOM}" stroke="{GRID}" stroke-width="1"/>')
+        out.append(f'<text x="{px(x)}" y="{H - BOTTOM + 18}" text-anchor="middle" fill="{MUTED}">{fmt(round(x / scale, 6))}</text>')
+    out.append(f'<line x1="{LEFT}" y1="{py(0)}" x2="{W - RIGHT}" y2="{py(0)}" stroke="{MUTED}" stroke-width="1"/>')
+    out.append(f'<text x="{(LEFT + W - RIGHT) / 2}" y="{H - 14}" text-anchor="middle">{xlabel}</text>')
+    out.append(f'<text x="20" y="{(TOP + H - BOTTOM) / 2}" text-anchor="middle" '
+               f'transform="rotate(-90 20 {(TOP + H - BOTTOM) / 2})">{ylabel}</text>')
+
+    for n, (_, pts) in enumerate(series):
         colour = COLOURS[n % len(COLOURS)]
         pts = sorted(pts)
-        out.append(f'<polyline fill="none" stroke="{colour}" points="{" ".join(f"{px(x)},{py(y)}" for x, y, _ in pts)}"/>')
+        out.append(f'<polyline fill="none" stroke="{colour}" stroke-width="2" stroke-linejoin="round" '
+                   f'points="{" ".join(f"{px(x):.1f},{py(y):.1f}" for x, y, _ in pts)}"/>')
         for x, y, sd in pts:
             if sd:
-                out.append(f'<line x1="{px(x)}" y1="{py(y - sd)}" x2="{px(x)}" y2="{py(y + sd)}" stroke="{colour}"/>')
-            out.append(f'<circle cx="{px(x)}" cy="{py(y)}" r="3" fill="{colour}"/>')
-        out.append(f'<text x="{W - RIGHT - 120}" y="{TOP + 16 * (n + 1)}" fill="{colour}">{label}</text>')
+                x0, y0, y1 = px(x), py(y - sd), py(y + sd)
+                out.append(f'<path d="M{x0},{y0}V{y1}M{x0 - 5},{y0}H{x0 + 5}M{x0 - 5},{y1}H{x0 + 5}" '
+                           f'stroke="{colour}" stroke-width="1.5" fill="none"/>')
+        for x, y, _ in pts:
+            out.append(marker(SHAPES[n % len(SHAPES)], px(x), py(y), colour))
+
+    row = 20
+    ly = (H - BOTTOM - 12 - row * (len(series) - 1)) if legend_at_bottom else TOP + 14
+    out.append(f'<rect x="{LEFT + 10}" y="{ly - 14}" width="190" height="{row * len(series) + 8}" '
+               f'fill="{SURFACE}" fill-opacity="0.9" stroke="{GRID}"/>')
+    for n, (label, _) in enumerate(series):
+        colour, y = COLOURS[n % len(COLOURS)], ly + row * n
+        out.append(f'<line x1="{LEFT + 18}" y1="{y - 4}" x2="{LEFT + 42}" y2="{y - 4}" stroke="{colour}" stroke-width="2"/>')
+        out.append(marker(SHAPES[n % len(SHAPES)], LEFT + 30, y - 4, colour))
+        out.append(f'<text x="{LEFT + 50}" y="{y}">{label}</text>')
     out.append("</svg>\n")
     with open(path, "w", encoding="utf-8") as handle:
         handle.write("\n".join(out))
@@ -101,6 +156,7 @@ def main(argv=None):
     parser.add_argument("--label", nargs="+", default=[], help="column=label pairs for the legend")
     parser.add_argument("--x", nargs="+", default=[], help="level=value pairs (c0500=7.2e7) giving each _c level its x value")
     parser.add_argument("--xlabel", default="kaolin (mg/L)")
+    parser.add_argument("--log-x", action="store_true", help="log2 x axis, for a series that doubles at each level")
     parser.add_argument("--title", default="")
     parser.add_argument("--out-dir", default="build/plots")
     parser.add_argument("--name", default="series")
@@ -138,8 +194,14 @@ def main(argv=None):
 
     os.makedirs(args.out_dir, exist_ok=True)
     stem = os.path.join(args.out_dir, args.name)
-    svg(stem + "_change.svg", args.title, args.xlabel, "change from clear (%)", change)
-    svg(stem + "_attenuation.svg", args.title, args.xlabel, "attenuation, -ln T", attenuation)
+    n = sorted({len(rows) for rows in fills.values()})
+    fills_text = f"{n[0]}" if len(n) == 1 else f"{n[0]}–{n[-1]}"
+    subtitle = (f"Mean of {fills_text} fills per point, each head against its own clear reference.",
+                "Error bars ±1 SD; where none shows, the SD is smaller than the marker.")
+    svg(stem + "_change.svg", args.title, subtitle, args.xlabel, "change from clear (%)", change,
+        (-100, 0), args.log_x, legend_at_bottom=True)
+    svg(stem + "_attenuation.svg", args.title, subtitle, args.xlabel, "attenuation, −ln T", attenuation,
+        None, args.log_x, legend_at_bottom=False)
     print(f"wrote {stem}_change.svg and {stem}_attenuation.svg", file=sys.stderr)
     return 0
 
