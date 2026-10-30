@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Plot a concentration series from capture files as SVG, standard library only.
 
-Each capture's concentration comes from its name (`..._c1000_...` is 1000 mg/L).
+Each capture's level comes from its name (`..._c1000_...` is level 1000, by default
+1000 mg/L kaolin). --x maps levels to other x values, such as cells/mL, with --xlabel
+naming the axis.
 Every ADC column is normalized against its own clear (and, optionally, dark)
 captures, as in summarize_capture.py:
 
@@ -39,11 +41,11 @@ def column_means(paths):
 def concentration(path):
     match = re.search(r"_c(\d+)", os.path.basename(path))
     if not match:
-        sys.exit(f"error: no _c<mg/L> in the name of {path}")
+        sys.exit(f"error: no _c<level> in the name of {path}")
     return int(match.group(1))
 
 
-def svg(path, title, ylabel, series):
+def svg(path, title, xlabel, ylabel, series):
     """series: [(label, [(x, y, sd_or_None)])]"""
     points = [p for _, pts in series for p in pts]
     x_max = max(x for x, _, _ in points) or 1
@@ -64,7 +66,7 @@ def svg(path, title, ylabel, series):
            f'<text x="{W / 2}" y="22" text-anchor="middle" font-size="14">{title}</text>',
            f'<line x1="{LEFT}" y1="{py(0)}" x2="{W - RIGHT}" y2="{py(0)}" stroke="#999"/>',
            f'<line x1="{LEFT}" y1="{TOP}" x2="{LEFT}" y2="{H - BOTTOM}" stroke="#333"/>',
-           f'<text x="{W / 2}" y="{H - 10}" text-anchor="middle">kaolin (mg/L)</text>',
+           f'<text x="{W / 2}" y="{H - 10}" text-anchor="middle">{xlabel}</text>',
            f'<text x="16" y="{H / 2}" text-anchor="middle" transform="rotate(-90 16 {H / 2})">{ylabel}</text>']
     for i in range(5):
         x = x_max * i / 4
@@ -92,11 +94,13 @@ def svg(path, title, ylabel, series):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("files", nargs="+", help="captures named ..._c<mg/L>...; repeats at one concentration are averaged")
+    parser.add_argument("files", nargs="+", help="captures named ..._c<level>...; repeats at one level are averaged")
     parser.add_argument("--clear", nargs="+", required=True, help="clear-water captures (their means are averaged)")
     parser.add_argument("--dark", nargs="+", help="dark captures; default: dark is 0")
     parser.add_argument("--columns", nargs="+", help="ADC columns to plot; default: all in the clear captures")
     parser.add_argument("--label", nargs="+", default=[], help="column=label pairs for the legend")
+    parser.add_argument("--x", nargs="+", default=[], help="level=value pairs (c0500=7.2e7) giving each _c level its x value")
+    parser.add_argument("--xlabel", default="kaolin (mg/L)")
     parser.add_argument("--title", default="")
     parser.add_argument("--out-dir", default="build/plots")
     parser.add_argument("--name", default="series")
@@ -106,12 +110,16 @@ def main(argv=None):
     dark = column_means(args.dark) if args.dark else {}
     labels = dict(pair.split("=", 1) for pair in args.label)
     columns = args.columns or sorted(clear)
+    x_of = {int(k.lstrip("c")): float(v) for k, v in (pair.split("=", 1) for pair in args.x)}
     fills = {}
     for path in args.files:
-        fills.setdefault(concentration(path), []).append(column_means([path]))
+        level = concentration(path)
+        if x_of and level not in x_of:
+            sys.exit(f"error: no --x value for level {level} ({path})")
+        fills.setdefault(x_of.get(level, level), []).append(column_means([path]))
 
     change, attenuation = [], []
-    print("column,mg_per_l,fills,change_pct,change_sd,attenuation,attenuation_sd")
+    print("column,x,fills,change_pct,change_sd,attenuation,attenuation_sd")
     for column in columns:
         d = dark.get(column, 0.0)
         c_pts, a_pts = [], []
@@ -123,15 +131,15 @@ def main(argv=None):
             sd_att = statistics.stdev(att) if len(att) > 1 else None
             c_pts.append((conc, statistics.fmean(pct), sd_pct))
             a_pts.append((conc, statistics.fmean(att), sd_att))
-            print(f"{column},{conc},{len(rows)},{c_pts[-1][1]:.2f},{sd_pct or 0:.2f},{a_pts[-1][1]:.4f},{sd_att or 0:.4f}")
+            print(f"{column},{conc:g},{len(rows)},{c_pts[-1][1]:.2f},{sd_pct or 0:.2f},{a_pts[-1][1]:.4f},{sd_att or 0:.4f}")
         label = labels.get(column, column)
         change.append((label, c_pts))
         attenuation.append((label, a_pts))
 
     os.makedirs(args.out_dir, exist_ok=True)
     stem = os.path.join(args.out_dir, args.name)
-    svg(stem + "_change.svg", args.title, "change from clear (%)", change)
-    svg(stem + "_attenuation.svg", args.title, "attenuation, -ln T", attenuation)
+    svg(stem + "_change.svg", args.title, args.xlabel, "change from clear (%)", change)
+    svg(stem + "_attenuation.svg", args.title, args.xlabel, "attenuation, -ln T", attenuation)
     print(f"wrote {stem}_change.svg and {stem}_attenuation.svg", file=sys.stderr)
     return 0
 
