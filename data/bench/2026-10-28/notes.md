@@ -5,6 +5,25 @@ trimmer was turned counter-clockwise (viewed from above) until A0 came off its c
 clear water (`../2026-10-26/notes.md`, captures `40` and `41`). Repeat 1's references in
 `../2026-10-25/` no longer apply to A0.
 
+- **Light:** A0's stock housing and A1's tube case are not dark by construction. Every
+  covered capture, on this day and on 10-25 and 10-26, ran under a large opaque plastic bin
+  over the heads, with the room lights off and the shades drawn after dark. Repeat 2 ran in
+  the morning, so it moved to a windowless room nearby, under the same bin. The exceptions
+  are the captures noted as uncovered or lit, and the tube tests at 12:05–12:39.
+- **A0's container** for the standards: a 100 mL plastic beaker with 25–35 mL of sample,
+  enough to cover the emitter and detector but below the black rear cap that snaps onto the
+  clear head, where liquid would run into the housing (`photos/a0_stock_beaker_side.jpg`).
+  The right volume depends on the beaker's diameter, so set it by the level against the
+  head. Each fill used about 25 mL for each head.
+- **Photos** (`photos/`, taken after the session, with the tube heads already taken down):
+  the bench (`bench_overview`, `bench_logger`, `bench_heads`), A0 in its beaker
+  (`a0_stock_beaker_front`, `a0_stock_beaker_side`), A1's case under its syringe
+  (`a1_tube_case_syringe`), A2's case at the foot of the grey autosampler arm
+  (`a2_tube_case_autosampler`), the standards (`standards`), and the adapters: unmodified
+  (`adapter_stock`), A1's with 15 kΩ (`adapter_a1_15k`) and A2's with 6.8 kΩ, sleeved
+  (`adapter_a2_6k8`). The arm only automates sampling; A2's case, tube and syringe are the
+  same as A1's.
+
 ## Captures
 
 Counts are 16-read means, from 0 to 1023. Times are when each capture ended (file times).
@@ -54,9 +73,9 @@ Four captures taken while a load resistor was missing or on the wrong adapter we
 
 ### Two tube heads, evening
 
-From here, two cases sit in series on one tube: **A1** (as above) and **A2**, its board back
+From here, two tube heads run side by side, each case on its own tube and syringe: **A1** (as above) and **A2**, its board back
 in a case, set up the same way (RV fully counter-clockwise, 15 kΩ from probe output to GND
-on A2's adapter). Every fill reaches both heads at once. A0 stays in its stock housing.
+on A2's adapter). Each tube is filled separately from the same standard. A0 stays in its stock housing.
 
 | File | Time | Setup | A0 | A1 | A2 | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -64,8 +83,8 @@ on A2's adapter). Every fill reaches both heads at once. A0 stays in its stock h
 | `47_tube_clear_1` | 20:31 | Clear water, fill 1 | 776.1 | 875.5 | 921.7 | Stds 0.26 / 0.28 / 0.11. A3, unconnected, follows A2 (906.0 here, 5.5 in `02_dark_tube`): the ADC's sampling capacitor keeps A2's charge |
 | `47_tube_clear_2` | 20:35 | Clear water, fill 2 | 776.6 | 878.6 | 921.3 | Stds 0.24 / 0.21 / 0.10 |
 | `47_tube_clear_3` | 20:36 | Clear water, fill 3 | 776.8 | 876.4 | 921.2 | Stds 0.15 / 0.29 / 0.11. Across the three fills: A1 876.9 ± 1.6 (0.18 %), A2 921.4 ± 0.3 (0.03 %) |
-| `48_tube_c0250_1` | 23:08 | 250 mg/L standard (300 mL bottle), fill 1; A0 in a 25 mL container of the same standard. File since overwritten (23:50) | 514.7 | 806.2 | 903.6 | From the clear mean: A1 −70.7 (−8.1 %), A2 −17.8 (−1.9 %) |
-| `48_tube_c0250_2` | 23:17 | Fill 2. File since overwritten (23:52) | 628.8 | 807.7 | 899.5 | A1 repeats within 1.5 counts; A2 within 4.1. A0 differs by 114 counts between fills, so the 25 mL container is not repeatable |
+| `48_tube_c0250_1` | 23:08 | 250 mg/L standard (300 mL bottle), fill 1; A0 in its beaker of the same standard. File since overwritten (23:50) | 514.7 | 806.2 | 903.6 | From the clear mean: A1 −70.7 (−8.1 %), A2 −17.8 (−1.9 %) |
+| `48_tube_c0250_2` | 23:17 | Fill 2. File since overwritten (23:52) | 628.8 | 807.7 | 899.5 | A1 repeats within 1.5 counts; A2 within 4.1. A0 differs by 114 counts between fills, so A0's container is not repeatable |
 
 **A2's load changed to 4.7 kΩ ∥ 6.8 kΩ ≈ 2.8 kΩ** (the 15 kΩ swapped for 6.8 kΩ) after
 `48_tube_c0250_2`: A2 sat at 921 in clear water, its fills were unusually steady (0.03 %), and
@@ -115,7 +134,7 @@ Percentages from here are against the fills 4–8 clear reference.
 
 Five fills per point, against each head's clear fills 4–8 (A1 879.5, A2 861.3, A0 636.5; dark
 0 for all three). Change in percent, mean ± SD, with attenuation −ln T in brackets. A0 is the
-stock-housing head in a 25 mL container of each standard.
+stock-housing head in its beaker of each standard (25–35 mL in a 100 mL beaker).
 
 | mg/L | A1 (tube) | A2 (tube) | A0 (stock housing) |
 | ---: | ---: | ---: | ---: |
@@ -131,4 +150,4 @@ changing; from 500 mg/L up it is repeatable.
 | File | Time | A1 | A2 | Notes |
 | --- | --- | --- | --- | --- |
 | `49_tube_clear_end` | 01:27 | 881.6 (+0.24 %) | 864.3 (+0.35 %) | Clear water after the standards, DI-flushed. A0 635.4 (−0.18 %). Every head is back within 0.35 % of its clear reference: no drift and no kaolin film over the series |
-| `49_tube_ipa` | 01:34 | 907.7 (+2.95 % over `49_tube_clear_end`) | 885.0 (+2.40 %) | 99.9 % isopropanol in place of water. The tube ray trace predicted about +4.6 %. A0, in its 25 mL container of isopropanol, rose +14.4 % with no tube in its path, so something besides the tube's refraction changes too (the emitter is infrared, and water and isopropanol absorb differently there); the test does not isolate the lens effect |
+| `49_tube_ipa` | 01:34 | 907.7 (+2.95 % over `49_tube_clear_end`) | 885.0 (+2.40 %) | 99.9 % isopropanol in place of water. The tube ray trace predicted about +4.6 %. A0, in its beaker of isopropanol, rose +14.4 % with no tube in its path, so something besides the tube's refraction changes too (the emitter is infrared, and water and isopropanol absorb differently there); the test does not isolate the lens effect |
