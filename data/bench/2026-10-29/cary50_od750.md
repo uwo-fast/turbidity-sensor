@@ -37,5 +37,12 @@ Conclusion: The dilution series demonstrates the expected decreasing OD₇₅₀
 
 ### Direct reads from the sensor bottles
 
-- `c0125`: 0.28, matching the 12.5 % read above, so the bottle series was made correctly.
-- `c0500`: near 1.0, above this instrument's linear range.
+- `c0125`: 0.2747, matching the 12.5 % read above (0.2786), so the bottle series was made correctly.
+- `c0500`: 0.9813, read from the bottle; near the top of the linear range.
+
+### Master stock OD
+
+A proportional fit through the origin of reads 2–6, OD = k × fraction with
+k = Σ(OD × fraction) / Σ(fraction²), gives OD₇₅₀ 2.22 for `c1000`. The other levels scale
+from it by dilution (`c0063` 0.139, `c2000` 4.45, `c4000` 8.89); above about 1.0 these are
+extrapolated, not measurable in a 10 mm cuvette.
