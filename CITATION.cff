@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this project, please cite it using the metadata below."
+title: "turbidity"
+type: software
+authors:
+  - family-names: "Brooks"
+    given-names: "Cameron"
+version: "0.2.0"
+url: "https://github.com/uwo-fast/turbidity-sensor"
+# Only the software licence goes here. A licence list in CFF means "either licence,
+# at your option", which is not what a repository licensed separately by component
+# grants; LICENSING.md states the hardware and data licences.
+license: GPL-3.0-or-later
