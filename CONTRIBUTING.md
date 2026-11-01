@@ -74,5 +74,5 @@ environment. For hardware problems, also give the sensor, MCU board, and wiring.
 
 ## License
 
-By contributing, you agree that your contributions are licensed under the project's
-license, GPL-3.0-only.
+By contributing, you agree that your contributions are licensed under whichever of the
+licences in [`LICENSING.md`](LICENSING.md) covers the files they touch.

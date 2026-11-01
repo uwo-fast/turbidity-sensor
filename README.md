@@ -1,5 +1,8 @@
 # turbidity
 
+[![Software: GPL-3.0-or-later](https://img.shields.io/badge/Software-GPL--3.0--or--later-blue.svg)](LICENSES/GPL-3.0-or-later.txt)
+[![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/Hardware-CERN--OHL--S--2.0-orange.svg)](LICENSES/CERN-OHL-S-2.0.txt)
+
 Open-source tools for modeling, calibrating, and evaluating Amphenol `TSW-10` and `TST-10` turbidity sensors.
 
 ## Goal
@@ -147,4 +150,15 @@ The probe needs a load resistor and an emitter resistor. The default setup gets 
 
 ## License
 
-This project is licensed under `GPL-3.0-only`. See [LICENSE](LICENSE).
+Copyright © 2025–2026 Cameron Brooks.
+
+This project is free software: you may redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later version.
+Hardware design files and the outputs generated from them are licensed instead
+under [CERN-OHL-S-2.0](LICENSES/CERN-OHL-S-2.0.txt), and the bench and calibration
+data under [CC-BY-4.0](LICENSES/CC-BY-4.0.txt). See [`LICENSING.md`](LICENSING.md)
+for what applies where, including the third-party datasheets and standards this
+repository does not license, and the organization
+[licensing policy](https://github.com/uwo-fast/.github/blob/main/LICENSING.md) for
+why.
