@@ -97,9 +97,9 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **OD750 of the culture:** 0.3583, Cary 50, screen stamp 21:52:42, about 20:52 by the Pi's clock: the Cary reads one
   hour ahead (`photos/cary50_od750_culture.jpg`). Blanked with DI water, reading −0.0002. Where the sample was drawn is not
   recorded yet. The sensor read 838.0–840.1 around then.
-- **Mismatch to settle:** interpolating A2's 10-29 readings gives about −6.7 % at OD 0.358. Before the move it read
-  −1.7 % on this culture (837 against 852). The doses imply an inoculum of about OD 5.7, which is plausible for a
-  denser culture and is not a measurement. Not yet explained: compare a hand-filled head on this culture.
+- **Against 10-29:** with the 10-29 ODs as corrected on 11-07, A2's 10-29 readings give about −2.5 % at OD 0.358. Before the
+  move it read −1.7 % on this culture (837 against 852); the OD was read about 90 min later, after the move. The doses imply
+  an inoculum of about OD 5.7, which is not a measurement.
 - **A1 as a control:** head in clear DI in its tube case on `a1` from about 21:13, not touching the column. Settled to
   879.1–879.3 from 21:15 to 22:52, std about 0.25.
 - **Sampler failure, about 22:02–22:10:** A2 read 835–840 in `ok` cycles until 22:01. The 22:02 and 22:04 bursts stayed
@@ -124,13 +124,13 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **OD750, 11-06:** 0.4624 against DI (blank read 0.0007), screen stamp 23:32:10, about 22:32 by the Pi's clock if the Cary
   is still an hour ahead (`photos/cary50_od750_culture_1106.jpg`). Two separate samples, 0.4624 and 0.4553 (read 3 in `photos/cary50_od750_culture_1107.jpg`), then combined into A1. From 0.3583 about 25.7 h earlier.
 - **Hand-filled A1 on that sample:** about 829.9 at 22:46, against 880.6 in DI at 22:20: −5.8 %. `vcc_mv` also fell,
-  from 4855 to about 4650, so this needs a fresh A1 clear reading. A1's 10-29 readings interpolate to about −9.5 % at this OD.
+  from 4855 to about 4650, so this needs a fresh A1 clear reading. A1's 10-29 readings, with the corrected ODs, give about −2.9 % at this OD.
 - **A2 through the rig, first cycle:** sample 833.2, air 457, still 833.8, `ok`. Against 852 before the move, about −2.1 %.
 - **A1 settled:** fills 1–3 read about 829–830 at `vcc_mv` about 4673. DI clear refill, 868.1 at about 4635, std small, from
   22:56. So about −4.4 % as read, about −4.7 % allowing for the supply. Between 880.6 at 4855 and 868.1 at 4635, A1's clear
   moved about 0.3 % per 1 % of supply.
 - **Comparison, same culture, OD 0.4624:** A1 hand-filled about −4.5 %; A2 through the rig about −1.8 % (852 scaled to the
-  present supply); A1's 10-29 response about −9.5 %. A2's cycles at 0.7 from 22:56: stops needed nudges, 833–836 when `ok`.
+  present supply); A1's 10-29 response, corrected, about −2.9 %. A2's cycles at 0.7 from 22:56: stops needed nudges, 833–836 when `ok`.
 - **Sample site:** the 0.4624 sample was taken by pipette a couple of centimetres below the sampling tube, so column
   stratification does not explain A2 reading less than A1. Why A2 responds about half as much as hand-filled A1 is still
   open. To check without using culture: A2's clear reference through its line at the end of the run, then A1 and A2
@@ -157,13 +157,6 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **Stop-and-read removed, 11-07 01:41:** the logger now only runs the motor on a timer, logs, and picks the culture from each
   burst's steady stretches. New data in `~/rig-data/algae-run-1c/`, throttle 0.5, 15-minute cycles. On the 11-05 run, 66 bursts
   good by both methods differ by a median of −0.09 counts (std 0.74). The picks for the old runs are in `~/rig-data/picked/`.
-- **Open: response per OD differs from 10-29.** Hand-filled A1 at OD 0.46 read about −4.6 %, against about −9.5 % interpolated from
-  10-29. Same flask, continued, about a week older, and at a different dilution. Cause not known. Planned check: one mixed
-  sample read on the Cary and A1, undiluted and diluted about 1:1 in media.
-- **Hypothesis to test: the 10-29 OD series was one dilution step off.** If the bottle read at 0.2747 was really `c0063` and `c0125`
-  is about 0.53, the mapping gives about −3.1 % (A1) and −3.8 % (A2) at OD 0.46, against about −4.6 % and −3.1 to −3.4 % measured, and a
-  master near 4.2. Test: the 10-29 bottles are in the fridge, so re-read `c0063`, `c0125` and `c0250` on the Cary after mixing. The 10-29
-  records stay as they are until this is settled.
 - **OD750, 11-07 morning:** 0.3997 and 0.3810 from two samples, blank −0.0020 after, in the same report as 11-06's reads
   (`photos/cary50_od750_culture_1107.jpg`). Mean 0.390, against 0.459 the night before: about 15 % lower. A2's picked readings rose over
   the night, from about 832 to about 840–855, which also means a thinner sample.
@@ -180,6 +173,12 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   | Sat 11-07 12:45 | 0.390 | 1 | 837.4 | −2.0 % | 4772 |
 
   Thu and Fri share A2's 864 clear reference, measured Fri 23:19–23:25; Sat follows the reopening. Not yet a calibration.
+- **10-29 OD labels corrected, 11-07:** the 10-29 bottles, re-read on the Cary after a week in the fridge, gave `c0063` 0.3064,
+  `c0125` 0.5223 and `c0250` 0.9504 (undiluted, near the Cary's top), about twice what 10-29 recorded under those labels. The
+  10-29 Cary reads were each one bottle down: the cuvette series' stock was `c0500`, not `c1000`, and the two direct reads were
+  `c0063` and `c0250`. Corrected in `../2026-10-29/cary50_od750.md` and `cell_count.md`; the sensor readings are unchanged. With
+  the corrected ODs, 10-29 gives about −3.5 % (A2) and −2.9 % (A1) at OD 0.459, against −3.1 to −3.4 % (A2, through the rig)
+  and −4.5 to −4.7 % (A1, hand-filled) on 11-06.
 
 ## Read from the photos, not measured
 
