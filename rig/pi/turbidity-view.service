@@ -1,0 +1,16 @@
+[Unit]
+Description=Turbidity column rig: read-only results page on 127.0.0.1
+
+[Service]
+User=cam
+ExecStart=/usr/bin/python3 /home/cam/rig/view_server.py
+Restart=on-failure
+RestartSec=10
+# It only reads the summary, and writes nothing.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+
+[Install]
+WantedBy=multi-user.target

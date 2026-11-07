@@ -1,0 +1,15 @@
+[Unit]
+Description=Turbidity column rig: actuator bursts and CSV logging
+After=time-sync.target network.target
+
+[Service]
+User=cam
+WorkingDirectory=/home/cam/rig
+ExecStart=/home/cam/rig-venv/bin/python /home/cam/rig/rig.py run
+# The HAT holds its last setting after the process dies, so stop the motor from outside it too.
+ExecStopPost=/home/cam/rig-venv/bin/python /home/cam/rig/rig.py stop
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
