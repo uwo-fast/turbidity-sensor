@@ -179,6 +179,11 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   `c0063` and `c0250`. Corrected in `../2026-10-29/cary50_od750.md` and `cell_count.md`; the sensor readings are unchanged. With
   the corrected ODs, 10-29 gives about −3.5 % (A2) and −2.9 % (A1) at OD 0.459, against −3.1 to −3.4 % (A2, through the rig)
   and −4.5 to −4.7 % (A1, hand-filled) on 11-06.
+- **Diluted re-reads, 11-07:** `c0250` 1:1 in supernatant 0.5310 (so 1.06) and `c0500` 1:4 0.4923 (so 1.97), against 1.11 and
+  2.22 from the corrected 10-29 fit and 0.556 and 1.11 under the old labels. Each level about doubles the one below (1.70, 2.03,
+  1.85). `c0500` reads lowest, likely from clumping in the fridge that vortexing did not fully break up; read several times.
+- **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
+  stamps from 11-01 on.
 
 ## Read from the photos, not measured
 
