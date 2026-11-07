@@ -4,11 +4,11 @@ Instrument: Varian Cary 50 UV-Vis spectrophotometer\
 Wavelength: 750 nm (OD₇₅₀)\
 Cuvettes: Semi-micro, 10 mm optical path\
 Blank: Cell-free culture supernatant\
-Master stock: the `c1000` bottle (culture as grown), so 25 % is `c0250` and 12.5 % is `c0125`
+Stock: the `c0500` bottle (half the culture as grown), so 25 % is `c0125` and 12.5 % is `c0063`
 
 ### Procedure
 
-1. Prepared a starting suspension of 250 µL algae master stock (25%) and 750 µL native supernatant (75%), totaling 1,000 µL.
+1. Prepared a starting suspension of 250 µL algae stock (`c0500`, 25%) and 750 µL native supernatant (75%), totaling 1,000 µL.
 2. Zeroed the Cary 50 using supernatant and verified the blank (OD = 0.0020).
 3. Measured the starting suspension.
 4. Sequentially added 250 µL supernatant to the same suspension, mixing and measuring OD₇₅₀ after each addition.
@@ -37,12 +37,15 @@ Conclusion: The dilution series demonstrates the expected decreasing OD₇₅₀
 
 ### Direct reads from the sensor bottles
 
-- `c0125`: 0.2747, matching the 12.5 % read above (0.2786), so the bottle series was made correctly.
-- `c0500`: 0.9813, read from the bottle; near the top of the linear range.
+- `c0063`: 0.2747, matching the 12.5 % read above (0.2786), so the bottle series was made correctly.
+- `c0250`: 0.9813, read from the bottle; at the top of the Cary's range, so it reads low (1.11 by the fit below).
 
-### Master stock OD
+Re-read on 2026-11-07, after a week in the fridge: `c0063` 0.3064, `c0125` 0.5223, `c0250` 0.9504.
+
+### OD by level
 
 A proportional fit through the origin of reads 2–6, OD = k × fraction with
-k = Σ(OD × fraction) / Σ(fraction²), gives OD₇₅₀ 2.22 for `c1000`. The other levels scale
-from it by dilution (`c0063` 0.139, `c2000` 4.45, `c4000` 8.89); above about 1.0 these are
-extrapolated, not measurable in a 10 mm cuvette.
+k = Σ(OD × fraction) / Σ(fraction²), gives OD₇₅₀ 2.22 for the `c0500` stock, so 4.45 for
+`c1000`. The other levels scale from it by dilution (`c0063` 0.278, `c0125` 0.556, `c0250`
+1.11, `c2000` 8.89, `c4000` 17.8); above about 1.0 these are extrapolated, not measurable in a
+10 mm cuvette.

@@ -31,7 +31,7 @@ An Improved Neubauer chamber is 0.1 mm deep, so a 0.2 × 0.2 mm square (0.04 mm�
 ## Other levels and dry mass
 
 The bottles scale from `c0500` by their dilution: the Cary read 0.2747 straight from the
-`c0125` bottle, matching the in-cuvette series (`cary50_od750.md`). Dry mass uses
+`c0063` bottle, matching the in-cuvette series (`cary50_od750.md`). Dry mass uses
 2.24 × 10^-11 g per cell, an assumed figure (needs reference); mass per cell changes with
 growth phase, and a gravimetric dry weight of one bottle would check it.
 
