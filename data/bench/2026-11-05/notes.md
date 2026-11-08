@@ -185,6 +185,16 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **OD750, 11-07 evening, about 19:00–19:25 by the Pi's clock:** 0.4867 and 0.4773 from two 1.4 mL samples at about the
   sampling tube's depth; mean 0.482, up about 24 % from 0.390 that morning. Predicted from the sensor before the read: 0.48–0.64,
   most likely about 0.53, from A2 at about 826–831 (17:00–18:45) against about 837 in the morning. Level marked and photos taken.
+- **Overnight 11-07 to 11-08:** A2 fell from about 828–832 (19:00–20:00) to about 814–822 (midnight to 06:00). Delivery recovered
+  by itself: from about 04:00 nearly every burst is `ok`, with 40–97 rows. From about 05:00 to 09:13 A2 rose again, from about 815
+  to 826–828, with no addition.
+- **OD750, 11-08 about 10:15:** 0.5653 and 0.5553, mean 0.560.
+- **BG-11 top-up, 11-08 10:20:** 1 L added; level re-marked. A2: 827.9 at 09:13, then 832.3 (10:28, 215 rows) and 830.8 (10:43,
+  226 rows). Cary at 10:55: 0.4376 and 0.4344, mean 0.436, a drop to 0.78 of 0.560, which a column of about 3.5 L
+  before the addition would give.
+- **Cary against A2 so far:** 0.390 about 837, 0.436 about 831, 0.482 about 828.5 fall in order; 0.560 sits against about 828 in
+  the bursts just before it, but about 815–821 in the early morning. The 05:00–09:13 rise is not explained: the lamp coming
+  on, or the change in delivery, are the candidates.
 - **Lamp:** 16 h on, 8 h off, on a manual timer set to roughly match daylight. Switch times to be confirmed.
 - **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
   stamps from 11-01 on.
