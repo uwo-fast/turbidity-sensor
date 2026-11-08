@@ -7,7 +7,7 @@ Setup record ahead of the first run with the actuator and tube head together. No
 - **Lid and sampler:** the printed pocket lid from `open-source-bioreactor`
   (`scad/_spikes/column_lid/`), with the sampler (`scad/custom/sampler.scad`) and a syringe actuator
   standing on it. A stand rod steadies the actuator.
-- **Fill:** to be topped up with supernatant to the line marked by the thumb in
+- **Fill:** to be topped up with BG-11 growth medium to the line marked by the thumb in
   `photos/fill_line_thumb.jpg`, so the riser is submerged.
 - **Light:** a lamp on a clamp behind the column, with a window beside it.
 
@@ -78,7 +78,7 @@ baseline in the column was taken.
 
 Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inoculating, from 19:01.
 
-- **Media:** 3 L, swapped in for the DI water. Clear reference from 5 cycles, 19:01–19:10: 851.4–852.7.
+- **Media:** 3 L of BG-11, swapped in for the DI water. Clear reference from 5 cycles, 19:01–19:10: 851.4–852.7.
 - **Inoculum:** 100 mL into the 3 L, so about 1:31, taken from a denser culture on hand, not the 10-29 master. Its OD
   was not measured. Time not recorded: the reading places it between about 19:10 and 19:11.
 - **First response:** the still reading stepped from 851.4 (cycle ending 19:10:18) to 844.3 and 844.9 (cycles
@@ -182,6 +182,10 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **Diluted re-reads, 11-07:** `c0250` 1:1 in supernatant 0.5310 (so 1.06) and `c0500` 1:4 0.4923 (so 1.97), against 1.11 and
   2.22 from the corrected 10-29 fit and 0.556 and 1.11 under the old labels. Each level about doubles the one below (1.70, 2.03,
   1.85). `c0500` reads lowest, likely from clumping in the fridge that vortexing did not fully break up; read several times.
+- **OD750, 11-07 evening, about 19:00–19:25 by the Pi's clock:** 0.4867 and 0.4773 from two 1.4 mL samples at about the
+  sampling tube's depth; mean 0.482, up about 24 % from 0.390 that morning. Predicted from the sensor before the read: 0.48–0.64,
+  most likely about 0.53, from A2 at about 826–831 (17:00–18:45) against about 837 in the morning. Level marked and photos taken.
+- **Lamp:** 16 h on, 8 h off, on a manual timer set to roughly match daylight. Switch times to be confirmed.
 - **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
   stamps from 11-01 on.
 

@@ -77,7 +77,7 @@ about 1 % of the start, about 851. A lasting drop means film on the tube.
 
 Only after stages 1 and 2 pass.
 
-1. Take the clear reference in the supernatant used for the top-up, in the tube.
+1. Take the clear reference in the BG-11 used for the top-up, in the tube.
 2. Top up the column and start a new `data_dir`, so this run has its own files.
 3. Set `period_s` back to 900, and `enable` the services if they should survive a reboot.
 4. Take samples for OD750 and dry weight now and then, with the time written down, to tie the readings
