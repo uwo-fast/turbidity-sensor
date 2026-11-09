@@ -215,6 +215,13 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   The 1:2 reads come out about 3 % above the 1:1, so the Cary already reads slightly low near 0.40: dilute to about 0.2–0.3.
   About 0.80–0.83, up 2–6 % from 0.787 at 23:30, while A2 read about 804 at 10:13 against about 793 then: on this night the
   two disagree in direction.
+- **Power blip, 11-09 about 12:00:** the Pi rebooted and the logger and page restarted by themselves (enabled at boot), with
+  about 2 min of data missing, from after the 11:58 burst to 12:00:48. Bursts resumed at 12:04, every one `ok`. 17 rows written
+  before the clock synced carry `clock_synced` 0. One 2 s loss of the Nano at 12:05, relinked by itself (and one on 11-08 at
+  15:01). The lamp, on its own supply and a manual timer, went off with the blip and stayed off until switched back on at 14:10.
+- **The lamp steps, four times now:** A2's culture level falls at the first burst after the lamp goes off and rises at the first
+  burst after it comes on: 00:00 off, about 793 to 785; 09:30 on, about 795 to 807; about 12:00 off, 791.8 to 781.4; 14:10 on,
+  781.8 to 794.5. With the lamp off it holds nearly flat (779–782 from 12:04 to 14:04).
 - **Lamp:** 16 h on, 8 h off, on a manual timer set to roughly match daylight. Switch times to be confirmed.
 - **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
   stamps from 11-01 on.
