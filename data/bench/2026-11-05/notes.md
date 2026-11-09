@@ -207,6 +207,14 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   read. The 10-29 `c0250` re-read did the same (0.950 undiluted, 1.06 diluted 1:1), so the Cary reads low from about 0.7, well
   below the 0.97 where it clearly saturates. Use the diluted value: 0.787, ×1.8 from 0.436 in about 12.5 h, a doubling time of
   about 15 h. Dilute samples to read about 0.5 or below from here; Saturday's undiluted 0.560 may be slightly low.
+- **Lamp switch times, 11-08/09:** off at 00:00, on at 09:30 (meant 08:00). Neither head steps at the switch second in the 1 Hz
+  rows between bursts (A1 about 880.5–881.6 across both), so no direct leak of lamp light is seen. But A2's picked culture
+  level moved at the first burst after each switch: about 793 before 00:00 to about 785 at 00:13, rising slowly to about 795 by
+  09:28; about 795 before 09:30 to about 807 at 09:43, then 806 and 804. Cause not known.
+- **OD750, 11-09 10:20:** diluted 1:1, 0.4043 and 0.4004 (×2: 0.809, 0.801); diluted 1:2, 0.2819 and 0.2725 (×3: 0.846, 0.818).
+  The 1:2 reads come out about 3 % above the 1:1, so the Cary already reads slightly low near 0.40: dilute to about 0.2–0.3.
+  About 0.80–0.83, up 2–6 % from 0.787 at 23:30, while A2 read about 804 at 10:13 against about 793 then: on this night the
+  two disagree in direction.
 - **Lamp:** 16 h on, 8 h off, on a manual timer set to roughly match daylight. Switch times to be confirmed.
 - **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
   stamps from 11-01 on.
