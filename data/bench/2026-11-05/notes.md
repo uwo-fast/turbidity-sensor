@@ -201,6 +201,9 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   11-07 19:35, 22:00 and 11-08 10:20.
 - **First 10.5 h of the test:** every burst `ok`, with 62–226 rows of culture. A2 fell steadily from about 832 (10:28) to about
   800 (20:58).
+- **OD750, 11-08 about 23:25, undiluted:** 0.7242 and 0.7018, mean 0.713. A2 at about 793 (23:13). Predicted from the sensor
+  before the read: about 0.75–0.85; from a 0.8-day doubling: about 0.68. From 0.436 at 10:55, ×1.64 in about 12.5 h, a doubling
+  time of about 17.5 h (0.73 d).
 - **Lamp:** 16 h on, 8 h off, on a manual timer set to roughly match daylight. Switch times to be confirmed.
 - **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
   stamps from 11-01 on.
