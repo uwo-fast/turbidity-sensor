@@ -195,6 +195,12 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **Cary against A2 so far:** 0.390 about 837, 0.436 about 831, 0.482 about 828.5 fall in order; 0.560 sits against about 828 in
   the bursts just before it, but about 815–821 in the early morning. The 05:00–09:13 rise is not explained: the lamp coming
   on, or the change in delivery, are the candidates.
+- **Growth test starts 11-08 10:20,** after the BG-11 top-up: fresh volume, well mixed, good delivery, and a Cary anchor of 0.436
+  at 10:55. Everything before is setup. From here the level is held at the 10:20 mark with DI water, replacing what evaporates,
+  so no more nutrients are added: a batch culture. Photo: `photos/column_1108_after_bg11.jpg`, with the level marks for
+  11-07 19:35, 22:00 and 11-08 10:20.
+- **First 10.5 h of the test:** every burst `ok`, with 62–226 rows of culture. A2 fell steadily from about 832 (10:28) to about
+  800 (20:58).
 - **Lamp:** 16 h on, 8 h off, on a manual timer set to roughly match daylight. Switch times to be confirmed.
 - **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
   stamps from 11-01 on.
