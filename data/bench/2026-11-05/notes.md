@@ -232,6 +232,9 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   usual. A2 read 762.0 at 22:49 and 762.4 at 23:04.
 - **Lamp off, 11-09 23:46.** All 95 bursts on 11-09 up to then read `ok`, with at least 70 rows of culture.
 - **Lamp on, 11-10 08:26.** The 23:46 lamp-off gave 760.4 to 749.6 at the 23:49 burst, then A2 rose slowly to about 764 by 06:49.
+- **OD750, 11-10:** diluted 1:4. At 10:05, 0.2101 and 0.2128 (×5: 1.051, 1.064), mean 1.057, with A2 about 761.7. At 11:36, 0.2218 and
+  0.2212 (×5: 1.109, 1.106), mean 1.108, with A2 about 752.
+- **Unexplained step, 11-10 07:04:** A2 764.8 to 752.3, with the lamp off. The 08:26 lamp-on then gave 758.8 to 769.3 at the 08:34 burst.
 - **The lamp steps, four times now:** A2's culture level falls at the first burst after the lamp goes off and rises at the first
   burst after it comes on: 00:00 off, about 793 to 785; 09:30 on, about 795 to 807; about 12:00 off, 791.8 to 781.4; 14:10 on,
   781.8 to 794.5. With the lamp off it holds nearly flat (779–782 from 12:04 to 14:04).
