@@ -8,7 +8,7 @@ data_dir = "~/rig-data"
 [motor]
 number = 4                 # terminal M4 of the HAT
 address = 0x60             # the Adafruit 2348's default
-throttle = 0.7             # revised unit (5ml-gnr2): 0.8 looked fast; 1 s kick at each start
+throttle = 0.5             # revised unit (5ml-gnr2): runs clean here; 1 s kick at each start
 kick_throttle = 1.0        # for the first kick_s of each start: a resting crank can stall below this
 kick_s = 1.0
 
