@@ -219,6 +219,11 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   about 2 min of data missing, from after the 11:58 burst to 12:00:48. Bursts resumed at 12:04, every one `ok`. 17 rows written
   before the clock synced carry `clock_synced` 0. One 2 s loss of the Nano at 12:05, relinked by itself (and one on 11-08 at
   15:01). The lamp, on its own supply and a manual timer, went off with the blip and stayed off until switched back on at 14:10.
+- **Air lost with the blip, 11-09:** the building air supply also stopped at about 12:00 and did not come back. Electric air pumps
+  were set up to give about 1 vvm again; the time air resumed is not recorded, and the data suggests about 16:45. With no
+  air, 12:04–16:34, A2's picks stayed smooth (std 2–4). From 16:49 to about 18:19 they turned spiky (772–787, std 4–8) and most
+  bursts showed no steady air level; from 18:34 they settled again (std about 2.4, about 774). Treat 12:00–18:30 on 11-09 as
+  disturbed: no mixing for about 4.5 h, then a new air supply settling in.
 - **The lamp steps, four times now:** A2's culture level falls at the first burst after the lamp goes off and rises at the first
   burst after it comes on: 00:00 off, about 793 to 785; 09:30 on, about 795 to 807; about 12:00 off, 791.8 to 781.4; 14:10 on,
   781.8 to 794.5. With the lamp off it holds nearly flat (779–782 from 12:04 to 14:04).
