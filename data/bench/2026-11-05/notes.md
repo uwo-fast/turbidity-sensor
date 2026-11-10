@@ -179,7 +179,7 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   `c0063` and `c0250`. Corrected in `../2026-10-29/cary50_od750.md` and `cell_count.md`; the sensor readings are unchanged. With
   the corrected ODs, 10-29 gives about −3.5 % (A2) and −2.9 % (A1) at OD 0.459, against −3.1 to −3.4 % (A2, through the rig)
   and −4.5 to −4.7 % (A1, hand-filled) on 11-06.
-- **Diluted re-reads, 11-07:** `c0250` 1:1 in supernatant 0.5310 (so 1.06) and `c0500` 1:4 0.4923 (so 1.97), against 1.11 and
+- **Diluted re-reads, 11-07:** `c0250` 1:1 in supernatant 0.5310 (so 1.06) and `c0500` 0.4923 (recorded as 1:4, so 1.97; to be re-read, since 1 + 3 parts or 1 + 4 parts is not certain), against 1.11 and
   2.22 from the corrected 10-29 fit and 0.556 and 1.11 under the old labels. Each level about doubles the one below (1.70, 2.03,
   1.85). `c0500` reads lowest, likely from clumping in the fridge that vortexing did not fully break up; read several times.
 - **OD750, 11-07 evening, about 19:00–19:25 by the Pi's clock:** 0.4867 and 0.4773 from two 1.4 mL samples at about the
@@ -228,12 +228,17 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   outage. A2 read 769.4 at 19:19 and 764.1 at 19:34, falling steadily with the lamp on.
 - **DI top-up, 11-09 19:38:** 150 mL of DI water, back to the 11-08 10:20 mark. The column holds just under 4 L, the volume now
   held. Expected dilution about 3.7 %, OD about 0.974 to 0.938.
+- **OD750, 11-09 23:03:** diluted 1:3, 0.2492 and 0.2309 (×4: 0.997, 0.924), mean 0.960; the two differ by about 8 %, more than
+  usual. A2 read 762.0 at 22:49 and 762.4 at 23:04.
 - **The lamp steps, four times now:** A2's culture level falls at the first burst after the lamp goes off and rises at the first
   burst after it comes on: 00:00 off, about 793 to 785; 09:30 on, about 795 to 807; about 12:00 off, 791.8 to 781.4; 14:10 on,
   781.8 to 794.5. With the lamp off it holds nearly flat (779–782 from 12:04 to 14:04).
 - **Lamp:** 16 h on, 8 h off, on a manual timer set to roughly match daylight. Switch times to be confirmed.
 - **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
   stamps from 11-01 on.
+- **Rig data in this folder:** `rig-data/<run>/` holds each run's raw logs (gzip), `summary.csv` and `events.csv`, a snapshot to
+  11-09 23:19; `rig-data/picked-<run>.csv` is the picking at that date applied to each run. `80`–`82` and `90` are the column
+  diagnostics and live reads from the Pi.
 
 ## Read from the photos, not measured
 

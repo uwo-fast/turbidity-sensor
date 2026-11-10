@@ -1,0 +1,11 @@
+time_utc,event,detail
+2026-11-07T06:41:25.771+00:00,start,"throttle 0.5, period 900 s"
+2026-11-07T06:41:27.347+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-07T17:57:58.252+00:00,start,"throttle 0.5, period 900 s"
+2026-11-07T17:57:59.825+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-08T20:01:19.880+00:00,link_lost,no rows for 3 s
+2026-11-08T20:01:21.458+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-09T17:00:49.227+00:00,start,"throttle 0.5, period 900 s"
+2026-11-09T17:00:50.805+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-09T17:05:42.429+00:00,link_lost,no rows for 3 s
+2026-11-09T17:05:44.003+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
