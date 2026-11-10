@@ -41,7 +41,7 @@ Conclusion: The dilution series demonstrates the expected decreasing OD₇₅₀
 - `c0250`: 0.9813, read from the bottle; at the top of the Cary's range, so it reads low (1.11 by the fit below).
 
 Re-read on 2026-11-07, after a week in the fridge: `c0063` 0.3064, `c0125` 0.5223, `c0250` 0.9504; diluted in
-supernatant, `c0250` 1:1 0.5310 (1.06) and `c0500` 0.4923 (1.97 if 1 + 3 parts; being re-read). Within 4.5–11.5 % of the fit below.
+supernatant, `c0250` 1:1 0.5310 (1.06) and `c0500` 0.4923 (1.97 if 1:3, dilution not certain). Re-read 1:7 on 2026-11-09: 0.2855 and 0.3643 (2.28, 2.91), scattered, probably clumps after the fridge. Each is about twice or more the 1.11 the old label needed; the fit below stands.
 
 ### OD by level
 

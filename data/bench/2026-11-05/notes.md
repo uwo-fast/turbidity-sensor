@@ -179,7 +179,7 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   `c0063` and `c0250`. Corrected in `../2026-10-29/cary50_od750.md` and `cell_count.md`; the sensor readings are unchanged. With
   the corrected ODs, 10-29 gives about −3.5 % (A2) and −2.9 % (A1) at OD 0.459, against −3.1 to −3.4 % (A2, through the rig)
   and −4.5 to −4.7 % (A1, hand-filled) on 11-06.
-- **Diluted re-reads, 11-07:** `c0250` 1:1 in supernatant 0.5310 (so 1.06) and `c0500` 0.4923 (recorded as 1:4, so 1.97; to be re-read, since 1 + 3 parts or 1 + 4 parts is not certain), against 1.11 and
+- **Diluted re-reads, 11-07:** `c0250` 1:1 in supernatant 0.5310 (so 1.06) and `c0500` 0.4923 (recorded as 1:4, multiplied by 4 to 1.97, so the dilution is not certain). Re-read 1:7 on 11-09: 0.2855 and 0.3643 (2.28, 2.91), 24 % apart, probably clumps after the fridge, so not settled and not repeated; the corrected value stays 2.22 from the 10-29 fit, against 1.11 and
   2.22 from the corrected 10-29 fit and 0.556 and 1.11 under the old labels. Each level about doubles the one below (1.70, 2.03,
   1.85). `c0500` reads lowest, likely from clumping in the fridge that vortexing did not fully break up; read several times.
 - **OD750, 11-07 evening, about 19:00–19:25 by the Pi's clock:** 0.4867 and 0.4773 from two 1.4 mL samples at about the
