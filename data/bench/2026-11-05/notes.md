@@ -226,6 +226,8 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   disturbed: no mixing for about 4.5 h, then a new air supply settling in.
 - **OD750, 11-09 19:24:** diluted 1:2, 0.3227 and 0.3267 (×3: 0.968, 0.980), mean 0.974, up about 17 % from 10:20 across the
   outage. A2 read 769.4 at 19:19 and 764.1 at 19:34, falling steadily with the lamp on.
+- **DI top-up, 11-09 19:38:** 150 mL of DI water, back to the 11-08 10:20 mark. The column holds just under 4 L, the volume now
+  held. Expected dilution about 3.7 %, OD about 0.974 to 0.938.
 - **The lamp steps, four times now:** A2's culture level falls at the first burst after the lamp goes off and rises at the first
   burst after it comes on: 00:00 off, about 793 to 785; 09:30 on, about 795 to 807; about 12:00 off, 791.8 to 781.4; 14:10 on,
   781.8 to 794.5. With the lamp off it holds nearly flat (779–782 from 12:04 to 14:04).
