@@ -244,6 +244,11 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **OD750, 11-11 21:38:** diluted 1:4, 0.3026 and 0.3021 (×5: 1.513, 1.511); the same samples diluted 1:5, 0.2508 and 0.2528 (×6: 1.505,
   1.517). Mean 1.512; the two dilutions agree within 0.1 %, so the Cary is linear at 0.25–0.30. A2 676.3 at 21:34, 673.6 at 21:49.
 - **DI top-up, 11-11 21:54:** 200 mL of DI water, back to the 11-08 10:20 mark, the same mark as the 150 mL top-up on 11-09.
+- **After the 21:54 top-up:** A2 673.6 (21:49), 680.5 (22:04), 682.3 (22:19): about +7 to +9, thinner, as a dilution of about 5 % should.
+- **OD750, 11-11 22:36:** diluted 1:4, 0.3071 and 0.3061 (×5: 1.536, 1.531); 1:5, 0.2598 and 0.2586 (×6: 1.559, 1.552). Mean 1.544,
+  about 2 % above 21:38, where the top-up predicts about 1.43–1.45. The Cary's blank had shifted by about 0.01 when re-zeroed
+  before this set, enough at these readings to account for most of the gap; not used as a dilution check. Samples kept in the
+  fridge, dated, to re-read on another instrument.
 - **The lamp steps, four times now:** A2's culture level falls at the first burst after the lamp goes off and rises at the first
   burst after it comes on: 00:00 off, about 793 to 785; 09:30 on, about 795 to 807; about 12:00 off, 791.8 to 781.4; 14:10 on,
   781.8 to 794.5. With the lamp off it holds nearly flat (779–782 from 12:04 to 14:04).
