@@ -322,6 +322,11 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **Rig data in this folder:** `rig-data/<run>/` holds each run's raw logs (gzip), `summary.csv` and `events.csv`, the complete
   `algae-run-1c` to its stop at 11-16 19:55, every file matching the Pi's byte for byte, and to 11-09 23:19 for the others; `rig-data/picked-<run>.csv` is the picking at that date applied to each run. `80`–`82` and `90` are the column
   diagnostics and live reads from the Pi.
+- **Figures:** `figures/growth_test.png` (sensor counts and Cary OD over the growth test, 11-08 10:20 to 11-12 00:30) and
+  `figures/agreement.png` (Cary OD against the sensor at the same time). Redraw with `python3 growth_plot.py` and then
+  `python3 agreement_plot.py` in `figures/`, then `rsvg-convert` for the PNGs. The Cary values are written into `growth_plot.py` from
+  these notes. The curve in `agreement.png` is fitted to the 7 Cary samples without a caveat, so it shows consistency within this
+  run, not a calibration tested on new data.
 
 ## Read from the photos, not measured
 
