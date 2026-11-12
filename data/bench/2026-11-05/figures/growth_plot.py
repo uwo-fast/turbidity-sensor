@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Growth test figure: A2 attenuation per burst (top) and Cary OD750 (bottom), shared time axis. Standard library only."""
+"""Growth test figure: Sensor (A2) reading per burst (top) and Cary OD750 (bottom), shared time axis. Standard library only."""
 import csv
 import datetime
 import math
@@ -110,16 +110,17 @@ for when, reads, note in CARY:
     hollow = bool(note)
     svg.append(f'<circle cx="{xx:.1f}" cy="{yo(mean):.1f}" r="7" fill="{SURF if hollow else ORANGE}" stroke="{ORANGE}" stroke-width="2.5"/>')
 # axes titles and panel titles
-svg.append(f'<text x="{L}" y="{P1[0] - 18}" font-size="24" font-weight="bold" fill="{INK}">Turbidity sensor (A2), one reading per 15-min burst (axis reversed: up = denser)</text>')
-svg.append(f'<text x="{L}" y="{P2[0] - 18}" font-size="24" font-weight="bold" fill="{INK}">Cary 50 OD750, diluted samples multiplied back to full strength</text>')
-for (top, bottom), label in ((P1, "Sensor reading (ADC counts, reversed)"), (P2, "OD750")):
+svg.append(f'<text x="{L}" y="{P1[0] - 18}" font-size="24" font-weight="bold" fill="{INK}">Sensor (A2): one reading per 15-min burst (axis reversed: up = denser)</text>')
+svg.append(f'<text x="{L}" y="{P2[0] - 18}" font-size="24" font-weight="bold" fill="{INK}">Cary OD750: diluted samples, multiplied back</text>')
+for (top, bottom), lines in ((P1, ("Sensor (A2) reading", "(ADC counts, reversed)")), (P2, ("Cary OD750", "(diluted, multiplied back)"))):
     cy = (top + bottom) / 2
-    svg.append(f'<text x="34" y="{cy:.1f}" font-size="21" fill="{INK}" text-anchor="middle" transform="rotate(-90 34 {cy:.1f})">{label}</text>')
+    for lx, line in zip((26, 52), lines):
+        svg.append(f'<text x="{lx}" y="{cy:.1f}" font-size="21" fill="{INK}" text-anchor="middle" transform="rotate(-90 {lx} {cy:.1f})">{line}</text>')
 svg.append(f'<text x="{(L + W - R) / 2:.1f}" y="{P2[1] + 62}" font-size="21" fill="{INK}" text-anchor="middle">Date (2026, local time); tick at midnight</text>')
 # legend row
 ly = H - 22
-items = [("dot", BLUE, BLUE, "Sensor"), ("dot", ORANGE, ORANGE, "Cary"),
-         ("dot", SURF, ORANGE, "Cary, caveat (see notes)"), ("rect", SHADE, None, "Lamp off"), ("hatch", None, None, "Power and air outage")]
+items = [("dot", BLUE, BLUE, "Sensor (A2)"), ("dot", ORANGE, ORANGE, "Cary OD750"),
+         ("dot", SURF, ORANGE, "Cary OD750, with caveat (see notes)"), ("rect", SHADE, None, "Lamp off"), ("hatch", None, None, "Power and air outage")]
 lx = L
 for kind, fill, stroke, label in items:
     if kind == "dot":

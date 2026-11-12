@@ -417,19 +417,21 @@
 <circle cx="1513.1" cy="550.1" r="7" fill="#eb6834" stroke="#eb6834" stroke-width="2.5"/>
 <line x1="1528.9" x2="1528.9" y1="547.4" y2="543.5" stroke="#eb6834" stroke-width="2"/>
 <circle cx="1528.9" cy="545.5" r="7" fill="#fcfcfb" stroke="#eb6834" stroke-width="2.5"/>
-<text x="150" y="52" font-size="24" font-weight="bold" fill="#0b0b0b">Turbidity sensor (A2), one reading per 15-min burst (axis reversed: up = denser)</text>
-<text x="150" y="492" font-size="24" font-weight="bold" fill="#0b0b0b">Cary 50 OD750, diluted samples multiplied back to full strength</text>
-<text x="34" y="255.0" font-size="21" fill="#0b0b0b" text-anchor="middle" transform="rotate(-90 34 255.0)">Sensor reading (ADC counts, reversed)</text>
-<text x="34" y="635.0" font-size="21" fill="#0b0b0b" text-anchor="middle" transform="rotate(-90 34 635.0)">OD750</text>
+<text x="150" y="52" font-size="24" font-weight="bold" fill="#0b0b0b">Sensor (A2): one reading per 15-min burst (axis reversed: up = denser)</text>
+<text x="150" y="492" font-size="24" font-weight="bold" fill="#0b0b0b">Cary OD750: diluted samples, multiplied back</text>
+<text x="26" y="255.0" font-size="21" fill="#0b0b0b" text-anchor="middle" transform="rotate(-90 26 255.0)">Sensor (A2) reading</text>
+<text x="52" y="255.0" font-size="21" fill="#0b0b0b" text-anchor="middle" transform="rotate(-90 52 255.0)">(ADC counts, reversed)</text>
+<text x="26" y="635.0" font-size="21" fill="#0b0b0b" text-anchor="middle" transform="rotate(-90 26 635.0)">Cary OD750</text>
+<text x="52" y="635.0" font-size="21" fill="#0b0b0b" text-anchor="middle" transform="rotate(-90 52 635.0)">(diluted, multiplied back)</text>
 <text x="855.0" y="822" font-size="21" fill="#0b0b0b" text-anchor="middle">Date (2026, local time); tick at midnight</text>
 <circle cx="158" cy="872" r="7" fill="#2a78d6" stroke="#2a78d6" stroke-width="2"/>
-<text x="180" y="878" font-size="19" fill="#0b0b0b">Sensor</text>
-<circle cx="282" cy="872" r="7" fill="#eb6834" stroke="#eb6834" stroke-width="2"/>
-<text x="304" y="878" font-size="19" fill="#0b0b0b">Cary</text>
-<circle cx="386" cy="872" r="7" fill="#fcfcfb" stroke="#eb6834" stroke-width="2"/>
-<text x="408" y="878" font-size="19" fill="#0b0b0b">Cary, caveat (see notes)</text>
-<rect x="682" y="862" width="22" height="20" fill="#eceae4" stroke="#e6e5e1"/>
-<text x="712" y="878" font-size="19" fill="#0b0b0b">Lamp off</text>
-<rect x="826" y="862" width="22" height="20" fill="url(#hatch)" stroke="#e6e5e1"/>
-<text x="856" y="878" font-size="19" fill="#0b0b0b">Power and air outage</text>
+<text x="180" y="878" font-size="19" fill="#0b0b0b">Sensor (A2)</text>
+<circle cx="332" cy="872" r="7" fill="#eb6834" stroke="#eb6834" stroke-width="2"/>
+<text x="354" y="878" font-size="19" fill="#0b0b0b">Cary OD750</text>
+<circle cx="496" cy="872" r="7" fill="#fcfcfb" stroke="#eb6834" stroke-width="2"/>
+<text x="518" y="878" font-size="19" fill="#0b0b0b">Cary OD750, with caveat (see notes)</text>
+<rect x="902" y="862" width="22" height="20" fill="#eceae4" stroke="#e6e5e1"/>
+<text x="932" y="878" font-size="19" fill="#0b0b0b">Lamp off</text>
+<rect x="1046" y="862" width="22" height="20" fill="url(#hatch)" stroke="#e6e5e1"/>
+<text x="1076" y="878" font-size="19" fill="#0b0b0b">Power and air outage</text>
 </svg>
