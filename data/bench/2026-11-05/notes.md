@@ -241,6 +241,9 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **Lamp switches 11-10/11, on the 16/8 timer started 11-10 08:26, read from the data:** off between 00:19 and 00:34 (A2 −12.6 at
   the 00:34 burst; timer due 00:26), on between 08:19 and 08:34 (+13.9 at 08:34; timer due 08:26). A one-burst spike at 04:34
   (+18.8, back −13.2 at 04:49) is not a switch: probably a bubble or clump.
+- **OD750, 11-11 21:38:** diluted 1:4, 0.3026 and 0.3021 (×5: 1.513, 1.511); the same samples diluted 1:5, 0.2508 and 0.2528 (×6: 1.505,
+  1.517). Mean 1.512; the two dilutions agree within 0.1 %, so the Cary is linear at 0.25–0.30. A2 676.3 at 21:34, 673.6 at 21:49.
+- **DI top-up, 11-11 21:54:** 200 mL of DI water, back to the 11-08 10:20 mark, the same mark as the 150 mL top-up on 11-09.
 - **The lamp steps, four times now:** A2's culture level falls at the first burst after the lamp goes off and rises at the first
   burst after it comes on: 00:00 off, about 793 to 785; 09:30 on, about 795 to 807; about 12:00 off, 791.8 to 781.4; 14:10 on,
   781.8 to 794.5. With the lamp off it holds nearly flat (779–782 from 12:04 to 14:04).
