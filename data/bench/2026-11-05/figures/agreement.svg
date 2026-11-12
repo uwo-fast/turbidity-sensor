@@ -52,13 +52,13 @@
 <line x1="1325.8" x2="1325.8" y1="181.8" y2="171.1" stroke="#eb6834" stroke-width="2"/>
 <circle cx="1325.8" cy="176.7" r="8" fill="#fcfcfb" stroke="#eb6834" stroke-width="2.5"/>
 <text x="1311.8" y="166.7" font-size="16" fill="#52514e" text-anchor="end">Wed 22:36</text>
-<text x="150" y="50" font-size="24" font-weight="bold" fill="#0b0b0b">Cary OD750 against the turbidity sensor at the same time (growth test, Nov 8–12)</text>
+<text x="150" y="50" font-size="24" font-weight="bold" fill="#0b0b0b">Cary OD750 against Sensor (A2) at the same time (growth test, Nov 8–12)</text>
 <text x="34" y="420.0" font-size="21" fill="#0b0b0b" text-anchor="middle" transform="rotate(-90 34 420.0)">Cary OD750 (diluted, multiplied back)</text>
-<text x="845.0" y="826" font-size="21" fill="#0b0b0b" text-anchor="middle">Sensor reading at the same time (ADC counts, mean of bursts within 15 min); clearer ← → denser</text>
+<text x="845.0" y="826" font-size="21" fill="#0b0b0b" text-anchor="middle">Sensor (A2) reading at the same time (ADC counts, mean of bursts within 15 min); clearer ← → denser</text>
 <circle cx="158" cy="864" r="8" fill="#eb6834" stroke="#eb6834" stroke-width="2.5"/>
-<text x="176" y="870" font-size="19" fill="#0b0b0b">Cary sample</text>
-<circle cx="324" cy="864" r="8" fill="#fcfcfb" stroke="#eb6834" stroke-width="2.5"/>
-<text x="342" y="870" font-size="19" fill="#0b0b0b">Cary sample with a caveat (see notes)</text>
-<line x1="742" x2="772" y1="864" y2="864" stroke="#2a78d6" stroke-width="2"/>
-<text x="782" y="870" font-size="19" fill="#0b0b0b">Fit to the 7 solid points, within -5% to +6%</text>
+<text x="176" y="870" font-size="19" fill="#0b0b0b">Cary OD750</text>
+<circle cx="314" cy="864" r="8" fill="#fcfcfb" stroke="#eb6834" stroke-width="2.5"/>
+<text x="332" y="870" font-size="19" fill="#0b0b0b">Cary OD750, with caveat (see notes)</text>
+<line x1="712" x2="742" y1="864" y2="864" stroke="#2a78d6" stroke-width="2"/>
+<text x="752" y="870" font-size="19" fill="#0b0b0b">Fit to the 7 Cary OD750 points without a caveat, within -5% to +6%</text>
 </svg>

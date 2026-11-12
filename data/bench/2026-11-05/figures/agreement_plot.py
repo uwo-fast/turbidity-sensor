@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cary OD750 against the sensor reading at the same time, one point per Cary sample. Standard library only."""
+"""Cary OD750 against the Sensor (A2) reading at the same time, one point per Cary sample. Standard library only."""
 import csv
 import datetime
 import math
@@ -60,18 +60,18 @@ for t, c, od, rmin, rmax, note in pts:
     label = t.strftime("%a %H:%M")
     dx, dy, anchor = OFFSETS.get(label, (14, 6, "start"))
     svg.append(f'<text x="{x(c) + dx:.1f}" y="{y(od) + dy:.1f}" font-size="16" fill="{INK2}" text-anchor="{anchor}">{label}</text>')
-svg.append(f'<text x="{L}" y="{T - 30}" font-size="24" font-weight="bold" fill="{INK}">Cary OD750 against the turbidity sensor at the same time (growth test, Nov 8–12)</text>')
+svg.append(f'<text x="{L}" y="{T - 30}" font-size="24" font-weight="bold" fill="{INK}">Cary OD750 against Sensor (A2) at the same time (growth test, Nov 8–12)</text>')
 svg.append(f'<text x="34" y="{(T + B) / 2:.1f}" font-size="21" fill="{INK}" text-anchor="middle" transform="rotate(-90 34 {(T + B) / 2:.1f})">Cary OD750 (diluted, multiplied back)</text>')
-svg.append(f'<text x="{(L + W - R) / 2:.1f}" y="{B + 66}" font-size="21" fill="{INK}" text-anchor="middle">Sensor reading at the same time (ADC counts, mean of bursts within 15 min); clearer ← → denser</text>')
+svg.append(f'<text x="{(L + W - R) / 2:.1f}" y="{B + 66}" font-size="21" fill="{INK}" text-anchor="middle">Sensor (A2) reading at the same time (ADC counts, mean of bursts within 15 min); clearer ← → denser</text>')
 ly = H - 30
-items = [(ORANGE, ORANGE, "Cary sample"), (SURF, ORANGE, "Cary sample with a caveat (see notes)")]
+items = [(ORANGE, ORANGE, "Cary OD750"), (SURF, ORANGE, "Cary OD750, with caveat (see notes)")]
 lx = L
 for fill, stroke, label in items:
     svg.append(f'<circle cx="{lx + 8}" cy="{ly - 6}" r="8" fill="{fill}" stroke="{stroke}" stroke-width="2.5"/>')
     svg.append(f'<text x="{lx + 26}" y="{ly}" font-size="19" fill="{INK}">{label}</text>')
     lx += 26 + len(label) * 10 + 30
 svg.append(f'<line x1="{lx}" x2="{lx + 30}" y1="{ly - 6}" y2="{ly - 6}" stroke="{BLUE}" stroke-width="2"/>')
-svg.append(f'<text x="{lx + 40}" y="{ly}" font-size="19" fill="{INK}">Fit to the {n} solid points, within {min(resid) * 100:+.0f}% to {max(resid) * 100:+.0f}%</text>')
+svg.append(f'<text x="{lx + 40}" y="{ly}" font-size="19" fill="{INK}">Fit to the {n} Cary OD750 points without a caveat, within {min(resid) * 100:+.0f}% to {max(resid) * 100:+.0f}%</text>')
 svg.append("</svg>")
 (HERE / "agreement.svg").write_text("\n".join(svg))
 print(f"fit OD = {k:.3f} * (-ln(counts/{CLEAR}))^{p:.3f}; residuals {min(resid) * 100:+.1f}% to {max(resid) * 100:+.1f}%")
