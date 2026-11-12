@@ -134,12 +134,12 @@ svg.append("</svg>")
 OUT.mkdir(parents=True, exist_ok=True)
 (OUT / "growth_test.svg").write_text("\n".join(svg))
 with open(OUT / "growth_test_sensor.csv", "w", newline="") as f:
-    w = csv.writer(f)
+    w = csv.writer(f, lineterminator="\n")
     w.writerow(["time_local", "a2_counts", "verdict"])
     for when, level, verdict in picks:
         w.writerow([when.strftime("%Y-%m-%d %H:%M"), round(level, 2), verdict])
 with open(OUT / "growth_test_cary.csv", "w", newline="") as f:
-    w = csv.writer(f)
+    w = csv.writer(f, lineterminator="\n")
     w.writerow(["time_local", "reads_multiplied_back", "mean_od750", "note"])
     for when, reads, note in CARY:
         w.writerow([when, " ".join(f"{v:.4f}" for v in reads), round(sum(reads) / len(reads), 4), note])
