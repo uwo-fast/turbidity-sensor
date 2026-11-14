@@ -1,0 +1,33 @@
+# Settings for rig.py. The schedule and levels are placeholders until the bench test
+# (docs/bench/sampler-waveform.md) replaces them.
+
+channel = "a2"             # the head's input on the Nano: a0 to a3
+port = "auto"              # first /dev/ttyUSB* or /dev/ttyACM*, or a path
+data_dir = "~/rig-data"
+
+[motor]
+number = 4                 # terminal M4 of the HAT
+address = 0x60             # the Adafruit 2348's default
+throttle = 0.5             # revised unit (5ml-gnr2): runs clean here; 1 s kick at each start
+kick_throttle = 1.0        # for the first kick_s of each start: a resting crank can stall below this
+kick_s = 1.0
+
+[schedule]
+period_s = 900.0           # burst to burst
+start_delay_s = 30.0       # after the service starts, so the head can warm up
+burst_s = 18.5             # how long the motor runs each time
+
+[levels]                   # in ADC counts, for this head and load resistor
+air_reference = 466.0      # A2, wet tube. Remeasure for the head in use
+near_air = 60.0            # a plateau this close to air_reference is air: wet air has ranged about 425-520
+plateau_rows = 5           # rows in a row, 100 ms at 50 Hz, for a stretch to count as a level
+plateau_step = 3.0         # the most one row may move on a plateau
+min_sample_rows = 25       # under this, 0.5 s of culture in a burst, the verdict is thin
+min_swing = 100.0          # a burst moving less than this did not move the line
+sample_band = 15.0         # culture plateaus further than this from their common level are dropped
+
+[serial]
+header_timeout_s = 10.0
+stale_s = 3.0              # no rows for this long: stop the motor and reconnect
+retry_s = 5.0
+idle_log_s = 1.0           # log rate between bursts

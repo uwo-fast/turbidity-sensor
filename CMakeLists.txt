@@ -184,5 +184,13 @@ if(BUILD_TESTS)
             NAME turbidity_tools
             COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/tests/test_tools.py
         )
+        add_test(
+            NAME turbidity_rig
+            COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/tests/test_rig.py
+        )
+        add_test(
+            NAME turbidity_rig_view
+            COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/tests/test_rig_view.py
+        )
     endif()
 endif()
