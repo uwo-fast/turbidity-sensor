@@ -13,3 +13,10 @@ time_utc,event,detail
 2026-11-10T17:04:24.544+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
 2026-11-11T17:04:25.499+00:00,link_lost,no rows for 3 s
 2026-11-11T17:04:27.078+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-12T17:04:22.727+00:00,link_lost,no rows for 3 s
+2026-11-12T17:04:24.308+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-13T17:04:22.293+00:00,link_lost,no rows for 3 s
+2026-11-13T17:04:23.878+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-14T05:27:11.218+00:00,link_lost,serial port closed
+2026-11-14T05:27:11.227+00:00,link_retry,no /dev/ttyUSB* or /dev/ttyACM*
+2026-11-14T05:27:17.805+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
