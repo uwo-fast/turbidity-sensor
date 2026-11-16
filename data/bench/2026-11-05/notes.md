@@ -264,6 +264,16 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **DI top-up, 11-14 00:26:** 200 mL of DI water back to the 11-08 10:20 mark, as the lamp switched off. The Nano's USB dropped for
   6 s at 00:27 when the cord was bumped. A2 597.8 (00:19), 581.0 (00:34), 586.9 (00:49): not usable as a dilution check, with the
   lamp step, mixing and possibly wall growth washed back in all at once.
+- **After the 00:26 top-up, 11-14:** A2 settled at 586.3 (01:04), about the lamp-off step alone; the DI's dilution barely shows,
+  possibly because it washed wall growth back into the culture.
+- **Sampler stalled, 11-15 08:34.** Last moving burst 08:19. From 08:34 the motor was commanded every burst as usual (1 s at 1.0,
+  then 0.5; HAT on I2C at 0x60; all 925 rows per burst; service running since 11-09 with no restarts and no events after 11-14
+  00:27), but A2 swung only 2–5 counts per burst, parked at the culture level (about 595) and rising as cells settled. Partial
+  moves at 11-15 10:34–11:04 and 16:34, and 11-16 03:04–03:49 with nobody in the lab, each followed by a stall: power reaches
+  the motor and it sometimes breaks free, so binding or a blockage, not software. The stall began at the first burst after the
+  08:26 lamp-on, and the Nano's supply steps about 130 mV at lamp switches (for example 4.52 to 4.65 V); both unexplained. A2
+  read about 420 (air in the tube) from 11-16 10:49. The growth test's sampled data ends at 11-15 08:19, about 7 days after its
+  11-08 10:20 start. Cause to be found at the bench.
 - **The lamp steps, four times now:** A2's culture level falls at the first burst after the lamp goes off and rises at the first
   burst after it comes on: 00:00 off, about 793 to 785; 09:30 on, about 795 to 807; about 12:00 off, 791.8 to 781.4; 14:10 on,
   781.8 to 794.5. With the lamp off it holds nearly flat (779–782 from 12:04 to 14:04).
@@ -271,7 +281,7 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
   stamps from 11-01 on.
 - **Rig data in this folder:** `rig-data/<run>/` holds each run's raw logs (gzip), `summary.csv` and `events.csv`, a snapshot to
-  11-14 01:04 for `algae-run-1c` and to 11-09 23:19 for the others; `rig-data/picked-<run>.csv` is the picking at that date applied to each run. `80`–`82` and `90` are the column
+  11-16 11:53 for `algae-run-1c` and to 11-09 23:19 for the others; `rig-data/picked-<run>.csv` is the picking at that date applied to each run. `80`–`82` and `90` are the column
   diagnostics and live reads from the Pi.
 
 ## Read from the photos, not measured
