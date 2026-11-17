@@ -24,7 +24,7 @@ picture lives.
 
 | Path | Licence |
 | --- | --- |
-| `include/`, `src/`, `tools/`, `examples/`, `tests/` | `GPL-3.0-or-later` |
+| `include/`, `src/`, `tools/`, `examples/`, `rig/`, `tests/` | `GPL-3.0-or-later` |
 | `CMakeLists.txt`, `cmake/`, `library.json`, `justfile`, `.github/`, and other build tooling | `GPL-3.0-or-later` |
 | `hardware/` — parametric CAD source (`.scad`) | `GPL-3.0-or-later` **and** `CERN-OHL-S-2.0` |
 | `hardware/` — geometry (STL) generated from that source | `CERN-OHL-S-2.0` |

@@ -1,0 +1,27 @@
+time_utc,event,detail
+2026-11-07T03:45:54.424+00:00,start,"throttle 0.8, period 120 s"
+2026-11-07T03:45:55.996+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-07T03:56:00.317+00:00,stop,phase burst
+2026-11-07T03:56:01.388+00:00,start,"throttle 0.7, period 120 s"
+2026-11-07T03:56:02.962+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-07T04:04:31.401+00:00,stop,phase still
+2026-11-07T04:04:32.486+00:00,start,"throttle 0.7, period 900 s"
+2026-11-07T04:04:34.059+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-07T04:08:16.608+00:00,stop,phase still
+2026-11-07T04:19:19.581+00:00,start,"throttle 0.7, period 120 s"
+2026-11-07T04:19:21.154+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-07T05:37:18.964+00:00,stop,phase idle
+2026-11-07T05:40:24.544+00:00,start,"throttle 0.7, period 120 s"
+2026-11-07T05:40:26.116+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-07T05:57:02.573+00:00,stop,phase still
+2026-11-07T05:57:03.670+00:00,start,"throttle 0.7, period 120 s"
+2026-11-07T05:57:05.243+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-07T06:00:13.877+00:00,stop,phase still
+2026-11-07T06:00:14.906+00:00,start,"throttle 0.6, period 120 s"
+2026-11-07T06:00:16.477+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-07T06:12:03.039+00:00,stop,phase still
+2026-11-07T06:12:04.065+00:00,start,"throttle 0.5, period 120 s"
+2026-11-07T06:12:05.639+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-07T06:21:09.780+00:00,stop,phase settle
+2026-11-07T06:21:10.838+00:00,start,"throttle 0.5, period 900 s"
+2026-11-07T06:21:12.409+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
