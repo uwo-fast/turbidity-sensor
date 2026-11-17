@@ -270,10 +270,12 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   then 0.5; HAT on I2C at 0x60; all 925 rows per burst; service running since 11-09 with no restarts and no events after 11-14
   00:27), but A2 swung only 2–5 counts per burst, parked at the culture level (about 595) and rising as cells settled. Partial
   moves at 11-15 10:34–11:04 and 16:34, and 11-16 03:04–03:49 with nobody in the lab, each followed by a stall: power reaches
-  the motor and it sometimes breaks free, so binding or a blockage, not software. The stall began at the first burst after the
+  the motor and it sometimes breaks free, so mechanical, not software. The stall began at the first burst after the
   08:26 lamp-on, and the Nano's supply steps about 130 mV at lamp switches (for example 4.52 to 4.65 V); both unexplained. A2
   read about 420 (air in the tube) from 11-16 10:49. The growth test's sampled data ends at 11-15 08:19, about 7 days after its
-  11-08 10:20 start. Cause to be found at the bench.
+  11-08 10:20 start. Cause, found at the bench: the motor's mounting screws worked loose, the
+  motor rocked, and the crank's D-bore cammed out on the shaft; threadlocker had only delayed it. The fix, the motor turned with its
+  screws along the stroke and a printed cradle gripping the gearbox, is in uwo-fast/syringe-actuator PR #24.
 - **Hand draws, 11-16, logger still running, motor spinning free:** the crank had cammed out, so culture was drawn by hand and
   held in the tube; the logger's 1 Hz idle rows record them. Median A2 from 3 to 33 s after each draw, groups of steady draws
   (spread 0.5–2 counts within each):
