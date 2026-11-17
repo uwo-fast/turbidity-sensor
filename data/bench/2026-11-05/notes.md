@@ -274,14 +274,32 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   08:26 lamp-on, and the Nano's supply steps about 130 mV at lamp switches (for example 4.52 to 4.65 V); both unexplained. A2
   read about 420 (air in the tube) from 11-16 10:49. The growth test's sampled data ends at 11-15 08:19, about 7 days after its
   11-08 10:20 start. Cause to be found at the bench.
+- **Hand draws, 11-16, logger still running, motor spinning free:** the crank had cammed out, so culture was drawn by hand and
+  held in the tube; the logger's 1 Hz idle rows record them. Median A2 from 3 to 33 s after each draw, groups of steady draws
+  (spread 0.5–2 counts within each):
+
+  | Time | Draws | A2 |
+  | --- | --- | --- |
+  | 15:34–16:08 | 3 | 563–574 |
+  | 17:42–17:49 | 6 | 592–598 |
+  | 18:07–18:09 | 4, short | 591–595 |
+  | 19:05–19:10 | 2 | 568–570 |
+  | 19:19–19:25 | 9 | 532–548 |
+  | 19:46–19:50 | 2 | 566–568 |
+
+  The groups differ by up to 60 counts within two hours, far more than growth (at most about 4 counts an hour). Draw speed and
+  volume varied between groups, and the tube was at times left wet or partly full: the air reading fell to about 343 around
+  18:30, against about 432 before. Draws released without holding (16:44, 16:58, 17:03, 17:28) left only 1–2 rows each and are
+  not readings.
+- **Run stopped, 11-16 19:55:46.** `turbidity-rig` stopped by hand; the view server left running.
 - **The lamp steps, four times now:** A2's culture level falls at the first burst after the lamp goes off and rises at the first
   burst after it comes on: 00:00 off, about 793 to 785; 09:30 on, about 795 to 807; about 12:00 off, 791.8 to 781.4; 14:10 on,
   781.8 to 794.5. With the lamp off it holds nearly flat (779–782 from 12:04 to 14:04).
 - **Lamp:** 16 h on, 8 h off, on a manual timer set to roughly match daylight. Switch times to be confirmed.
 - **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
   stamps from 11-01 on.
-- **Rig data in this folder:** `rig-data/<run>/` holds each run's raw logs (gzip), `summary.csv` and `events.csv`, a snapshot to
-  11-16 11:53 for `algae-run-1c` and to 11-09 23:19 for the others; `rig-data/picked-<run>.csv` is the picking at that date applied to each run. `80`–`82` and `90` are the column
+- **Rig data in this folder:** `rig-data/<run>/` holds each run's raw logs (gzip), `summary.csv` and `events.csv`, the complete
+  `algae-run-1c` to its stop at 11-16 19:55, every file matching the Pi's byte for byte, and to 11-09 23:19 for the others; `rig-data/picked-<run>.csv` is the picking at that date applied to each run. `80`–`82` and `90` are the column
   diagnostics and live reads from the Pi.
 
 ## Read from the photos, not measured
