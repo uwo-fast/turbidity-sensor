@@ -249,14 +249,78 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   about 2 % above 21:38, where the top-up predicts about 1.43–1.45. The Cary's blank had shifted by about 0.01 when re-zeroed
   before this set, enough at these readings to account for most of the gap; not used as a dilution check. Samples kept in the
   fridge, dated, to re-read on another instrument.
+- **OD750 on 11-12 to 11-14, read on 11-14 from fridge-stored samples** (two of the four taken by someone else). Each predicted
+  beforehand from A2 by the 11-08 to 11-11 fit, OD = 3.99 × (−ln(counts / 854.1))^0.63, fitted only to reads up to 1.51:
+
+  | Sampled | Dilution | Reads | ×(n+1), mean | A2 nearby | Fit | Fit − Cary |
+  | --- | --- | --- | ---: | ---: | ---: | ---: |
+  | 11-12 10:26 | 1:5 | 0.2566, 0.2538 | 1.531 | 681.3 | 1.568 | +2.4 % |
+  | 11-12 22:32 | 1:6 | 0.2686, 0.2677 | 1.877 | 630.3 | 1.888 | +0.6 % |
+  | 11-13 09:38 | 1:6 | 0.2645, 0.2628 | 1.846 | 631.4 | 1.881 | +1.9 % |
+  | 11-14 00:24 | 1:7 | 0.2600, 0.2583 | 2.073 | 597.8 | 2.088 | +0.7 % |
+
+  All four within 2.5 %, beyond the range the fit was made on. Pairs agree within 1.1 %. The 11-13 sample was about 70 min after
+  lamp-on, but read on the fit this time. 11-14 00:24 uses only the 00:19 burst; the lamp went off at about 00:26.
+- **DI top-up, 11-14 00:26:** 200 mL of DI water back to the 11-08 10:20 mark, as the lamp switched off. The Nano's USB dropped for
+  6 s at 00:27 when the cord was bumped. A2 597.8 (00:19), 581.0 (00:34), 586.9 (00:49): not usable as a dilution check, with the
+  lamp step, mixing and possibly wall growth washed back in all at once.
+- **After the 00:26 top-up, 11-14:** A2 settled at 586.3 (01:04), about the lamp-off step alone; the DI's dilution barely shows,
+  possibly because it washed wall growth back into the culture.
+- **Sampler stalled, 11-15 08:34.** Last moving burst 08:19. From 08:34 the motor was commanded every burst as usual (1 s at 1.0,
+  then 0.5; HAT on I2C at 0x60; all 925 rows per burst; service running since 11-09 with no restarts and no events after 11-14
+  00:27), but A2 swung only 2–5 counts per burst, parked at the culture level (about 595) and rising as cells settled. Partial
+  moves at 11-15 10:34–11:04 and 16:34, and 11-16 03:04–03:49 with nobody in the lab, each followed by a stall: power reaches
+  the motor and it sometimes breaks free, so mechanical, not software. The stall began at the first burst after the
+  08:26 lamp-on, and the Nano's supply steps about 130 mV at lamp switches (for example 4.52 to 4.65 V); both unexplained. A2
+  read about 420 (air in the tube) from 11-16 10:49. The growth test's sampled data ends at 11-15 08:19, about 7 days after its
+  11-08 10:20 start. Cause, found at the bench: the motor's mounting screws worked loose, the
+  motor rocked, and the crank's D-bore cammed out on the shaft; threadlocker had only delayed it. The fix, the motor turned with its
+  screws along the stroke and a printed cradle gripping the gearbox, is in uwo-fast/syringe-actuator PR #24.
+- **Hand draws, 11-16, logger still running, motor spinning free:** the crank had cammed out, so culture was drawn by hand and
+  held in the tube; the logger's 1 Hz idle rows record them. Median A2 from 3 to 33 s after each draw, groups of steady draws
+  (spread 0.5–2 counts within each):
+
+  | Time | Draws | A2 |
+  | --- | --- | --- |
+  | 15:34–16:08 | 3 | 563–574 |
+  | 17:42–17:49 | 6 | 592–598 |
+  | 18:07–18:09 | 4, short | 591–595 |
+  | 19:05–19:10 | 2 | 568–570 |
+  | 19:19–19:25 | 9 | 532–548 |
+  | 19:46–19:50 | 2 | 566–568 |
+
+  The groups differ by up to 60 counts within two hours, far more than growth (at most about 4 counts an hour). Draw speed and
+  volume varied between groups, and the tube was at times left wet or partly full: the air reading fell to about 343 around
+  18:30, against about 432 before. Draws released without holding (16:44, 16:58, 17:03, 17:28) left only 1–2 rows each and are
+  not readings.
+- **OD750 on 11-14 to 11-16, read on 11-16/17 from fridge-stored samples** (11-14 and 11-15 taken by a technician, 11-16 by me),
+  one read per tube. Predicted beforehand where the sensor was sampling, from the 11-08 to 11-11 fit:
+
+  | Sampled | Dilution | Read | ×(n+1) | A2 nearby | Fit | Fit − Cary |
+  | --- | --- | --- | ---: | --- | ---: | ---: |
+  | 11-14 09:31 | 1:7 | 0.2615 | 2.092 | 600.5, 594.6 (09:19, 09:34) | 2.090 | −0.1 % |
+  | 11-14 21:30 | 1:8 | 0.2502 | 2.252 | 571.8, 569.4 (21:19, 21:34) | 2.255 | +0.2 % |
+  | 11-15 09:02 | 1:8 | 0.2552 | 2.297 | stalled from 08:34 | – | – |
+  | 11-15 20:01 | 1:8 | 0.2611 | 2.350 | stalled | – | – |
+  | 11-16 10:03 | 1:8 | 0.2550 | 2.295 | stalled | – | – |
+  | 11-16 17:01 | 1:8 | 0.2453 | 2.208 | hand draws only, about 563–598 | – | – |
+  | 11-16 19:58 | 1:8 | 0.2506 | 2.255 | hand draws 19:46–19:50, about 567 | 2.275 | +0.9 % |
+
+  The two sampled reads land within 0.2 % of the fit, and the 19:58 hand draw within 1 %. The culture levelled off at about
+  2.2–2.35 from the evening of 11-14, after 2.07 at 00:24 that day: the end of growth in this batch.
+- **Run stopped, 11-16 19:55:46.** `turbidity-rig` stopped by hand; the view server left running.
+- **What ran, checked on the Pi at the end:** `rig.py`, `pick_samples.py`, `view_server.py`, `view/`, both service units and
+  `requirements.txt` are identical to `rig/pi/` here, and the Pi's virtualenv holds exactly the pinned versions. `rig.toml` differs
+  only in `data_dir = "~/rig-data/algae-run-1c"`. The Nano ran `multichannel-20ms.hex`, sha256 `86a29036bcd43686…`, built from
+  `examples/arduino-multichannel` with `-DTURBIDITY_SAMPLE_PERIOD_MS=20`.
 - **The lamp steps, four times now:** A2's culture level falls at the first burst after the lamp goes off and rises at the first
   burst after it comes on: 00:00 off, about 793 to 785; 09:30 on, about 795 to 807; about 12:00 off, 791.8 to 781.4; 14:10 on,
   781.8 to 794.5. With the lamp off it holds nearly flat (779–782 from 12:04 to 14:04).
 - **Lamp:** 16 h on, 8 h off, on a manual timer set to roughly match daylight. Switch times to be confirmed.
 - **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
   stamps from 11-01 on.
-- **Rig data in this folder:** `rig-data/<run>/` holds each run's raw logs (gzip), `summary.csv` and `events.csv`, a snapshot to
-  11-12 00:19 for `algae-run-1c` and to 11-09 23:19 for the others; `rig-data/picked-<run>.csv` is the picking at that date applied to each run. `80`–`82` and `90` are the column
+- **Rig data in this folder:** `rig-data/<run>/` holds each run's raw logs (gzip), `summary.csv` and `events.csv`, the complete
+  `algae-run-1c` to its stop at 11-16 19:55, every file matching the Pi's byte for byte, and to 11-09 23:19 for the others; `rig-data/picked-<run>.csv` is the picking at that date applied to each run. `80`–`82` and `90` are the column
   diagnostics and live reads from the Pi.
 - **Figures:** `figures/growth_test.png` (sensor counts and Cary OD over the growth test, 11-08 10:20 to 11-12 00:30) and
   `figures/agreement.png` (Cary OD against the sensor at the same time). Redraw with `python3 growth_plot.py` and then
