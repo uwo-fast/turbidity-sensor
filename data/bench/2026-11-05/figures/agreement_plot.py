@@ -88,8 +88,14 @@ for kind, fill, label in items:
         svg.append(f'<rect x="{lx + 1}" y="{ly - 13}" width="14" height="14" fill="{fill}" stroke="{ORANGE}" stroke-width="2.5"/>')
     svg.append(f'<text x="{lx + 26}" y="{ly}" font-size="19" fill="{INK}">{label}</text>')
     lx += 26 + len(label) * 10 + 30
-svg.append(f'<line x1="{lx}" x2="{lx + 30}" y1="{ly - 6}" y2="{ly - 6}" stroke="{BLUE}" stroke-width="2"/>')
-svg.append(f'<text x="{lx + 40}" y="{ly}" font-size="19" fill="{INK}">Fit (Nov 8–11); later reads {min(pred) * 100:+.1f}% to {max(pred) * 100:+.1f}% from it</text>')
+# the fit's legend sits in the empty upper left of the plot, the markers' along the bottom
+for i, (dash, label) in enumerate(((None, "Fit, made on the Nov 8–11 reads"),
+                                   ("8 6", "Fit, extended past the reads it was made from (dashed)"))):
+    fy = T + 34 + i * 32
+    svg.append(f'<line x1="{L + 20}" x2="{L + 60}" y1="{fy - 6}" y2="{fy - 6}" stroke="{BLUE}" stroke-width="2"'
+               + (f' stroke-dasharray="{dash}"' if dash else "") + "/>")
+    svg.append(f'<text x="{L + 70}" y="{fy}" font-size="19" fill="{INK}">{label}</text>')
+svg.append(f'<text x="{L + 20}" y="{T + 34 + 2 * 32}" font-size="19" fill="{INK}">Later reads: {min(pred) * 100:+.1f}% to {max(pred) * 100:+.1f}% from the fit</text>')
 svg.append("</svg>")
 (HERE / "agreement.svg").write_text("\n".join(svg))
 print(f"fit OD = {k:.3f} * (-ln(counts/{CLEAR}))^{p:.3f} on {n} reads; residuals {min(resid) * 100:+.1f}% to {max(resid) * 100:+.1f}%;"

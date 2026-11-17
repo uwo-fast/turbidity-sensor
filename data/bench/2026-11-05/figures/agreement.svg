@@ -88,6 +88,9 @@
 <text x="412" y="870" font-size="19" fill="#0b0b0b">Cary OD750, after the fit</text>
 <circle cx="700" cy="864" r="8" fill="#fcfcfb" stroke="#eb6834" stroke-width="2.5"/>
 <text x="718" y="870" font-size="19" fill="#0b0b0b">Cary OD750, with caveat (see notes)</text>
-<line x1="1098" x2="1128" y1="864" y2="864" stroke="#2a78d6" stroke-width="2"/>
-<text x="1138" y="870" font-size="19" fill="#0b0b0b">Fit (Nov 8–11); later reads -0.1% to +2.4% from it</text>
+<line x1="170" x2="210" y1="108" y2="108" stroke="#2a78d6" stroke-width="2"/>
+<text x="220" y="114" font-size="19" fill="#0b0b0b">Fit, made on the Nov 8–11 reads</text>
+<line x1="170" x2="210" y1="140" y2="140" stroke="#2a78d6" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="220" y="146" font-size="19" fill="#0b0b0b">Fit, extended past the reads it was made from (dashed)</text>
+<text x="170" y="178" font-size="19" fill="#0b0b0b">Later reads: -0.1% to +2.4% from the fit</text>
 </svg>
