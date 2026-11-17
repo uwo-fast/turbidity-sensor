@@ -292,6 +292,10 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   18:30, against about 432 before. Draws released without holding (16:44, 16:58, 17:03, 17:28) left only 1–2 rows each and are
   not readings.
 - **Run stopped, 11-16 19:55:46.** `turbidity-rig` stopped by hand; the view server left running.
+- **What ran, checked on the Pi at the end:** `rig.py`, `pick_samples.py`, `view_server.py`, `view/`, both service units and
+  `requirements.txt` are identical to `rig/pi/` here, and the Pi's virtualenv holds exactly the pinned versions. `rig.toml` differs
+  only in `data_dir = "~/rig-data/algae-run-1c"`. The Nano ran `multichannel-20ms.hex`, sha256 `86a29036bcd43686…`, built from
+  `examples/arduino-multichannel` with `-DTURBIDITY_SAMPLE_PERIOD_MS=20`.
 - **The lamp steps, four times now:** A2's culture level falls at the first burst after the lamp goes off and rises at the first
   burst after it comes on: 00:00 off, about 793 to 785; 09:30 on, about 795 to 807; about 12:00 off, 791.8 to 781.4; 14:10 on,
   781.8 to 794.5. With the lamp off it holds nearly flat (779–782 from 12:04 to 14:04).
