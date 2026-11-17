@@ -291,6 +291,21 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   volume varied between groups, and the tube was at times left wet or partly full: the air reading fell to about 343 around
   18:30, against about 432 before. Draws released without holding (16:44, 16:58, 17:03, 17:28) left only 1–2 rows each and are
   not readings.
+- **OD750 on 11-14 to 11-16, read on 11-16/17 from fridge-stored samples** (11-14 and 11-15 taken by a technician, 11-16 by me),
+  one read per tube. Predicted beforehand where the sensor was sampling, from the 11-08 to 11-11 fit:
+
+  | Sampled | Dilution | Read | ×(n+1) | A2 nearby | Fit | Fit − Cary |
+  | --- | --- | --- | ---: | --- | ---: | ---: |
+  | 11-14 09:31 | 1:7 | 0.2615 | 2.092 | 600.5, 594.6 (09:19, 09:34) | 2.090 | −0.1 % |
+  | 11-14 21:30 | 1:8 | 0.2502 | 2.252 | 571.8, 569.4 (21:19, 21:34) | 2.255 | +0.2 % |
+  | 11-15 09:02 | 1:8 | 0.2552 | 2.297 | stalled from 08:34 | – | – |
+  | 11-15 20:01 | 1:8 | 0.2611 | 2.350 | stalled | – | – |
+  | 11-16 10:03 | 1:8 | 0.2550 | 2.295 | stalled | – | – |
+  | 11-16 17:01 | 1:8 | 0.2453 | 2.208 | hand draws only, about 563–598 | – | – |
+  | 11-16 19:58 | 1:8 | 0.2506 | 2.255 | hand draws 19:46–19:50, about 567 | 2.275 | +0.9 % |
+
+  The two sampled reads land within 0.2 % of the fit, and the 19:58 hand draw within 1 %. The culture levelled off at about
+  2.2–2.35 from the evening of 11-14, after 2.07 at 00:24 that day: the end of growth in this batch.
 - **Run stopped, 11-16 19:55:46.** `turbidity-rig` stopped by hand; the view server left running.
 - **What ran, checked on the Pi at the end:** `rig.py`, `pick_samples.py`, `view_server.py`, `view/`, both service units and
   `requirements.txt` are identical to `rig/pi/` here, and the Pi's virtualenv holds exactly the pinned versions. `rig.toml` differs
