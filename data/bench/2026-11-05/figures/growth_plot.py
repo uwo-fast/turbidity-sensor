@@ -16,7 +16,8 @@ def t(s):
     return datetime.datetime.strptime(s, "%Y-%m-%d %H:%M").replace(tzinfo=TZ)
 
 
-START, END = t("2026-11-08 10:20"), t("2026-11-12 00:30")
+START, END = t("2026-11-08 10:20"), t("2026-11-16 21:00")
+STALL = t("2026-11-15 08:34")  # first burst with the crank cammed out; sensor points end before it
 
 # Cary OD750, growth test, from data/bench/2026-11-05/notes.md: (time, reads multiplied back, note)
 CARY = [
@@ -31,19 +32,33 @@ CARY = [
     ("2026-11-11 09:10", [0.8945, 0.9055], "45 min after lamp on"),
     ("2026-11-11 21:38", [1.5130, 1.5105, 1.5048, 1.5168], ""),
     ("2026-11-11 22:36", [1.5355, 1.5305, 1.5588, 1.5516], "Cary blank shifted 0.01"),
+    ("2026-11-12 10:26", [1.5396, 1.5228], ""),
+    ("2026-11-12 22:32", [1.8802, 1.8739], ""),
+    ("2026-11-13 09:38", [1.8515, 1.8396], "70 min after lamp on"),
+    ("2026-11-14 00:24", [2.0800, 2.0664], ""),
+    ("2026-11-14 09:31", [2.0920], ""),
+    ("2026-11-14 21:30", [2.2518], ""),
+    ("2026-11-15 09:02", [2.2968], ""),
+    ("2026-11-15 20:01", [2.3499], ""),
+    ("2026-11-16 10:03", [2.2950], ""),
+    ("2026-11-16 17:01", [2.2077], ""),
+    ("2026-11-16 19:58", [2.2554], ""),
 ]
 # lamp off (dark) and other disturbances
 DARK = [("2026-11-09 00:00", "2026-11-09 09:30"), ("2026-11-09 12:00", "2026-11-09 14:10"),
         ("2026-11-09 23:46", "2026-11-10 08:26"), ("2026-11-10 00:26", "2026-11-10 00:26"),
-        ("2026-11-11 00:26", "2026-11-11 08:26")]
+        ("2026-11-11 00:26", "2026-11-11 08:26"), ("2026-11-12 00:26", "2026-11-12 08:26"),
+        ("2026-11-13 00:26", "2026-11-13 08:26"), ("2026-11-14 00:26", "2026-11-14 08:26"),
+        ("2026-11-15 00:26", "2026-11-15 08:26"), ("2026-11-16 00:26", "2026-11-16 08:26")]
 DARK = [d for d in DARK if d[0] != d[1]]
 OUTAGE = ("2026-11-09 12:00", "2026-11-09 18:30")
-EVENTS = [("2026-11-08 10:20", "1 L BG-11, start"), ("2026-11-09 19:38", "+150 mL DI"), ("2026-11-11 21:54", "+200 mL DI")]
+EVENTS = [("2026-11-08 10:20", "1 L BG-11, start"), ("2026-11-09 19:38", "+150 mL DI"), ("2026-11-11 21:54", "+200 mL DI"),
+          ("2026-11-14 00:26", "+200 mL DI"), ("2026-11-15 08:34", "Sampler stalled"), ("2026-11-16 19:55", "Run stopped")]
 
 picks = []
 for r in csv.DictReader(open(RUN / "rig-data" / "picked-algae-run-1c.csv")):
     when = datetime.datetime.fromisoformat(r["time_utc"]).astimezone(TZ)
-    if START <= when <= END and r["verdict"] in ("ok", "thin") and r["sample_level"]:
+    if START <= when < STALL and r["verdict"] in ("ok", "thin") and r["sample_level"]:
         picks.append((when, float(r["sample_level"]), r["verdict"]))
 
 W, H = 1600, 900
@@ -62,8 +77,8 @@ def yscale(lo, hi, top, bottom):
     return lambda v: bottom - (v - lo) / (hi - lo) * (bottom - top)
 
 
-ya = yscale(850.0, 650.0, *P1)  # reversed: up = denser, as in the OD panel
-yo = yscale(0.0, 1.8, *P2)
+ya = yscale(850.0, 550.0, *P1)  # reversed: up = denser, as in the OD panel
+yo = yscale(0.0, 2.5, *P2)
 svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" font-family="Helvetica, Arial, sans-serif">',
        f'<rect width="{W}" height="{H}" fill="{SURF}"/>',
        '<defs><pattern id="hatch" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">'
@@ -74,10 +89,10 @@ for top, bottom in (P1, P2):
     a, b = OUTAGE
     svg.append(f'<rect x="{x(t(a)):.1f}" y="{top}" width="{x(t(b)) - x(t(a)):.1f}" height="{bottom - top}" fill="url(#hatch)"/>')
 # gridlines and y labels
-for v in (650, 700, 750, 800, 850):
+for v in (550, 600, 650, 700, 750, 800, 850):
     svg.append(f'<line x1="{L}" x2="{W - R}" y1="{ya(v):.1f}" y2="{ya(v):.1f}" stroke="{GRID}" stroke-width="1"/>')
     svg.append(f'<text x="{L - 12}" y="{ya(v) + 6:.1f}" font-size="20" fill="{INK2}" text-anchor="end">{v}</text>')
-for v in (0.0, 0.5, 1.0, 1.5):
+for v in (0.0, 0.5, 1.0, 1.5, 2.0, 2.5):
     svg.append(f'<line x1="{L}" x2="{W - R}" y1="{yo(v):.1f}" y2="{yo(v):.1f}" stroke="{GRID}" stroke-width="1"/>')
     svg.append(f'<text x="{L - 12}" y="{yo(v) + 6:.1f}" font-size="20" fill="{INK2}" text-anchor="end">{v:.1f}</text>')
 # day ticks
@@ -96,7 +111,7 @@ for when, label in EVENTS:
         svg.append(f'<line x1="{xx:.1f}" x2="{xx:.1f}" y1="{top}" y2="{bottom}" stroke="{INK2}" stroke-width="1.5"/>')
     anchor = "start" if xx < W - 260 else "end"
     dx = 6 if anchor == "start" else -6
-    ly_ = P1[1] - 12 if when == EVENTS[0][0] else P1[0] + 22
+    ly_ = P2[1] - 12  # bottom of the Cary panel, clear of both data series
     svg.append(f'<text x="{xx + dx:.1f}" y="{ly_}" font-size="18" fill="{INK}" text-anchor="{anchor}">{label}</text>')
 # sensor points
 for when, att, verdict in picks:
