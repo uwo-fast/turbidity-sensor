@@ -76,7 +76,7 @@ This repo is not yet a standards-validated turbidity instrument project.
 - Community `SEN0189` voltage-to-NTU formulas are useful as practical bring-up
   references only. They should not be treated as authoritative calibration for this
   repo.
-- `ISO 7027`, `EPA 180.1`, and related standards documents in `datasheets/` are
+- `ISO 7027` (cited in `datasheets/README.md`), `EPA 180.1`, and related standards documents are
   present as future reference material for proper calibration and quantification work.
   They are not the basis for any current compliance claim.
 
