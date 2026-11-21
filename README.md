@@ -8,7 +8,7 @@ TST-10-type probe, the one on DFRobot's SEN0189 module, in a printed case around
 by an Arduino Nano. Paired with a syringe that draws culture through the tube on a timer, it follows
 the density of a culture in a vessel that is already running.
 
-![The sampler on a column photobioreactor's lid: the syringe actuator above, the head's housing below it, the riser into the culture](data/bench/2026-11-05/photos/sampler_on_lid.jpg)
+![The sampler on a column photobioreactor's lid: the syringe actuator's body above, the head's housing below it](docs/images/sampler.jpg)
 
 ## What's here
 
