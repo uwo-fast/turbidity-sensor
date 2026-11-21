@@ -55,8 +55,6 @@ None of the files below is licensed by this repository.
 | --- | --- | --- |
 | `docs/archive/datasheets/TST-10-*.pdf`, `docs/archive/datasheets/TSW-10-*.pdf` | Amphenol Thermometrics | Vendor datasheets, all rights reserved by their publisher |
 | `data/calibration/vendor-data/*-datasheet-plot.png` | Amphenol Thermometrics | Plots cropped from those datasheets |
-| `docs/archive/datasheets/ISO7027_Turbidity_2016.pdf` | ISO | Published standard, all rights reserved by its publisher |
-| `docs/archive/datasheets/BSI_Turbidity_Quantitative_2019.pdf` | BSI | Published standard, all rights reserved by its publisher |
 | `docs/archive/datasheets/EPA180.1_Turbidity_Nephelometry_1993.pdf` | US EPA | US Government work |
 
 The curves in `data/calibration/vendor-data/*.csv` were digitized by this project
