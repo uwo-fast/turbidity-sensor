@@ -1,0 +1,13 @@
+time_utc,event,detail
+2026-11-06T00:01:22.517+00:00,start,"throttle 0.7, period 120 s"
+2026-11-06T00:01:24.087+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-06T00:58:08.598+00:00,link_lost,serial port closed
+2026-11-06T00:58:08.618+00:00,link_retry,no /dev/ttyUSB* or /dev/ttyACM*
+2026-11-06T00:58:13.625+00:00,link_retry,no /dev/ttyUSB* or /dev/ttyACM*
+2026-11-06T00:58:18.631+00:00,link_retry,no /dev/ttyUSB* or /dev/ttyACM*
+2026-11-06T00:58:23.638+00:00,link_retry,no /dev/ttyUSB* or /dev/ttyACM*
+2026-11-06T00:58:30.210+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-06T01:08:27.986+00:00,stop,phase idle
+2026-11-06T01:08:29.021+00:00,start,"throttle 0.8, period 120 s"
+2026-11-06T01:08:30.595+00:00,linked,"timestamp_ms,vcc_mv,adc_counts_a0,adc_counts_a1,adc_counts_a2,adc_counts_a3"
+2026-11-06T04:53:33.361+00:00,stop,phase idle
