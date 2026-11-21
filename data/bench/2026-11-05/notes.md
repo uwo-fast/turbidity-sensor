@@ -324,8 +324,10 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   diagnostics and live reads from the Pi.
 - **Figures:** `figures/growth_test.png` (sensor counts and Cary OD over the growth test, 11-08 10:20 to the stop on 11-16;
   sensor points end at the 11-15 08:19 burst, the last before the stall) and `figures/agreement.png` (Cary OD against the
-  sensor at the same time: the mean of the bursts within 16 min, not across a DI top-up). Redraw with `python3 growth_plot.py`
-  and then `python3 agreement_plot.py` in `figures/`, then `rsvg-convert` for the PNGs. The Cary values are written into
+  sensor at the same time: the mean of the bursts within 16 min, not across a DI top-up), and `figures/burst.png` (one
+  normal burst at 50 Hz, 11-10 09:04, beside the first stalled one, 11-15 08:34, with the rows `rig.py`'s picker kept).
+  Redraw with `python3 growth_plot.py`, then `python3 agreement_plot.py` and `python3 burst_plot.py` in `figures/`, then
+  `rsvg-convert` for the PNGs. The Cary values are written into
   `growth_plot.py` from these notes. The curve in `agreement.png` is fitted to the 7 Cary samples from 11-08 to 11-11 without a
   caveat; the 5 later samples without a caveat, 11-12 to 11-14, read −0.1 % to +2.4 % from it. The 11-13 09:38 sample, about
   70 min after lamp-on, is drawn with a caveat as the earlier lamp-on samples are.
