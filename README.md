@@ -1,153 +1,78 @@
-# turbidity
+# turbidity-sensor
 
 [![Software: GPL-3.0-or-later](https://img.shields.io/badge/Software-GPL--3.0--or--later-blue.svg)](LICENSES/GPL-3.0-or-later.txt)
 [![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/Hardware-CERN--OHL--S--2.0-orange.svg)](LICENSES/CERN-OHL-S-2.0.txt)
 
-Open-source tools for modeling, calibrating, and evaluating Amphenol `TSW-10` and `TST-10` turbidity sensors.
+A low-cost turbidity sensor and its software. The sensing element is the bare board from a
+TST-10-type probe, the one on DFRobot's SEN0189 module, in a printed case around a clear tube, read
+by an Arduino Nano. Paired with a syringe that draws culture through the tube on a timer, it follows
+the density of a culture in a vessel that is already running.
 
-## Goal
+<!-- Run 1's first print, grey and on a clear lid. Replace with photos of the black reprint from run 2: #48 -->
+![The sampler on a column photobioreactor's lid: the syringe actuator's body above, the head's housing below it](docs/images/sampler.jpg)
 
-This project aims to characterize these low-cost sensors and develop a reproducible approach to turbidity measurement, including calibration, data acquisition, and validation across different sensors and optical configurations.
+## What's here
 
-Obtaining a sensor voltage, as in DFRobot's example, is trivially easy (just an analog read away), but it does not establish measurement accuracy, repeatability, or consistency between individual sensors. Establishing those is the aim here.
-
-## Features
-
-- A portable, stateless C library for sensor modeling and 3-point calibration
-- A calibration CLI that generates machine-readable JSON profiles
-- CSV acquisition, analysis, and replay tools for experimental validation
-- Arduino examples for single- and multi-sensor measurements
-- Parametric OpenSCAD models of the sensor hardware and a printable flow-through housing
+- **The head:** [`hardware/case/`](hardware/case/README.md) is the printed case around the board and the
+  tube, and [`hardware/probe/`](hardware/probe/) the board's measured outline, from which any housing
+  sizes itself. [`docs/hardware.md`](docs/hardware.md) covers the wiring.
+- **Reading it:** [`examples/arduino-multichannel/`](examples/arduino-multichannel/) streams raw readings
+  from up to four heads. [`tools/`](tools/) captures, summarises and plots them.
+- **The sampler logger:** [`rig/pi/`](rig/pi/README.md) runs the syringe actuator
+  ([uwo-fast/syringe-actuator](https://github.com/uwo-fast/syringe-actuator)) in timed bursts and picks
+  the culture's reading out of each burst. It needs no position sensing and no valves.
+- **The C library:** a model of the head from the manufacturer's curves, with a calibration tool. It
+  applies to a head in its stock housing, not in the tube case: [`docs/library.md`](docs/library.md).
+- **Data:** every bench session and run, with its notes, in [`data/bench/`](data/bench/).
 
 ## Status
 
-The software is an MVP based on digitized and fitted manufacturer curves. The acquisition tools and hardware models support experimental characterization, but measurement accuracy and repeatability have not yet been established through end-to-end calibration of the finished hardware.
+- **Bench:** two heads in tube cases read kaolin standards from 250 to 4000 mg/L. Refilling the tube with
+  clear water repeats within 0.05–0.11 %, about one ADC count
+  ([`docs/bench/session-1-results.md`](docs/bench/session-1-results.md)).
+- **Run 1:** the sampler followed a *Chlorella vulgaris* batch culture in a sparged column for about 7
+  days, against a benchtop spectrophotometer (OD750).
+  - A fit to the first four days predicted five later reads within 2.4 %. That holds only with four
+    reads that carry recorded caveats left out of the fit; with them in, the later reads come out
+    4.5–10.2 % off.
+  - Record: [`data/bench/2026-11-05/notes.md`](data/bench/2026-11-05/notes.md).
+- **Not yet:**
+  - turbidity units, from a formazin series ([#23](https://github.com/uwo-fast/turbidity-sensor/issues/23));
+  - picking on the Nano itself, for a BREAD DCMT slice ([run 2](docs/bench/algae-run-2-plan.md));
+  - setting up the logger without editing it by hand ([#46](https://github.com/uwo-fast/turbidity-sensor/issues/46)).
 
-## Repository Map
+## Repository map
 
-- `include/`: public C API
-- `src/`: core implementation plus the generated vendor-fit header used at runtime
-- `rig/pi/`: the Raspberry Pi logger that runs the syringe actuator in bursts and logs a head over days
-- `tools/`: offline utilities: the 3-point calibration CLI, the calibration generator, the serial capture, summary and plot scripts, and the tube-case ray trace
-- `examples/`: host and Arduino examples
-- `data/calibration/`: raw vendor digitizations and generated calibration artifacts
-- `tests/`: unit, CLI-contract, and package smoke tests
-- `docs/hardware.md`: sensor interface: the SEN0189 adapter and bare wiring
-- `hardware/probe/`: the probe board inside a TSW-10 or TST-10 as an OpenSCAD library: its envelope to cut, and the figures a housing sizes itself from
-- `hardware/case/`: printable flow-through case for the bare probe board and a clear tube (OpenSCAD), built on `hardware/probe/`
-- `hardware/tst-flange/`: printable flange that holds a TST-10 over a beaker
-- `docs/bench/`: bench procedures
-- `docs/archive/`: preserved research, planning, and datasheet material
+- `include/`, `src/`: the C library; `src/` also holds the generated vendor-fit header
+- `tools/`: the calibration CLI and generator, serial capture, summary and plot scripts, and the tube ray trace
+- `examples/`: the Arduino examples and a host replay example
+- `rig/pi/`: the sampler logger
+- `hardware/`: the probe library, the tube case, and a flange that holds a TST-10 over a beaker
+- `data/bench/`: bench sessions and runs; `data/calibration/`: vendor digitisations and generated calibration
+- `docs/`: wiring, test solutions, the library, bench procedures; `docs/archive/`: earlier research and datasheets
+- `tests/`: unit, CLI-contract, package smoke and logger tests
 
 ## Development
 
-Tasks run through [`just`](https://github.com/casey/just) (`just --list` shows them all):
+Tasks run through [`just`](https://github.com/casey/just); `just --list` shows them all.
 
 ```sh
 just build    # configure and compile (warnings are errors)
 just test     # build and run the test suite
 just check    # clang-format check + clang-tidy (CI-equivalent)
-just fmt      # format C/C++ sources in place
-just regen    # regenerate calibration artifacts
-just arduino  # compile both Arduino examples for every board
-just upload   # flash an Arduino example (default: uno, arduino)
+just arduino  # compile the Arduino examples for every board
 just capture  # record a board's serial log to CSV
-just summarize  # per-file statistics; --dark/--clear add per-head transmittance
-just plot       # SVG plots of a concentration series, in build/plots
 ```
 
 `fmt`, `check` and CI use clang-format and clang-tidy 18.1.8.
 
-Without `just`, the equivalent CMake commands are:
+Without `just`:
 
 ```sh
 cmake -S . -B build -DBUILD_TESTS=ON -DBUILD_TOOLS=ON -DBUILD_EXAMPLES=ON
 cmake --build build
 ctest --test-dir build --output-on-failure
 ```
-
-## Install
-
-```sh
-cmake --install build --prefix ./_install
-```
-
-The install exports a standard CMake package that downstream projects can consume with:
-
-```cmake
-find_package(turbidity REQUIRED CONFIG)
-target_link_libraries(my_app PRIVATE turbidity::turbidity)
-```
-
-## Quick Start
-
-Solve a unit-specific profile from exactly three known `NTU,mV` reference pairs:
-
-```sh
-build/turbidity_calibrate \
-  --sensor tsw10 \
-  --point 0,4195 \
-  --point 500,3452 \
-  --point 1500,2497
-```
-
-Example JSON output:
-
-```json
-{"sensor":"tsw10","trim_t":0.478192628,"gain":1.003159094,"offset_mv":12.943040793,"rmse_mv":0.000000000,"max_abs_error_mv":0.000000000}
-```
-
-The solve has three free parameters for three points, so `rmse_mv` and `max_abs_error_mv` are zero whenever `trim_t` lands inside `[0, 1]`. They only become non-zero when `trim_t` is pinned at a bound, so they do not measure calibration quality.
-
-Replay a CSV stream through the model:
-
-```sh
-printf 'timestamp_ms,raw_mv\n0,4195\n100,3452\n200,2497\n' | \
-  build/turbidity_stream --sensor tsw10 --trim 0.5 --gain 1.0 --offset-mv 0 --filter-window 8
-```
-
-Input schema is strict, and any violation is a hard error:
-
-- the first line is a header naming each column; it must include `timestamp_ms` and `raw_mv`, in any order, with no empty or repeated names
-- other named columns are allowed and ignored, so the Arduino example's serial log replays as-is
-- every row has exactly as many fields as the header, with no empty fields and no surrounding whitespace
-- `timestamp_ms` is a non-negative integer up to 2^64 - 1; `raw_mv` is a finite number
-- lines end in LF or CRLF, may be at most 510 characters, and the last line may omit its newline
-
-## Calibration Data Pipeline
-
-The vendor-derived model is generated from the digitized point clouds in `data/calibration/vendor-data/`.
-
-To regenerate the derived calibration tables, fit reports, and runtime header:
-
-```sh
-python3 tools/generate_vendor_calibration.py
-```
-
-If you want CMake to run that regeneration as part of the build, enable:
-
-```sh
-cmake -S . -B build -DTURBIDITY_REGENERATE_CALIBRATION=ON
-```
-
-## Arduino Example
-
-The Arduino example lives under `examples/arduino/` and uses the same stateless library API. It builds for the Uno and Nano (`uno`, `nano`, `nano_oldbootloader`), and for an Uno with a switched emitter (`uno_switched_emitter`).
-
-Every 100 ms it logs one CSV row over serial at 115200 baud:
-
-- `adc_counts`: the mean of 16 ADC reads, the primary measurement
-- `dark_adc_counts`: the same with the emitter off (`uno_switched_emitter` only), which measures ambient light
-- `vcc_mv`: supply estimate from the ATmega328P's internal bandgap; it tracks drift within a session and is not an absolute measurement
-- `raw_mv`, `filtered_mv`, `equivalent_mv`, `estimated_ntu`, `range_status`: the vendor-curve model applied to the reading
-
-The log replays directly through `turbidity_stream`. `tools/capture_serial.py` (`just capture`) records it to a file, starting at the header and dropping a truncated last line.
-
-`examples/arduino-multichannel/` is a bench logger for up to four heads at once on `A0`–`A3`. It logs `vcc_mv` and one `adc_counts_<pin>` column per head, with no model: `just summarize --dark … --clear …` normalizes each head against its own dark and clear-water captures.
-
-[`docs/bench/session-1.md`](docs/bench/session-1.md) is the first bench procedure, for the stock housings or the printed tube case: wiring checks, per-head references, and a kaolin dilution series.
-
-The probe needs a load resistor and an emitter resistor. The default setup gets them from a DFRobot SEN0189 adapter with its switch at `A`: the adapter is the datasheet test circuit plus a unity-gain buffer, so its analog output is the probe voltage. Connect its signal to `A0`. [`docs/hardware.md`](docs/hardware.md) covers the adapter circuit, a check for boards from other sources, and bare wiring without an adapter.
 
 ## License
 
