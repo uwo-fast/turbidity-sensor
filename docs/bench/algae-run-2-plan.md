@@ -15,10 +15,11 @@ also checks the edge picker against the run-1 Python picker on the same raw stre
 | Idle rows logged at 1 Hz | Every reading logged, idle included: the data for detecting bursts from the signal alone |
 | The crank cammed out on 11-15 08:34; the motor's screws worked loose | The N20 stands with its screws along the stroke, gripped by a printed cradle (uwo-fast/syringe-actuator PR #24, merged) |
 | The stall went unnoticed until morning | The Anolis run's heartbeat, which is lab setup kept outside this repo; a `no_motion` verdict has to reach it (see Open) |
-| A2 stepped about 8–14 counts at each lamp switch, cause open | All-black housing, then the light test below |
+| A2 stepped about 8–14 counts at each lamp switch, cause open. Nothing was black: the housing was grey PETG, and its bayonet base and the column lid clear PETG | Housing printed black, with a filament change to clear PETG for the bayonet section that faces the culture, so no pigment reaches it; then the light test below |
 | Lamp switch times inferred from the data | Lamp state logged on port 1's terminal B by a light-dependent resistor facing the lamp |
 | The air reading is the floor: A2 reads air below about 526 counts (air 466 + `near_air` 60), which the run-1 fit puts at OD 2.53. Run 1 plateaued at 2.2–2.35 | Run to the plateau as in run 1, so the two compare. Mark any sensor point above OD 2.4 as near the air floor |
 | Inoculum OD not measured | Same volumes (100 + 100 mL into 3 L BG-11), with the inoculum read on the Cary first |
+| Room temperature known only roughly (22–23 °C) | A BME280 on the same I2C bus as the slice logs temperature, humidity and pressure through Anolis |
 
 ## Before the culture goes in
 
