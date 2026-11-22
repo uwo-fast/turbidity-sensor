@@ -82,7 +82,8 @@ This project is free software: you may redistribute it and/or modify it under th
 terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later version.
 Hardware design files and the outputs generated from them are licensed instead
-under [CERN-OHL-S-2.0](LICENSES/CERN-OHL-S-2.0.txt), and the bench and calibration
+under [CERN-OHL-S-2.0](LICENSES/CERN-OHL-S-2.0.txt), except the sampler housing,
+which includes GPL libraries and stays GPL-3.0-or-later, and the bench and calibration
 data under [CC-BY-4.0](LICENSES/CC-BY-4.0.txt). See [`LICENSING.md`](LICENSING.md)
 for what applies where, including the third-party datasheets and standards this
 repository does not license, and the organization
