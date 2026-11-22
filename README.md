@@ -47,7 +47,7 @@ the density of a culture in a vessel that is already running.
 - `tools/`: the calibration CLI and generator, serial capture, summary and plot scripts, and the tube ray trace
 - `examples/`: the Arduino examples and a host replay example
 - `rig/pi/`: the sampler logger
-- `hardware/`: the probe library, the tube case, and a flange that holds a TST-10 over a beaker
+- `hardware/`: the probe library, the tube case, the sampler housing, and a flange that holds a TST-10 over a beaker
 - `data/bench/`: bench sessions and runs; `data/calibration/`: vendor digitisations and generated calibration
 - `docs/`: wiring, test solutions, the library, bench procedures; `docs/archive/`: earlier research and datasheets
 - `tests/`: unit, CLI-contract, package smoke and logger tests

@@ -37,6 +37,14 @@ check: fmt-check lint
 test: build
     ctest --test-dir {{build_dir}} --output-on-failure
 
+# Install the pinned scadman and the OpenSCAD libraries scadman.lock pins, into .scadman/env
+scad-setup:
+    @scripts/install-libraries.sh
+
+# Fail when the sampler housing stops fitting its board, tube, screws, drivers or actuator
+check-sampler:
+    OPENSCADPATH={{justfile_directory()}}/.scadman/env scripts/check-sampler.sh
+
 # Regenerate calibration tables, fit reports, and the runtime header
 regen:
     python3 tools/generate_vendor_calibration.py

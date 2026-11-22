@@ -33,6 +33,43 @@ jobs:
       - name: Test
         run: just test
 
+  # The sampler housing's fit test. OpenSCAD is pinned to the same development snapshot as
+  # open-source-bioreactor, which consumes the housing, so both render it with one binary. Move the
+  # date and its sha256 together, in both repositories.
+  sampler:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install just
+        uses: extractions/setup-just@v4
+
+      # The AppImage is extracted, so it needs no FUSE; it takes its GL libraries from the host.
+      - name: Install OpenSCAD
+        env:
+          OPENSCAD_SNAPSHOT: "2026.10.15"
+          OPENSCAD_SHA256: "9d26e390d3a5c94f2e304d94d7b2eff77fb11fcd25829f2814de147ba92ac363"
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends libegl1 libgl1 libopengl0 libglx0 libgbm1 libwayland-client0 libx11-xcb1 fontconfig
+          dir="$RUNNER_TEMP/openscad"
+          file="OpenSCAD-$OPENSCAD_SNAPSHOT-x86_64.AppImage"
+          mkdir -p "$dir/bin"
+          curl -fsSL -o "$dir/$file" "https://files.openscad.org/snapshots/$file"
+          echo "$OPENSCAD_SHA256  $dir/$file" | sha256sum -c -
+          chmod +x "$dir/$file"
+          (cd "$dir" && "./$file" --appimage-extract > /dev/null)
+          printf '#!/bin/sh\nexec "%s/squashfs-root/AppRun" "$@"\n' "$dir" > "$dir/bin/openscad"
+          chmod +x "$dir/bin/openscad"
+          echo "$dir/bin" >> "$GITHUB_PATH"
+          "$dir/bin/openscad" --version
+
+      - name: Install the OpenSCAD libraries
+        run: just scad-setup
+
+      - name: Check the sampler's fits
+        run: just check-sampler
+
   arduino-compile:
     runs-on: ubuntu-24.04
     steps:
