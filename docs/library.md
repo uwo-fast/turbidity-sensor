@@ -6,9 +6,9 @@ solves those three from three reference points, and `turbidity_stream` replays a
 the model.
 
 The manufacturer's curves describe a head in its stock housing. They do not describe the printed
-tube case in `hardware/case/`, whose water-filled tube changes the light path; a head in the case is
+tube case in `hardware/tube-case/`, whose water-filled tube changes the light path; a head in the case is
 calibrated from its own dark, clear and reference readings instead
-([`hardware/case/README.md`](../hardware/case/README.md)).
+([`hardware/tube-case/README.md`](../hardware/tube-case/README.md)).
 
 ## Install
 

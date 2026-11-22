@@ -4,9 +4,9 @@
  * @author Cameron K. Brooks
  * @copyright 2026
  *
- * Its own file because sampler.scad includes NopSCADlib, whose assembly() shadows the actuator
+ * Its own file because sampler_case.scad includes NopSCADlib, whose assembly() shadows the actuator
  * library's: from here the library's is the only one in scope. Actuator frame: x along the syringe's
- * axis, the nozzle towards -x, z up from the plate's underside; sampler.scad places it.
+ * axis, the nozzle towards -x, z up from the plate's underside; sampler_case.scad places it.
  */
 
 use <syringe-actuator/cad/main.scad>

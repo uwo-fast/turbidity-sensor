@@ -4,18 +4,21 @@
 [![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/Hardware-CERN--OHL--S--2.0-orange.svg)](LICENSES/CERN-OHL-S-2.0.txt)
 
 A low-cost turbidity sensor and its software. The sensing element is the bare board from a
-TST-10-type probe, the one on DFRobot's SEN0189 module, in a printed case around a clear tube, read
+TST-10-type probe, the one on DFRobot's SEN0189 module, in a printed case round a clear tube, read
 by an Arduino Nano. Paired with a syringe that draws culture through the tube on a timer, it follows
 the density of a culture in a vessel that is already running.
 
 <!-- Run 1's first print, grey and on a clear lid. Replace with photos of the black reprint from run 2: #48 -->
-![The sampler on a column photobioreactor's lid: the syringe actuator's body above, the head's housing below it](docs/images/sampler.jpg)
+![The sampler on a column photobioreactor's lid: the syringe actuator's body above, the sampler case below it](docs/images/sampler.jpg)
 
 ## What's here
 
-- **The head:** [`hardware/case/`](hardware/case/README.md) is the printed case around the board and the
-  tube, and [`hardware/probe/`](hardware/probe/) the board's measured outline, from which any housing
-  sizes itself. [`docs/hardware.md`](docs/hardware.md) covers the wiring.
+- **The head:** the bare board in one of two printed cases round a clear tube:
+  [`hardware/tube-case/`](hardware/tube-case/README.md), a plain block for the bench or a liquid
+  line, and [`hardware/sampler-case/`](hardware/sampler-case/README.md), which stands on a
+  vessel's port under the syringe actuator. [`hardware/probe/`](hardware/probe/) is the board's
+  measured outline, from which both size themselves. [`docs/hardware.md`](docs/hardware.md#setups)
+  names the enclosures and covers the wiring.
 - **Reading it:** [`examples/arduino-multichannel/`](examples/arduino-multichannel/) streams raw readings
   from up to four heads. [`tools/`](tools/) captures, summarises and plots them.
 - **The sampler logger:** [`rig/pi/`](rig/pi/README.md) runs the syringe actuator
@@ -47,7 +50,7 @@ the density of a culture in a vessel that is already running.
 - `tools/`: the calibration CLI and generator, serial capture, summary and plot scripts, and the tube ray trace
 - `examples/`: the Arduino examples and a host replay example
 - `rig/pi/`: the sampler logger
-- `hardware/`: the probe library, the tube case, the sampler housing, and a flange that holds a TST-10 over a beaker
+- `hardware/`: the probe library, the tube case, the sampler case, and a flange that holds a TST-10 over a beaker
 - `data/bench/`: bench sessions and runs; `data/calibration/`: vendor digitisations and generated calibration
 - `docs/`: wiring, test solutions, the library, bench procedures; `docs/archive/`: earlier research and datasheets
 - `tests/`: unit, CLI-contract, package smoke and logger tests
@@ -82,7 +85,7 @@ This project is free software: you may redistribute it and/or modify it under th
 terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later version.
 Hardware design files and the outputs generated from them are licensed instead
-under [CERN-OHL-S-2.0](LICENSES/CERN-OHL-S-2.0.txt), except the sampler housing,
+under [CERN-OHL-S-2.0](LICENSES/CERN-OHL-S-2.0.txt), except the sampler case,
 which includes GPL libraries and stays GPL-3.0-or-later, and the bench and calibration
 data under [CC-BY-4.0](LICENSES/CC-BY-4.0.txt). See [`LICENSING.md`](LICENSING.md)
 for what applies where, including the third-party datasheets and standards this

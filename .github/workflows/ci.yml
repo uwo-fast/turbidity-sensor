@@ -33,8 +33,8 @@ jobs:
       - name: Test
         run: just test
 
-  # The sampler housing's fit test. OpenSCAD is pinned to the same development snapshot as
-  # open-source-bioreactor, which consumes the housing, so both render it with one binary. Move the
+  # The sampler case's fit test. OpenSCAD is pinned to the same development snapshot as
+  # open-source-bioreactor, which consumes the case, so both render it with one binary. Move the
   # date and its sha256 together, in both repositories.
   sampler:
     runs-on: ubuntu-24.04
@@ -67,8 +67,8 @@ jobs:
       - name: Install the OpenSCAD libraries
         run: just scad-setup
 
-      - name: Check the sampler's fits
-        run: just check-sampler
+      - name: Check the sampler case's fits
+        run: just check-sampler-case
 
   arduino-compile:
     runs-on: ubuntu-24.04
