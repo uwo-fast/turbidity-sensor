@@ -123,6 +123,48 @@ class CaptureSerialTest(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in self.output.parent.iterdir()), ["capture.csv"])
 
 
+class PortResetTest(unittest.TestCase):
+    """open_port resets the board by pulsing DTR, so every capture starts from the header (#22)."""
+
+    def setUp(self):
+        sys.path.insert(0, str(TOOLS))
+        import capture_serial
+
+        self.module = capture_serial
+        self.master, self.slave = os.openpty()
+        self.port = os.ttyname(self.slave)
+
+    def tearDown(self):
+        sys.path.remove(str(TOOLS))
+        os.close(self.master)
+        os.close(self.slave)
+
+    def open_with(self, ioctl):
+        original = self.module.fcntl.ioctl
+        self.module.fcntl.ioctl = ioctl
+        try:
+            fd = self.module.open_port(self.port, 115200)
+        finally:
+            self.module.fcntl.ioctl = original
+        os.close(fd)
+
+    def test_pulses_dtr_low_then_high(self):
+        import struct
+        import termios
+
+        calls = []
+        self.open_with(lambda fd, request, arg: calls.append((request, struct.unpack("I", arg)[0])))
+        dtr = termios.TIOCM_DTR
+        self.assertEqual(calls, [(termios.TIOCMBIC, dtr), (termios.TIOCMBIS, dtr)])
+
+    def test_port_without_modem_lines_still_opens(self):
+        # A pseudo-terminal, like some adapters, has no DTR line and refuses the ioctl
+        def refuse(fd, request, arg):
+            raise OSError(25, "Inappropriate ioctl for device")
+
+        self.open_with(refuse)
+
+
 class SummarizeCaptureTest(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.TemporaryDirectory()

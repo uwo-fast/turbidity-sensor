@@ -2,14 +2,17 @@
 """Capture the Arduino example's CSV log from a serial port to a file.
 
 Standard library only (POSIX termios), so it runs on Linux and macOS without
-pyserial. Opening the port resets most Arduino boards, so the capture starts
-from the CSV header. Anything received before the header
+pyserial. Opening the port pulses DTR, which resets an Arduino with auto-reset,
+so the capture starts from the CSV header. Anything received before the header
 is discarded, and a final line cut off mid-transfer is dropped, so the file
 always replays through turbidity_stream. The output file is replaced only once
 the header has arrived: a capture that fails before then leaves it as it was.
 """
 import argparse
+import errno
+import fcntl
 import os
+import struct
 import select
 import sys
 import termios
@@ -24,6 +27,7 @@ BAUD_RATES = {
     115200: termios.B115200,
 }
 HEADER_PREFIX = "timestamp_ms,"
+RESET_PULSE_S = 0.1
 
 
 def open_port(path, baud):
@@ -33,8 +37,23 @@ def open_port(path, baud):
     attributes[4] = BAUD_RATES[baud]
     attributes[5] = BAUD_RATES[baud]
     termios.tcsetattr(fd, termios.TCSANOW, attributes)
+    pulse_dtr(fd)
     termios.tcflush(fd, termios.TCIFLUSH)
     return fd
+
+
+def pulse_dtr(fd):
+    """Drops DTR and raises it again, so the board resets even if DTR was already up when the port
+    opened (another program left it so). A port with no modem lines, such as a pseudo-terminal,
+    refuses the call; it has no board to reset."""
+    dtr = struct.pack("I", termios.TIOCM_DTR)
+    try:
+        fcntl.ioctl(fd, termios.TIOCMBIC, dtr)
+        time.sleep(RESET_PULSE_S)
+        fcntl.ioctl(fd, termios.TIOCMBIS, dtr)
+    except OSError as error:
+        if error.errno not in (errno.ENOTTY, errno.EINVAL):
+            raise
 
 
 def capture(fd, output, duration_s, header_timeout_s, on_header=None):
