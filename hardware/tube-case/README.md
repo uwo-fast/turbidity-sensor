@@ -1,17 +1,18 @@
-# Printed flow-through case
+# Tube case
 
-An alternative to the stock probe housing. Remove the housing, drop the bare DFRobot
+A printed case, a plain rectangular block, in place of the probe's stock housing. Remove the
+stock housing, drop the bare DFRobot
 SEN0189 probe board into the printed base, close the lid, and push a clear tube down
 through the optical slot between the emitter and detector heads. Water flows through
 the tube instead of around an immersed probe.
 
 | File | Contents |
 | --- | --- |
-| `turbidity_case.scad` | Parametric source for both parts: the case's own choices |
+| `tube_case.scad` | Parametric source for both parts: the case's own choices |
 | `../probe/probe.scad` | The board it is built around: its figures, envelope and optical axis |
 | `base.stl`, `lid.stl` | Print-ready exports, flat side down |
 
-Regenerate the STLs after changing the source with `just case` (needs OpenSCAD). The
+Regenerate the STLs after changing the source with `just tube-case` (needs OpenSCAD). The
 export's triangle order varies from run to run, so the STLs show as changed even when
 the geometry is not.
 
@@ -43,7 +44,7 @@ the geometry is not.
 
 1. Open the stock housing. Before you touch anything, photograph both sides of the
    board and mark the position of the `RV` trimmer (see [`docs/hardware.md`](../../docs/hardware.md#probe-trimmer-rv)),
-   so the board can go back in its housing at its original setting.
+   so the board can go back in its stock housing at its original setting.
 2. Drop the board into the base, component side up. The pocket fits it only one way.
 3. Put the lid on, keys down, with its window over the connector. The keys locate it
    on the base.
@@ -64,7 +65,9 @@ over air, the same for emitter half-angles from 10 to 45°.
 
 So a board that reads well in its stock housing sits near the ADC's ceiling in the case:
 940–970 counts of 1023 in clear water, where it barely responds to turbidity. Two boards
-stayed there with `RV` at its dimmest end. Lowering the load on the probe's output fixes it:
+stayed there with `RV` at its dimmest end. Lowering the load on the probe's output fixes it. The same applies in the
+[sampler case](../sampler-case/README.md), whose pocket and tube are the same; the stock
+housing needs no resistor:
 
 1. Turn `RV` fully counter-clockwise (viewed from above), its dimmest end.
 2. With clear water in the tube, add a resistor from the probe's output (the middle pin of
@@ -92,10 +95,10 @@ always on, so take the dark reading with an opaque rod in place of the tube. The
 bare wiring in [`docs/hardware.md`](../../docs/hardware.md#alternative-bare-wiring), not the adapter.
 
 The optical path differs from the stock housings (tube walls and a 6.35 mm water column
-instead of the housing's own window), so the Amphenol vendor curves do not describe
+instead of the stock housing's own window), so the Amphenol vendor curves do not describe
 this setup. Calibrate it from its own dark and clear-water readings.
 
-## Using the case in another OpenSCAD project
+## Using the tube case in another OpenSCAD project
 
 `include` the file with `part = "none"`. That brings in the case's modules (`base()`,
 `lid()`, `tube_bore()`, …) and dimensions, lets you override the case's parameters, and
@@ -104,7 +107,7 @@ draws nothing on its own. The board library it uses, `../probe/probe.scad`, come
 be overridden from your file; change them in `probe.scad`.
 
 ```openscad
-include <turbidity_case.scad>
+include <tube_case.scad>
 part = "none";   // draw nothing from this file
 tube_od = 8.0;   // any of the case's parameters can be overridden
 
@@ -119,7 +122,7 @@ difference() {
 base();
 ```
 
-`use <turbidity_case.scad>` also works, but only at the default parameters: overrides are
+`use <tube_case.scad>` also works, but only at the default parameters: overrides are
 ignored and the dimensions are not readable.
 
 ## Status

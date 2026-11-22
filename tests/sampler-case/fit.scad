@@ -1,15 +1,15 @@
 // The sampler's fits, each drawn as the material that should not exist: this renders empty while
-// they all hold. `just check-sampler` fails on anything it draws.
+// they all hold. `just check-sampler-case` fails on anything it draws.
 // On the bayonet foot, bayonet-port-scad's pin, so the fits are checked against a real foot's
-// figures rather than the housing's defaults
-include <../../hardware/sampler/bayonet.scad>
+// figures rather than the case's defaults
+include <../../hardware/sampler-case/bayonet.scad>
 piece = "none";
 
 module parts() { sampler_base() foot(); sampler_top(); }
 
 // the board inside either part
 intersection() { board_place() probe(); parts(); }
-// the board's pocket grown by min_wall, outside the housing: a wall too thin
+// the board's pocket grown by min_wall, outside the case: a wall too thin
 difference() {
   board_place() probe(clr + min_wall);
   translate([0, 0, board_z + bot_b]) linear_extrude(top_b - bot_b) outline();

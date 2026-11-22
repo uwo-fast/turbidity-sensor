@@ -41,18 +41,18 @@ test: build
 scad-setup:
     @scripts/install-libraries.sh
 
-# Fail when the sampler housing stops fitting its board, tube, screws, drivers or actuator
-check-sampler:
-    OPENSCADPATH={{justfile_directory()}}/.scadman/env scripts/check-sampler.sh
+# Fail when the sampler case stops fitting its board, tube, screws, drivers or actuator
+check-sampler-case:
+    OPENSCADPATH={{justfile_directory()}}/.scadman/env scripts/check-sampler-case.sh
 
 # Regenerate calibration tables, fit reports, and the runtime header
 regen:
     python3 tools/generate_vendor_calibration.py
 
-# Export the printed case and flange STLs from the OpenSCAD source
-case:
-    openscad --export-format binstl -D 'part="base"' -D 'orient="print"' -o hardware/case/base.stl hardware/case/turbidity_case.scad
-    openscad --export-format binstl -D 'part="lid"' -D 'orient="print"' -o hardware/case/lid.stl hardware/case/turbidity_case.scad
+# Export the tube case and flange STLs from the OpenSCAD source
+tube-case:
+    openscad --export-format binstl -D 'part="base"' -D 'orient="print"' -o hardware/tube-case/base.stl hardware/tube-case/tube_case.scad
+    openscad --export-format binstl -D 'part="lid"' -D 'orient="print"' -o hardware/tube-case/lid.stl hardware/tube-case/tube_case.scad
     openscad --export-format binstl -o hardware/tst-flange/flange.stl hardware/tst-flange/flange.scad
 
 # Compile both Arduino examples for every board in their platformio.ini

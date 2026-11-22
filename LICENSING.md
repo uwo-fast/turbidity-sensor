@@ -26,9 +26,9 @@ picture lives.
 | --- | --- |
 | `include/`, `src/`, `tools/`, `examples/`, `rig/`, `tests/` | `GPL-3.0-or-later` |
 | `CMakeLists.txt`, `cmake/`, `library.json`, `justfile`, `.github/`, and other build tooling | `GPL-3.0-or-later` |
-| `hardware/`, except `hardware/sampler/` — parametric CAD source (`.scad`) | `GPL-3.0-or-later` **and** `CERN-OHL-S-2.0` |
-| `hardware/`, except `hardware/sampler/` — geometry (STL) generated from that source | `CERN-OHL-S-2.0` |
-| `hardware/sampler/` — the sampler housing's source, and geometry generated from it | `GPL-3.0-or-later` |
+| `hardware/`, except `hardware/sampler-case/` — parametric CAD source (`.scad`) | `GPL-3.0-or-later` **and** `CERN-OHL-S-2.0` |
+| `hardware/`, except `hardware/sampler-case/` — geometry (STL) generated from that source | `CERN-OHL-S-2.0` |
+| `hardware/sampler-case/` — the sampler case's source, and geometry generated from it | `GPL-3.0-or-later` |
 | `data/` — bench captures, their notes and photos, and the calibration sets | `CC-BY-4.0`, except as listed under [Third-party components](#third-party-components) |
 | `docs/` | see below, except as listed under [Third-party components](#third-party-components) |
 
@@ -37,8 +37,8 @@ Add a row to the table above for each new top-level directory.
 Parametric CAD source is granted under both licences so that a licensee who Makes a
 Product from the geometry can satisfy CERN-OHL-S-2.0 §4, which requires the Complete
 Source — the design in its preferred form for modification, meaning the source, not
-the mesh. The case, probe and flange CAD include no GPL-licensed library, which is
-what lets them carry both. The sampler housing includes NopSCADlib, bayonet-port-scad
+the mesh. The tube case, probe and flange CAD include no GPL-licensed library, which is
+what lets them carry both. The sampler case includes NopSCADlib, bayonet-port-scad
 and syringe-actuator, which are GPL-3.0-or-later, so it and the geometry generated
 from it are `GPL-3.0-or-later` alone; see the organization
 [licensing policy](https://github.com/uwo-fast/.github/blob/main/LICENSING.md).

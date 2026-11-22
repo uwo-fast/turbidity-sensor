@@ -1,13 +1,18 @@
-# Sampler housing
+# Sampler case
 
-A flow cell round the bare probe board, drawn through by the
+A printed case round the bare probe board and a clear tube, drawn through by the
 [syringe actuator](https://github.com/uwo-fast/syringe-actuator) bolted on top, standing on a
 vessel's port. A clear FEP tube runs between the board's heads; the vessel's riser is bushed into
 its bottom, and the syringe draws culture up through it.
 
-Two prints, both in `sampler.scad`:
+To the board it is the same as the [tube case](../tube-case/README.md): the same pocket, tube
+and light path, so it needs the same load resistor
+([optics and setup](../tube-case/README.md#optics-and-setup)), and a board reads the same in
+either. It differs only in how much ambient light reaches the tube.
 
-- **The base:** the vessel's foot, a skirt out to the housing, and the floor under the board.
+Two prints, both in `sampler_case.scad`:
+
+- **The base:** the vessel's foot, a skirt out to the case, and the floor under the board.
 - **The top:** the board's pocket, the shroud round the syringe, and the face the actuator bolts to.
 
 ## The foot
@@ -17,16 +22,16 @@ file draws everything above it and checks its fits against four figures, `foot_f
 `foot_neck_r`, `foot_core_r` and `foot_gland_top_z`. Their defaults are the bayonet pin on
 open-source-bioreactor's standard port.
 
-`bayonet.scad` stands the housing on that pin, from
+`bayonet.scad` stands the case on that pin, from
 [bayonet-port-scad](https://github.com/CameronBrooks11/bayonet-port-scad), and is the file to
 print from. It is also the pattern for another foot:
 
 1. `use`/`include` the foot's library, and define what the foot figures are computed from
-   (`panel`), before including `sampler.scad`.
+   (`panel`), before including `sampler_case.scad`.
 2. After the include, set `part = "none"` and the four `foot_*` figures.
 3. Pass the foot as the child of `sampler_base()`, `sampler_placed()` or `sampler_print("base")`.
 
-OpenSCAD takes a reassigned variable's last value, evaluated where `sampler.scad` first assigns
+OpenSCAD takes a reassigned variable's last value, evaluated where `sampler_case.scad` first assigns
 it, so a figure set before the include is silently replaced by the default, and a name defined
 after it is still undefined where the figures are computed.
 
@@ -42,20 +47,20 @@ fit-tested; the others render but are unverified.
 
 ```sh
 just scad-setup     # the pinned scadman, then the libraries scadman.lock pins
-just check-sampler  # tests/sampler/fit.scad, on the bayonet foot: renders empty while every fit holds
+just check-sampler-case  # tests/sampler-case/fit.scad, on the bayonet foot: renders empty while every fit holds
 ```
 
 To export a print, with the libraries on `OPENSCADPATH`:
 
 ```sh
-OPENSCADPATH=$PWD/.scadman/env openscad --export-format binstl -D 'piece="base"' -o base.stl hardware/sampler/bayonet.scad
+OPENSCADPATH=$PWD/.scadman/env openscad --export-format binstl -D 'piece="base"' -o base.stl hardware/sampler-case/bayonet.scad
 ```
 
 `piece` is `base`, `top` or `assembly`; both prints come out lying as they print.
 
 ## Status
 
-Run 1 (`data/bench/2026-11-05/`) used an earlier version of this housing, printed from
+Run 1 (`data/bench/2026-11-05/`) used an earlier version of this case, printed from
 open-source-bioreactor before syringe-actuator v0.1.0, whose face sat 13.8 mm higher. The move here
 changed no geometry: with the bayonet pin passed as the foot, the base and top export
 byte-identical to open-source-bioreactor's at f3c35f0, the merge of its #150.

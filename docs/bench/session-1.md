@@ -18,7 +18,7 @@ reaches the beam and how the references are taken. Run one setup per session.
 
 | Setup | Head | Sample |
 | --- | --- | --- |
-| **Tube** | Bare probe board in the printed case ([`hardware/case/`](../../hardware/case/README.md)) | Flows through a clear 5/16 x 1/4 in tube in the optical slot |
+| **Tube** | Bare probe board in the printed case ([`hardware/tube-case/`](../../hardware/tube-case/README.md)) | Flows through a clear 5/16 x 1/4 in tube in the optical slot |
 | **Stock** | Unmodified `TSW-10` or `TST-10` in its own housing | The head is immersed in a container |
 
 Most users will run the stock housings, so both are supported equally. This lab starts with
@@ -181,7 +181,7 @@ Bubbles in the gaps caused the two bad captures in repeat 1. Both read far lower
 trend and recovered when repeated (`data/bench/2026-10-26/photos/`).
 
 **Tube setup,** each case on its own vertical tube and syringe, filled from the same standard. Set each tube head up
-first ([`hardware/case/README.md`](../../hardware/case/README.md#optics-and-setup)): out of
+first ([`hardware/tube-case/README.md`](../../hardware/tube-case/README.md#optics-and-setup)): out of
 the box, a board in the case sits near the ADC ceiling and barely responds.
 
 Use separate standards rather than the beaker: each fill is then an independent sample,

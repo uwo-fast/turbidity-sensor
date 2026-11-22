@@ -1,5 +1,5 @@
 // The probe board inside an Amphenol TSW-10 or TST-10 turbidity probe (the board is the same in
-// both), as a library a housing is built around. It draws nothing itself.
+// both), as a library a case is built around. It draws nothing itself.
 //
 // The board: a PCB with an emitter and a detector head on a U-shaped bracket, facing each other
 // across a slot, and a right-angle 3-pin connector at the other end. A clear tube runs vertically
@@ -9,11 +9,11 @@
 // toward the connector, whose plug enters from -y.
 //
 // The figures come from a CAD model drawn from caliper measurements, and matched the board used
-// for the first printed case. Remeasure and change them here; every housing follows. The bracket's
+// for the tube case. Remeasure and change them here; every case follows. The bracket's
 // and the heads' heights were measured from the PCB's top face, and are kept that way.
 //
 // Use it with `use <probe.scad>`:
-//   probe(c)               the board grown by c on every side, to subtract from a housing
+//   probe(c)               the board grown by c on every side, to subtract from a case
 //   probe_outline()        the PCB's outline (2D), to open a pocket to a parting plane
 //   probe_bbox(c)          [[x0, y0, z0], [x1, y1, z1]] of probe(c)
 //   probe_optical_axis()   [x, y] where a tube passes between the heads

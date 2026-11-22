@@ -5,7 +5,7 @@ $fn = $preview ? 32 : 96;
 
 thickness = 5;
 outer_diameter = 80; // larger than the vessel's opening
-inner_diameter = 34; // fits the TST-10 housing
+inner_diameter = 34; // fits the TST-10's stock housing
 hole_separation = 44; // centre to centre, across the flange
 hole_diameter = 4;
 

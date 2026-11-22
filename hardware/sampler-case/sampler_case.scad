@@ -1,11 +1,11 @@
 /**
- * @file sampler.scad
- * @brief Turbidity sampler: a flow cell round the turbidity probe's board, drawn through by a
+ * @file sampler_case.scad
+ * @brief Sampler case: a printed case round the turbidity probe's board, drawn through by a
  *        syringe actuator bolted on top, standing on a vessel's port
  * @author Cameron K. Brooks
  * @copyright 2026
  *
- * Two prints. The base is a foot with a skirt out to the housing, and the floor under the board.
+ * Two prints. The base is a foot with a skirt out to the case, and the floor under the board.
  * The top houses the board, split at the PCB's underside, and grows a shroud that flares into the
  * face the actuator bolts to. The board drops into the top upside down and the base closes it; a
  * clear tube runs through both between the board's heads. The dip tube is the vessel's riser,
@@ -22,7 +22,7 @@
  * panel, 4x1.5 riser o-ring).
  *
  * Port frame: origin on the port's axis at the lid's outer face, +z out of the vessel, +x radially
- * outward. The fits are checked by `just check-sampler` (tests/sampler/fit.scad).
+ * outward. The fits are checked by `just check-sampler-case` (tests/sampler-case/fit.scad).
  */
 
 use <../probe/probe.scad>
@@ -39,11 +39,11 @@ orient = "print"; // [print, assembly]
 $fn = 64;
 
 // ---- the foot ----
-// The vessel's port, as figures the housing is checked against. Defaults: open-source-bioreactor's
+// The vessel's port, as figures the case is checked against. Defaults: open-source-bioreactor's
 // bayonet pin on bayonet_std, 18 mm panel, 4x1.5 riser o-ring, read from its port library at
 // open-source-bioreactor f3c35f0.
-foot_flange_h = 5;       // the foot's flange top over the lid, where the housing's neck starts
-foot_neck_r = 14.1;      // the flange's radius, which the housing's neck carries straight up
+foot_flange_h = 5;       // the foot's flange top over the lid, where the case's neck starts
+foot_neck_r = 14.1;      // the flange's radius, which the case's neck carries straight up
 foot_core_r = 8.8;       // the radius inside the foot's pin the tube's seat may use
 foot_gland_top_z = -14.55; // the top of the riser's o-ring gland in the foot, which the seat must clear
 flange_h = foot_flange_h;
@@ -53,7 +53,7 @@ flange_h = foot_flange_h;
 riser_od = 4;
 riser_id = 3;
 riser_bore = riser_od / 2 + 0.2;
-// hardware/case/README.md: the clear tube is 5/16 in outside, 1/4 in inside, and
+// hardware/tube-case/README.md: the clear tube is 5/16 in outside, 1/4 in inside, and
 // a bore 0.2 over its outside holds it snugly
 tube_od = 7.9375;
 tube_id = 6.35;
@@ -92,13 +92,13 @@ face_screw_l = 10;
 face_nut = M3_nut;
 
 // ---- choices ----
-clr = 0.2;        // round the board, per side; the case's proven fit
-wall = 2;         // the housing's sides round the board's pocket
+clr = 0.2;        // round the board, per side; the tube case's proven fit
+wall = 2;         // the case's sides round the board's pocket
 floor_t = 1.2;    // under the relief
 roof_t = 1.2;     // over the connector
 min_wall = 0.8;   // the thinnest any of them may be
 corner_r = 4;
-neck_h = 1;       // the housing overhangs the neighbours' flanges, and clears them by the lid's 1 mm
+neck_h = 1;       // the case overhangs the neighbours' flanges, and clears them by the lid's 1 mm
 neck_r = foot_neck_r; // the foot's flange runs straight up into the skirt
 // A skirt from the neck out to the outline, the hull of the two, so the underside slopes into the
 // neck instead of stepping; it faces up when the base prints upside down
@@ -162,7 +162,7 @@ pocket_x = [axis[1] - pocket[1][1], axis[1] - pocket[0][1]];  // [inner, outer]
 inner_screw_x = -(shroud_r + inner_seat_d / 2 + 0.1);
 inner_head_z = split_z + seat_t + (inner_seat_d - inner_clear_d) / 2;
 // the outline: the pocket and its walls, wide enough for the inner screw's slot; its inner end a
-// half-circle the housing's width across
+// half-circle the case's width across
 half_w = max(pocket[1][0] + wall, -inner_screw_x + inner_seat_d / 2 + min_wall);
 // each outer screw at the centre of a rounded corner, its insert min_wall clear of the pocket's
 // outer end, so its counterbore keeps the same wall all round
@@ -174,7 +174,7 @@ top_skirt_h = outline_reach - shroud_r; // 45 degrees where it reaches farthest
 flare_h = max([for (p = face_outline) norm(p)]) - shroud_r;
 
 assert(tube_od < probe_gap(), "the clear tube does not pass between the heads");
-assert(half_w >= neck_r, "the pin's flange reaches past the housing's inner end, which would overhang");
+assert(half_w >= neck_r, "the pin's flange reaches past the case's inner end, which would overhang");
 assert(min(wall, floor_t, roof_t) >= min_wall, "a wall is thinner than min_wall");
 assert(corner_r - outer_cbore_d / 2 >= min_wall, "an outer screw's counterbore breaks the rounded corner");
 assert(inner_screw_x + inner_seat_d / 2 < pocket_x[0] - min_wall, "the inner screw's seat runs into the pocket");
@@ -185,7 +185,7 @@ assert(plate_z0 - flare_h > roof_z + top_skirt_h, "the face's flare reaches down
 assert(min([for (h = holes) abs(to_port(h)[1])]) - (face_key_sweep / 2 + clr) - pocket[1][0] >= min_wall,
        "a face screw's key groove leaves less than min_wall to the board's pocket");
 
-echo(str("sampler: housing ", outer_x + half_w, " x ", 2 * half_w, ", face ", face_z, " over the lid; clear tube cut ",
+echo(str("sampler: case ", outer_x + half_w, " x ", 2 * half_w, ", face ", face_z, " over the lid; clear tube cut ",
          tube_top_z - clear_z0, "; the riser's top ", riser_top_z, " over the lid"));
 
 // The board in the port frame: its optical axis on the port's, its connector end outward (+x).
@@ -259,7 +259,7 @@ module sampler_base() {
 
 module sampler_top() {
   difference() {
-    // the housing, its skirt up into the shroud tube at 45 degrees where it reaches farthest, and
+    // the case, its skirt up into the shroud tube at 45 degrees where it reaches farthest, and
     // the flare out to the face: nothing past 45 when the top prints face-down
     loft() {
       translate([0, 0, split_z]) linear_extrude(roof_z - split_z) outline();
@@ -293,7 +293,7 @@ module sampler_top() {
     translate([0, 0, heads_top_z]) cylinder(r1=bore_r, r2=shroud_id / 2, h=_cone + 0.01);
     translate([0, 0, heads_top_z + _cone]) cylinder(d=shroud_id, h=face_z - heads_top_z - _cone + 1);
     // the actuator's screws: clearance through face_clamp_t, counterbored down and out through the
-    // flare's underside, where they go in from; and below each a groove down the housing's side and
+    // flare's underside, where they go in from; and below each a groove down the case's side and
     // out through the parting face, so a key's long arm reaches the head straight up from the base's
     // top, the length from the head to the parting face
     for (h = holes) translate([each to_port(h), 0]) {

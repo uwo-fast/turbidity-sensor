@@ -18,7 +18,7 @@ The lab has several `TSW-10` and `TST-10` heads, bought from
 [TSW-10](https://www.digikey.ca/en/products/detail/amphenol-advanced-sensors/TSW-10/4250485))
 and from Mouser. The probe board inside differs by source:
 
-![Probe boards out of their housings: DFRobot's (top, with its cable) and Amphenol's from DigiKey (bottom)](images/probe-boards.jpg)
+![Probe boards out of their stock housings: DFRobot's (top, with its cable) and Amphenol's from DigiKey (bottom)](images/probe-boards.jpg)
 
 - **DFRobot:** a different trace layout, and a 150 Ω resistor (marked `151`) in series with
   the signal.
@@ -29,19 +29,32 @@ reading has not been measured. Record each head's model and source with its data
 
 ## Setups
 
-The same probe board can see its sample in three ways. All of them use the same
-electronics and firmware.
+The same probe board sits in one of three enclosures. All of them use the same electronics
+and firmware.
 
-| Setup | Housing | Sample | Vendor curves apply |
-| --- | --- | --- | --- |
-| Stock `TSW-10` | Amphenol housing, made to mount in a washer's water path | Water flows past the head | Yes |
-| Stock `TST-10` | Amphenol housing, made to sit submerged in a tank | The head is immersed | Yes |
-| Tube | Housing removed; bare board in the printed case ([`hardware/case/`](../hardware/case/README.md)) | Flows through a clear tube in the optical slot | No |
+- **Stock housing:** the probe's own Amphenol housing, as bought.
+- **Tube case:** a printed case, a plain rectangular block, round the bare board and a clear
+  tube through its optical slot ([`hardware/tube-case/`](../hardware/tube-case/README.md)).
+- **Sampler case:** the same pocket and tube, with a foot that mounts it on a vessel's port
+  below and a face for the syringe actuator on top
+  ([`hardware/sampler-case/`](../hardware/sampler-case/README.md)).
+
+The tube case and the sampler case are the **printed cases**. To the board they are the same
+setup: the same pocket, the same tube and the same light path, so a board needs the same load
+resistor and reads the same in either. They differ only in how much ambient light reaches the
+tube, which a dark reference, a rebaseline or a shade handles.
+
+| Setup | Enclosure | Sample | Load resistor | Vendor curves apply |
+| --- | --- | --- | --- | --- |
+| Stock `TSW-10` | Stock housing, made to mount in a washer's water path | Water flows past the head | No | Yes |
+| Stock `TST-10` | Stock housing, made to sit submerged in a tank | The head is immersed | No | Yes |
+| Tube | Tube case or sampler case | Flows through the clear tube | Yes | No |
 
 The stock housings are the supported default: most users will not open a probe. The tube
-setup trades the housing's optical window for two tube walls and a 6.35 mm water column
-(with 5/16 x 1/4 in tubing), so it needs its own calibration. It also fits into other
-builds: the case is a plain box that other OpenSCAD projects can `include`.
+setup trades the stock housing's optical window for two tube walls and a 6.35 mm water
+column (with 5/16 x 1/4 in tubing), so it needs its own calibration and a load resistor
+([`hardware/tube-case/README.md`](../hardware/tube-case/README.md#optics-and-setup)). The tube
+case is also a plain box that other OpenSCAD projects can `include`.
 
 Whatever the setup, per-head dark and clear-water references (see
 [`docs/bench/session-1.md`](bench/session-1.md)) make heads comparable with each other.
@@ -49,7 +62,7 @@ Whatever the setup, per-head dark and clear-water references (see
 ## Probe trimmer (RV)
 
 Every probe in the lab (TSW-10 and TST-10, from DFRobot, DigiKey and Mouser) has a trimmer
-on a small board inside its plastic housing (silkscreened `VR` on the Amphenol board;
+on a small board inside its stock housing (silkscreened `VR` on the Amphenol board;
 these docs call it `RV`). The Amphenol datasheet
 schematic does not show it. On the bench it sets how bright the head reads: **turning it
 counter-clockwise, viewed from above, lowers the output**, and clockwise raises it
@@ -70,8 +83,8 @@ other head.
   and record the change with the head's data.
 - After a turn, let the head settle in clear water: one head moved about 35 counts over
   ten minutes before it steadied. Take references once it is steady.
-- In the printed tube case, `RV` alone is not enough; see
-  [`hardware/case/README.md`](../hardware/case/README.md#optics-and-setup).
+- In a printed case, tube or sampler, `RV` alone is not enough; see
+  [`hardware/tube-case/README.md`](../hardware/tube-case/README.md#optics-and-setup).
 
 ## Default path: DFRobot SEN0189 adapter
 

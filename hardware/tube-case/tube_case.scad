@@ -1,4 +1,4 @@
-// Printed flow-through case for the bare DFRobot SEN0189 probe board.
+// Tube case: a printed case for the bare DFRobot SEN0189 probe board.
 //
 // The stock probe housing is removed. The bare probe PCB (emitter and detector
 // heads on a U-shaped bracket, right-angle 3-pin connector) drops into the base,
@@ -13,7 +13,7 @@
 // its figures live in ../probe/probe.scad; this file adds only the case's own
 // choices.
 //
-// Export both parts with `just case`.
+// Export both parts with `just tube-case`.
 
 use <../probe/probe.scad>
 
@@ -191,7 +191,7 @@ if (part == "base") {
 } else if (part == "lid") {
   pose(top_z, flip=true) lid();
 } else if (part == "none") {
-  // include <turbidity_case.scad> for the modules and dimensions without geometry
+  // include <tube_case.scad> for the modules and dimensions without geometry
 } else {
   color("orange") base();
   color("gray", 0.5) lid();

@@ -1,10 +1,10 @@
 /**
  * @file bayonet.scad
- * @brief The sampler housing on a bayonet port: bayonet-port-scad's pin as the base's foot
+ * @brief The sampler case on a bayonet port: bayonet-port-scad's pin as the base's foot
  * @author Cameron K. Brooks
  * @copyright 2026
  *
- * The housing as open-source-bioreactor stands it on its lid: bayonet_std, an 18 mm panel, the
+ * The case as open-source-bioreactor stands it on its lid: bayonet_std, an 18 mm panel, the
  * riser sealed by a 4x1.5 o-ring. It is also the pattern for any vessel's foot: define what the foot
  * is computed from before the include, set the foot_* figures after it, and pass the foot as the
  * base's child.
@@ -15,9 +15,9 @@ include <bayonet-port-scad/custom/bayonet_interfaces.scad>
 
 panel = 18; // the lid's thickness at the port
 
-include <sampler.scad>
+include <sampler_case.scad>
 
-part = "none"; // sampler.scad's own drawing, off: this file draws the parts below
+part = "none"; // sampler_case.scad's own drawing, off: this file draws the parts below
 piece = "assembly"; // [assembly, base, top]
 
 foot_flange_h = bayonet_flange_height(bayonet_std);

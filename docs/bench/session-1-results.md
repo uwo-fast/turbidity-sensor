@@ -62,7 +62,7 @@ beaker at constant volume (`data/bench/2026-10-26/`, `data/bench/2026-10-28/`).
 ## Tube case
 
 Two boards, each in a printed case on its own vertical FEP tube (6.35 mm ID) and syringe, set up per
-[`hardware/case/README.md`](../../hardware/case/README.md#optics-and-setup): `RV` fully
+[`hardware/tube-case/README.md`](../../hardware/tube-case/README.md#optics-and-setup): `RV` fully
 counter-clockwise, and a load resistor chosen for 850–880 counts in clear water (15 kΩ on A1,
 6.8 kΩ on A2). Separate standards in capped bottles, five fills each, mean ± SD
 (`data/bench/2026-10-28/`, captures `47_` to `49_`). A0 is a stock-housing head in a 100 mL
