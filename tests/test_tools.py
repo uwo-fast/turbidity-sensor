@@ -103,6 +103,25 @@ class CaptureSerialTest(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("no CSV header", stderr)
 
+    def test_failed_capture_keeps_existing_file(self):
+        # A capture over an existing file that never sees a header must leave it as it was (#21)
+        self.output.parent.mkdir(parents=True)
+        self.output.write_text(HEADER + "\n100,tsw10,850.25,4155.518\n")
+        code, stderr = self.run_capture([b"garbage\r\n"], "--header-timeout", "1.0")
+        self.assertEqual(code, 1, stderr)
+        self.assertEqual(self.output.read_text(), HEADER + "\n100,tsw10,850.25,4155.518\n")
+        self.assertEqual(sorted(p.name for p in self.output.parent.iterdir()), ["capture.csv"])
+
+    def test_capture_replaces_existing_file(self):
+        self.output.parent.mkdir(parents=True)
+        self.output.write_text("old\n")
+        code, stderr = self.run_capture(
+            [HEADER.encode() + b"\r\n", b"100,tsw10,850.25,4155.518\r\n"], "--duration", "1.0"
+        )
+        self.assertEqual(code, 0, stderr)
+        self.assertEqual(self.output.read_text(), HEADER + "\n100,tsw10,850.25,4155.518\n")
+        self.assertEqual(sorted(p.name for p in self.output.parent.iterdir()), ["capture.csv"])
+
 
 class SummarizeCaptureTest(unittest.TestCase):
     def setUp(self):
