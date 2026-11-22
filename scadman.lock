@@ -1,0 +1,13 @@
+version = 1
+
+[[package]]
+name = "NopSCADlib"
+source = "https://github.com/nophead/NopSCADlib"
+rev = "e4f6227e9acb7b76a560d1d92a90b3cb91113083"
+hash = "6409345aa88d905f838837c7942cbde82250b5fe54ea5cd1a62bb8e62d91093e"
+
+[[package]]
+name = "syringe-actuator"
+source = "https://github.com/uwo-fast/syringe-actuator"
+rev = "a30b42ae87a93ef3b71d5c0da153c2a2a1fa45de"
+hash = "857dc8c45147bc0f4d7ff7b3eac7a84a14c6db8e7d48fd061f855b8ee48844a1"

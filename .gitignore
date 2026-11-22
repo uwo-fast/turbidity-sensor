@@ -50,3 +50,7 @@ venv/
 *.tmp
 *.temp
 *.bak
+
+# OpenSCAD libraries and the pinned scadman (scripts/install-libraries.sh)
+/.scadman/
+/.cache/

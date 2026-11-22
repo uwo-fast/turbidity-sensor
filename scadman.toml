@@ -1,0 +1,16 @@
+# The OpenSCAD libraries hardware/sampler/ needs, and the exact revision of each. scadman.lock
+# records the commit and a content hash for every one; `just scad-setup` installs them.
+#
+# A tag, never a branch. A project that pins this repository takes these through it, so the
+# bioreactor's NopSCADlib pin must match this one: bump both together.
+
+[project]
+name = "turbidity-sensor"
+
+[dependencies.NopSCADlib]
+git = "https://github.com/nophead/NopSCADlib"
+tag = "v21.41.1"
+
+[dependencies.syringe-actuator]
+git = "https://github.com/uwo-fast/syringe-actuator"
+tag = "v0.1.0"
