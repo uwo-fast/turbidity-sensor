@@ -2,13 +2,17 @@
 """Capture the Arduino example's CSV log from a serial port to a file.
 
 Standard library only (POSIX termios), so it runs on Linux and macOS without
-pyserial. Opening the port resets most Arduino boards, so the capture starts
-from the CSV header. Anything received before the header is discarded, and a
-final line cut off mid-transfer is dropped, so the file always replays through
-turbidity_stream.
+pyserial. Opening the port pulses DTR, which resets an Arduino with auto-reset,
+so the capture starts from the CSV header. Anything received before the header
+is discarded, and a final line cut off mid-transfer is dropped, so the file
+always replays through turbidity_stream. The output file is replaced only once
+the header has arrived: a capture that fails before then leaves it as it was.
 """
 import argparse
+import errno
+import fcntl
 import os
+import struct
 import select
 import sys
 import termios
@@ -23,6 +27,7 @@ BAUD_RATES = {
     115200: termios.B115200,
 }
 HEADER_PREFIX = "timestamp_ms,"
+RESET_PULSE_S = 0.1
 
 
 def open_port(path, baud):
@@ -32,12 +37,28 @@ def open_port(path, baud):
     attributes[4] = BAUD_RATES[baud]
     attributes[5] = BAUD_RATES[baud]
     termios.tcsetattr(fd, termios.TCSANOW, attributes)
+    pulse_dtr(fd)
     termios.tcflush(fd, termios.TCIFLUSH)
     return fd
 
 
-def capture(fd, output, duration_s, header_timeout_s):
-    """Writes header and complete rows to `output`. Returns the row count.
+def pulse_dtr(fd):
+    """Drops DTR and raises it again, so the board resets even if DTR was already up when the port
+    opened (another program left it so). A port with no modem lines, such as a pseudo-terminal,
+    refuses the call; it has no board to reset."""
+    dtr = struct.pack("I", termios.TIOCM_DTR)
+    try:
+        fcntl.ioctl(fd, termios.TIOCMBIC, dtr)
+        time.sleep(RESET_PULSE_S)
+        fcntl.ioctl(fd, termios.TIOCMBIS, dtr)
+    except OSError as error:
+        if error.errno not in (errno.ENOTTY, errno.EINVAL):
+            raise
+
+
+def capture(fd, output, duration_s, header_timeout_s, on_header=None):
+    """Writes header and complete rows to `output`, calling `on_header` once the header has been
+    written. Returns the row count.
 
     Ctrl+C ends the capture normally and keeps the rows received so far.
     """
@@ -69,6 +90,9 @@ def capture(fd, output, duration_s, header_timeout_s):
                     if line.startswith(HEADER_PREFIX):
                         header_seen = True
                         output.write(line + "\n")
+                        output.flush()
+                        if on_header:
+                            on_header()
                     continue
                 if line.startswith(HEADER_PREFIX):
                     raise RuntimeError(f"board reset mid-capture after {rows} rows; the file holds the rows before the reset")
@@ -82,23 +106,36 @@ def capture(fd, output, duration_s, header_timeout_s):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--port", required=True, help="serial device, e.g. /dev/ttyACM0 or /dev/ttyUSB0")
-    parser.add_argument("--output", required=True, help="CSV file to write (overwritten)")
+    parser.add_argument("--output", required=True, help="CSV file to write; an existing one is replaced once the header arrives")
     parser.add_argument("--baud", type=int, default=115200, choices=sorted(BAUD_RATES))
     parser.add_argument("--duration", type=float, default=None, help="seconds to record after the header; default: until Ctrl+C")
     parser.add_argument("--header-timeout", type=float, default=10.0, help="seconds to wait for the CSV header")
     args = parser.parse_args(argv)
 
-    os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
+    target = os.path.abspath(args.output)
+    os.makedirs(os.path.dirname(target), exist_ok=True)
+    # Written beside the target and renamed onto it at the header, so an existing file survives a
+    # capture that never starts (#21). The open file follows the rename.
+    partial = f"{target}.partial"
+    started = False
+
+    def start():
+        nonlocal started
+        os.replace(partial, target)
+        started = True
+
     fd = open_port(args.port, args.baud)
     try:
-        with open(args.output, "w", encoding="ascii", errors="replace", newline="") as output:
+        with open(partial, "w", encoding="ascii", errors="replace", newline="") as output:
             print(f"capturing {args.port} -> {args.output} (Ctrl+C to stop)", file=sys.stderr)
-            rows = capture(fd, output, args.duration, args.header_timeout)
+            rows = capture(fd, output, args.duration, args.header_timeout, on_header=start)
     except RuntimeError as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
     finally:
         os.close(fd)
+        if not started and os.path.exists(partial):
+            os.remove(partial)
 
     print(f"captured {rows} rows to {args.output}", file=sys.stderr)
     return 0
