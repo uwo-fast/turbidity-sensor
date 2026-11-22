@@ -25,8 +25,8 @@ dependencies = [
 [[package]]
 name = "syringe-actuator"
 source = "https://github.com/uwo-fast/syringe-actuator"
-rev = "a30b42ae87a93ef3b71d5c0da153c2a2a1fa45de"
-hash = "857dc8c45147bc0f4d7ff7b3eac7a84a14c6db8e7d48fd061f855b8ee48844a1"
+rev = "2badd762dc28d9fd53815e6578e27931001f6cd3"
+hash = "4bbf58bee07066d64b399d79ceb1ac9ecbe56de7224571fee507e5d67ac61a49"
 
 [[package]]
 name = "threads-scad"
