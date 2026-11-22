@@ -12,6 +12,8 @@ and reassembled since 10-28.
 - **Levels:** the `_c` number is per-mille of the culture as grown: `c1000` is the culture as
   grown, `c0063` is 0.0625 of it, `c4000` is 4 times as dense.
 - **OD750:** `cary50_od750.md`. **Cell count:** `cell_count.md`.
+- **Spreadsheet:** `algae_2026-10-29_results_2026-11-21.xlsx`, a snapshot of the working sheet as of 2026-11-21, with the
+  corrected OD labels. The Markdown files here are the record; the sheet is not kept in sync.
 - **Photos** (`photos/`): the series in 50 mL conical tubes, light to dark green from
   `c0063` to `c4000` (`series_tubes_side`, `series_tubes_front`), and the `c0063` tube on a
   vortex mixer (`c0063_tube_vortex`).
