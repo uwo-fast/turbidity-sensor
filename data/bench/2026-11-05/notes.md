@@ -7,6 +7,7 @@ Setup record ahead of the first run with the actuator and tube head together. No
 - **Lid and sampler:** the printed pocket lid from `open-source-bioreactor`
   (`scad/_spikes/column_lid/`), with the sampler (`scad/custom/sampler.scad`) and a syringe actuator
   standing on it. A stand rod steadies the actuator.
+- **Riser:** 4 mm stainless tube, 3 mm bore, 22.5 cm long (reported 2026-11-22).
 - **Fill:** to be topped up with BG-11 growth medium to the line marked by the thumb in
   `photos/fill_line_thumb.jpg`, so the riser is submerged.
 - **Light:** a lamp on a clamp behind the column, with a window beside it.
