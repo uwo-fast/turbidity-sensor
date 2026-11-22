@@ -13,7 +13,7 @@ tag = "v21.41.1"
 
 [dependencies.syringe-actuator]
 git = "https://github.com/uwo-fast/syringe-actuator"
-tag = "v0.1.0"
+tag = "v0.1.1"
 
 # The bayonet pin, for hardware/sampler/bayonet.scad: the housing on open-source-bioreactor's
 # standard port, and the foot the fit test checks against.
