@@ -1,9 +1,11 @@
 // The sampler's fits, each drawn as the material that should not exist: this renders empty while
 // they all hold. `just check-sampler` fails on anything it draws.
-include <../../hardware/sampler/sampler.scad>
-part = "none";
+// On the bayonet foot, bayonet-port-scad's pin, so the fits are checked against a real foot's
+// figures rather than the housing's defaults
+include <../../hardware/sampler/bayonet.scad>
+piece = "none";
 
-module parts() { sampler_base(); sampler_top(); }
+module parts() { sampler_base() foot(); sampler_top(); }
 
 // the board inside either part
 intersection() { board_place() probe(); parts(); }

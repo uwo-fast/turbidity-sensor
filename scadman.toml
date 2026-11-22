@@ -2,7 +2,7 @@
 # records the commit and a content hash for every one; `just scad-setup` installs them.
 #
 # A tag, never a branch. A project that pins this repository takes these through it, so the
-# bioreactor's NopSCADlib pin must match this one: bump both together.
+# bioreactor's NopSCADlib and bayonet-port-scad pins must match these: bump both together.
 
 [project]
 name = "turbidity-sensor"
@@ -13,4 +13,10 @@ tag = "v21.41.1"
 
 [dependencies.syringe-actuator]
 git = "https://github.com/uwo-fast/syringe-actuator"
+tag = "v0.1.0"
+
+# The bayonet pin, for hardware/sampler/bayonet.scad: the housing on open-source-bioreactor's
+# standard port, and the foot the fit test checks against.
+[dependencies.bayonet-port-scad]
+git = "https://github.com/CameronBrooks11/bayonet-port-scad"
 tag = "v0.1.0"
