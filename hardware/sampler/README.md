@@ -34,8 +34,8 @@ sampler_print("base") bayonet_port(type=bayonet_std, part="pin", panel_thickness
                                    catch_pockets=false);
 ```
 
-OpenSCAD evaluates a reassigned variable at the place of its first assignment, so anything the
-foot figures are computed from must be defined before this file is included.
+OpenSCAD takes a reassigned variable's last value, evaluated where this file first assigns it. So
+set the foot figures after the include, and define anything they are computed from before it.
 
 Without a child the base has no foot, so it cannot be printed for use on its own. Issue
 [#49](https://github.com/uwo-fast/turbidity-sensor/issues/49) tracks other feet.
@@ -57,4 +57,4 @@ just check-sampler  # tests/sampler/fit.scad: renders empty while every fit hold
 Run 1 (`data/bench/2026-11-05/`) used an earlier version of this housing, printed from
 open-source-bioreactor before syringe-actuator v0.1.0, whose face sat 13.8 mm higher. The move here
 changed no geometry: with the bayonet pin passed as the foot, the base and top export
-byte-identical to open-source-bioreactor's at 9c955fc.
+byte-identical to open-source-bioreactor's at f3c35f0, the merge of its #150.

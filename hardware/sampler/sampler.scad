@@ -15,6 +15,9 @@
  * above it, and checks its fits against the foot's figures (foot_*, below). A consumer that has a
  * foot passes it as the child of sampler_base(), sampler_placed() or sampler_print(), and sets the
  * foot_* figures to match; `include` this file and set `part = "none"` to draw nothing from it.
+ * Order matters with `include`: OpenSCAD takes a reassigned variable's last value, evaluated where
+ * this file first assigns it. So set foot_* (and anything else this file defines) after the
+ * include, and define what those values are computed from (panel, bayonet_std) before it.
  * The defaults are the bayonet pin on open-source-bioreactor's standard port (bayonet_std, 18 mm
  * panel, 4x1.5 riser o-ring).
  *
@@ -38,7 +41,7 @@ $fn = 64;
 // ---- the foot ----
 // The vessel's port, as figures the housing is checked against. Defaults: open-source-bioreactor's
 // bayonet pin on bayonet_std, 18 mm panel, 4x1.5 riser o-ring, read from its port library at
-// open-source-bioreactor 9c955fc.
+// open-source-bioreactor f3c35f0.
 foot_flange_h = 5;       // the foot's flange top over the lid, where the housing's neck starts
 foot_neck_r = 14.1;      // the flange's radius, which the housing's neck carries straight up
 foot_core_r = 8.8;       // the radius inside the foot's pin the tube's seat may use
@@ -124,13 +127,13 @@ inner_insert_l = insert_hole_length(inner_insert) + 0.5;
 face_clear_d = 2 * screw_clearance_radius(face_screw);
 face_cbore_d = 2 * screw_head_radius(face_screw) + 0.5;
 face_clamp_t = 2.5;  // face over each face screw's head
-// the hex key the face screws are turned with from below, kept clear straight up into each head:
-// a 2.5 mm key's long arm
+// the hex key the face screws are turned with from below, across its flats; it turns on the
+// circle its corners sweep, kept clear straight up into each head from the parting face
 face_key_d = 2.5;
-face_key_l = 50;
 
 // ---- derived ----
 pocket = probe_bbox(clr);            // board frame, its clearance included
+face_key_sweep = face_key_d / cos(30); // the key's corners, across, as it turns
 axis = probe_optical_axis();         // where the clear tube runs, board frame
 split_b = -clr;                      // the parting plane, board frame: the PCB pocket's floor
 bot_b = pocket[0][2] - floor_t;      // the base's underside, board frame
@@ -179,7 +182,7 @@ assert(riser_top_z < split_z, "the riser's top reaches up into the top part");
 assert(tube_seat_r + min_wall <= foot_core_r, "the clear tube's seat breaks out of the foot's core");
 assert(clear_z0 - (tube_seat_r - riser_bore) > foot_gland_top_z + min_wall, "the clear tube's seat reaches the riser's o-ring");
 assert(plate_z0 - flare_h > roof_z + top_skirt_h, "the face's flare reaches down into the top skirt");
-assert(min([for (h = holes) abs(to_port(h)[1])]) - (face_key_d / 2 + clr) - pocket[1][0] >= min_wall,
+assert(min([for (h = holes) abs(to_port(h)[1])]) - (face_key_sweep / 2 + clr) - pocket[1][0] >= min_wall,
        "a face screw's key groove leaves less than min_wall to the board's pocket");
 
 echo(str("sampler: housing ", outer_x + half_w, " x ", 2 * half_w, ", face ", face_z, " over the lid; clear tube cut ",
@@ -290,13 +293,14 @@ module sampler_top() {
     translate([0, 0, heads_top_z]) cylinder(r1=bore_r, r2=shroud_id / 2, h=_cone + 0.01);
     translate([0, 0, heads_top_z + _cone]) cylinder(d=shroud_id, h=face_z - heads_top_z - _cone + 1);
     // the actuator's screws: clearance through face_clamp_t, counterbored down and out through the
-    // flare's underside, where they go in from; and below each a groove down the housing's side, so
-    // the key reaches the head straight up from face_key_l below it
+    // flare's underside, where they go in from; and below each a groove down the housing's side and
+    // out through the parting face, so a key's long arm reaches the head straight up from the base's
+    // top, the length from the head to the parting face
     for (h = holes) translate([each to_port(h), 0]) {
       translate([0, 0, face_z - face_clamp_t - 1]) cylinder(d=face_clear_d, h=face_clamp_t + 2);
       translate([0, 0, plate_z0 - flare_h]) cylinder(d=face_cbore_d, h=face_z - face_clamp_t - plate_z0 + flare_h);
       _head = face_z - face_clamp_t - screw_head_height(face_screw);
-      translate([0, 0, _head - face_key_l - 1]) cylinder(d=face_key_d + 2 * clr, h=face_key_l + 1.01);
+      translate([0, 0, split_z - 1]) cylinder(d=face_key_sweep + 2 * clr, h=_head - split_z + 1.01);
     }
   }
 }
