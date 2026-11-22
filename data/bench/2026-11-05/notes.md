@@ -331,6 +331,9 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   `growth_plot.py` from these notes. The curve in `agreement.png` is fitted to the 7 Cary samples from 11-08 to 11-11 without a
   caveat; the 5 later samples without a caveat, 11-12 to 11-14, read −0.1 % to +2.4 % from it. The 11-13 09:38 sample, about
   70 min after lamp-on, is drawn with a caveat as the earlier lamp-on samples are.
+- **Spreadsheet:** `algae_run1_column_results_2026-11-21.xlsx`, a snapshot as of 2026-11-21 of the Cary reads, the sensor
+  agreement, every burst, the events and the hand draws, for reading in Excel. These notes and `rig-data/` are the record;
+  the sheet is not kept in sync.
 
 ## Read from the photos, not measured
 
