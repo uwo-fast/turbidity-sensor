@@ -17,27 +17,20 @@ file draws everything above it and checks its fits against four figures, `foot_f
 `foot_neck_r`, `foot_core_r` and `foot_gland_top_z`. Their defaults are the bayonet pin on
 open-source-bioreactor's standard port.
 
-A project with a foot includes this file, sets `part = "none"`, sets the four figures, and passes
-its foot as the child of `sampler_base()`, `sampler_placed()` or `sampler_print("base")`:
+`bayonet.scad` stands the housing on that pin, from
+[bayonet-port-scad](https://github.com/CameronBrooks11/bayonet-port-scad), and is the file to
+print from. It is also the pattern for another foot:
 
-```openscad
-use <bayonet_port.scad>
-include <bayonet_interfaces.scad>
-panel = 18;  // set before the include below: see the note
-include <turbidity-sensor/hardware/sampler/sampler.scad>
-part = "none";
-foot_flange_h = bayonet_flange_height(bayonet_std);
-// ...the other three
+1. `use`/`include` the foot's library, and define what the foot figures are computed from
+   (`panel`), before including `sampler.scad`.
+2. After the include, set `part = "none"` and the four `foot_*` figures.
+3. Pass the foot as the child of `sampler_base()`, `sampler_placed()` or `sampler_print("base")`.
 
-sampler_print("base") bayonet_port(type=bayonet_std, part="pin", panel_thickness=panel,
-                                   center_bore_radius=riser_bore, bore_oring=oring_4x1p5_epdm,
-                                   catch_pockets=false);
-```
+OpenSCAD takes a reassigned variable's last value, evaluated where `sampler.scad` first assigns
+it, so a figure set before the include is silently replaced by the default, and a name defined
+after it is still undefined where the figures are computed.
 
-OpenSCAD takes a reassigned variable's last value, evaluated where this file first assigns it. So
-set the foot figures after the include, and define anything they are computed from before it.
-
-Without a child the base has no foot, so it cannot be printed for use on its own. Issue
+Without a child the base has no foot. Issue
 [#49](https://github.com/uwo-fast/turbidity-sensor/issues/49) tracks other feet.
 
 ## Syringes
@@ -48,9 +41,17 @@ fit-tested; the others render but are unverified.
 ## Checks and libraries
 
 ```sh
-just scad-setup     # the pinned scadman, then NopSCADlib and syringe-actuator from scadman.lock
-just check-sampler  # tests/sampler/fit.scad: renders empty while every fit holds
+just scad-setup     # the pinned scadman, then the libraries scadman.lock pins
+just check-sampler  # tests/sampler/fit.scad, on the bayonet foot: renders empty while every fit holds
 ```
+
+To export a print, with the libraries on `OPENSCADPATH`:
+
+```sh
+OPENSCADPATH=$PWD/.scadman/env openscad --export-format binstl -D 'piece="base"' -o base.stl hardware/sampler/bayonet.scad
+```
+
+`piece` is `base`, `top` or `assembly`; both prints come out lying as they print.
 
 ## Status
 
