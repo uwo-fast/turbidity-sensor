@@ -41,7 +41,25 @@ Without a child the base has no foot. Issue
 ## Syringes
 
 `syringe` picks the actuator's layout. Only `5ml-gnr2`, the syringe the sampler runs, has been
-fit-tested; the others render but are unverified.
+fit-tested. The other 5 mL layouts (`5ml-gnr1`, `5ml-gnr1-ga25`, `5ml-gnr2-ga25`) render but are
+unverified. The 1, 3, 10, 20 and 30 mL do not build yet: syringe-actuator has not measured their
+`nozzle_l`, which places the face, and the build stops there.
+
+## The line
+
+A vessel that cuts the riser reads these to cut and check the rest of the line:
+
+| Function | Gives |
+| --- | --- |
+| `sampler_clear_tube_cut()` | the FEP tube's cut length, mm |
+| `sampler_sleeve_l()` | the silicone sleeve's length over the riser's top, mm |
+| `sampler_syringe()` | the syringe's row in syringe-actuator |
+| `sampler_stroke_ml()` | what one stroke draws: the actuator's stroke across the syringe's nominal bore |
+| `sampler_line_ml(riser_l)` | the line's volume from the riser's open end up past the heads' top |
+
+A stroke has to move `sampler_line_ml(riser_l)` before the culture at the beam is culture drawn
+from the inlet, rather than what stood in the line between bursts. The heads' top stands in for the
+beam because the lens window's height on them is not in the probe library.
 
 ## Checks and libraries
 

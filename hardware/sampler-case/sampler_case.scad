@@ -60,8 +60,10 @@ tube_id = 6.35;
 tube_fit = 0.2;
 // syringe-actuator's layout for the syringe, in its frame: x along the syringe's axis, the nozzle
 // towards -x, z up from the plate's underside. Its front face's holes and outline are [y, z]. Only
-// 5ml-gnr2, the syringe the sampler runs, has been fit-tested; the others render, unverified.
-syringe = "5ml-gnr2"; // [1ml, 3ml, 5ml-gnr1, 5ml-gnr2, 5ml-gnr1-ga25, 5ml-gnr2-ga25, 10ml, 20ml, 30ml]
+// 5ml-gnr2, the syringe the sampler runs, has been fit-tested; the other 5 mL layouts render,
+// unverified. The 1, 3, 10, 20 and 30 mL do not build: syringe-actuator has not measured their
+// nozzle_l, which places the face.
+syringe = "5ml-gnr2"; // [5ml-gnr1, 5ml-gnr2, 5ml-gnr1-ga25, 5ml-gnr2-ga25]
 act = actuator(syringe);
 act_body = get(act, "body");
 holes = get(act_body, "mount_front");
@@ -360,6 +362,17 @@ module lay(z) if (orient == "print") translate([0, 0, z]) rotate([180, 0, 0]) ch
 function sampler_riser_top_z() = riser_top_z;
 function sampler_face_z() = face_z;
 function sampler_clear_tube_cut() = tube_top_z - clear_z0;
+// What a vessel reads to cut and check its line. The silicone sleeve's length over the riser's top.
+function sampler_sleeve_l() = bushing_l;
+// The syringe's row, and what one stroke draws: the actuator's stroke, 2 x its crank's throw, across
+// the syringe's bore (nominal, from the syringe's row).
+function sampler_syringe() = get(act, "syringe");
+function sampler_stroke_ml() = PI * pow(get(get(act, "syringe"), "bore_d") / 2, 2) * 2 * get(act, "throw") / 1000;
+// The line's volume from a riser's open end, riser_l below its top, up the clear tube past the heads'
+// top: what a stroke has to move before the culture at the beam is culture drawn from the inlet. The
+// heads' top, because the lens window's height on them is not in the probe library.
+function sampler_line_ml(riser_l) =
+  (riser_l * PI * pow(riser_id / 2, 2) + (heads_top_z - riser_top_z) * PI * pow(tube_id / 2, 2)) / 1000;
 // Its two prints in the port frame, as they stand on the lid, the foot passed as the child.
 // Each sets its own facets: a file that uses this one does not inherit its $fn.
 module sampler_base_placed() {
