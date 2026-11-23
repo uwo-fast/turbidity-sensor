@@ -104,7 +104,7 @@ def fit_quadratic(x_values, y_values):
 
 def write_calibration_csv(path: Path, low_curve, high_curve, max_ntu: int):
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.writer(handle)
+        writer = csv.writer(handle, lineterminator="\n")
         writer.writerow(["NTU", "Voltage (High)", "Voltage (Low)"])
         for ntu in range(0, max_ntu + 1, 100):
             writer.writerow([
