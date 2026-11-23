@@ -18,7 +18,9 @@ panel = 18; // the lid's thickness at the port
 include <sampler_case.scad>
 
 part = "none"; // sampler_case.scad's own drawing, off: this file draws the parts below
-piece = "assembly"; // [assembly, base, top]
+piece = "assembly"; // [assembly, case, base, top]
+explode = 0; // the step between the base, the top and the actuator, in mm
+section = false; // cut away the half towards -y
 
 foot_flange_h = bayonet_flange_height(bayonet_std);
 foot_neck_r = bayonet_flange_radius(bayonet_std);
@@ -32,8 +34,11 @@ module foot() {
 
 if (piece == "base") lay(split_z) sampler_base() foot();
 else if (piece == "top") lay(face_z) sampler_top();
-else if (piece == "assembly") {
-  color("orange") sampler_base() foot();
-  color("darkorange") sampler_top();
-  sampler_bought();
+else if (piece == "assembly" || piece == "case") difference() {
+  union() {
+    color("orange") sampler_base() foot();
+    color("darkorange") translate([0, 0, explode]) sampler_top();
+    sampler_bought(explode=explode, actuator=piece == "assembly");
+  }
+  if (section) translate([-500, -1000, -500]) cube(1000);
 }
