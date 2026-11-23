@@ -123,6 +123,25 @@ class CaptureSerialTest(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in self.output.parent.iterdir()), ["capture.csv"])
 
 
+class CalibrationCsvTest(unittest.TestCase):
+    """The generated calibration CSVs use LF, as .gitattributes stores them, so `just regen` leaves
+    the working copy clean (#7)."""
+
+    def test_writes_lf_line_endings(self):
+        sys.path.insert(0, str(TOOLS))
+        try:
+            import generate_vendor_calibration as generator
+        finally:
+            sys.path.remove(str(TOOLS))
+        curve = [(0.0, 4.2), (1000.0, 3.0)]
+        with tempfile.TemporaryDirectory() as workdir:
+            path = pathlib.Path(workdir) / "calibration.csv"
+            generator.write_calibration_csv(path, curve, curve, 200)
+            data = path.read_bytes()
+        self.assertNotIn(b"\r", data)
+        self.assertTrue(data.startswith(b"NTU,Voltage (High),Voltage (Low)\n"), data[:60])
+
+
 class PortResetTest(unittest.TestCase):
     """open_port resets the board by pulsing DTR, so every capture starts from the header (#22)."""
 
