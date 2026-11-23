@@ -60,8 +60,10 @@ tube_id = 6.35;
 tube_fit = 0.2;
 // syringe-actuator's layout for the syringe, in its frame: x along the syringe's axis, the nozzle
 // towards -x, z up from the plate's underside. Its front face's holes and outline are [y, z]. Only
-// 5ml-gnr2, the syringe the sampler runs, has been fit-tested; the others render, unverified.
-syringe = "5ml-gnr2"; // [1ml, 3ml, 5ml-gnr1, 5ml-gnr2, 5ml-gnr1-ga25, 5ml-gnr2-ga25, 10ml, 20ml, 30ml]
+// 5ml-gnr2, the syringe the sampler runs, has been fit-tested; the other 5 mL layouts render,
+// unverified. The 1, 3, 10, 20 and 30 mL do not build: syringe-actuator has not measured their
+// nozzle_l, which places the face.
+syringe = "5ml-gnr2"; // [5ml-gnr1, 5ml-gnr2, 5ml-gnr1-ga25, 5ml-gnr2-ga25]
 act = actuator(syringe);
 act_body = get(act, "body");
 holes = get(act_body, "mount_front");

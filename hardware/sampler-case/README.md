@@ -41,7 +41,9 @@ Without a child the base has no foot. Issue
 ## Syringes
 
 `syringe` picks the actuator's layout. Only `5ml-gnr2`, the syringe the sampler runs, has been
-fit-tested; the others render but are unverified.
+fit-tested. The other 5 mL layouts (`5ml-gnr1`, `5ml-gnr1-ga25`, `5ml-gnr2-ga25`) render but are
+unverified. The 1, 3, 10, 20 and 30 mL do not build yet: syringe-actuator has not measured their
+`nozzle_l`, which places the face, and the build stops there.
 
 ## Checks and libraries
 
