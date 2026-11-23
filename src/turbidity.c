@@ -309,6 +309,29 @@ turbidity_status turbidity_estimate_ntu_from_mv(
     return TURBIDITY_STATUS_OK;
 }
 
+/* Three calibration points constrain the fit only if their voltage falls as NTU rises, and they span
+ * at least a tenth of the sensor's range. In any order. */
+static int points_constrain_fit(const turbidity_model_record *model, const double ntu[3], const double mv[3])
+{
+    size_t order[3] = {0U, 1U, 2U};
+    size_t i;
+    size_t j;
+
+    for (i = 1U; i < 3U; ++i) {
+        for (j = i; (j > 0U) && (ntu[order[j - 1U]] > ntu[order[j]]); --j) {
+            size_t swap = order[j];
+            order[j] = order[j - 1U];
+            order[j - 1U] = swap;
+        }
+    }
+    for (i = 1U; i < 3U; ++i) {
+        if ((!(ntu[order[i]] > ntu[order[i - 1U]])) || (!(mv[order[i]] < mv[order[i - 1U]]))) {
+            return 0;
+        }
+    }
+    return (ntu[order[2]] - ntu[order[0]]) >= (0.1 * model->max_ntu);
+}
+
 turbidity_status turbidity_solve_profile_3point(
     turbidity_sensor_kind sensor_kind,
     const double ntu[3],
@@ -341,6 +364,9 @@ turbidity_status turbidity_solve_profile_3point(
             (ntu[point_index] < 0.0) || (ntu[point_index] > model->max_ntu)) {
             return TURBIDITY_STATUS_INVALID_ARGUMENT;
         }
+    }
+    if (!points_constrain_fit(model, ntu, mv)) {
+        return TURBIDITY_STATUS_INVALID_ARGUMENT;
     }
 
     for (pass_index = 0; pass_index < 4U; ++pass_index) {

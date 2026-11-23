@@ -158,6 +158,48 @@ static void test_calibration_cli(const char *calibrate_executable)
     remove(output_path);
 }
 
+/* #6: points the library rejects, and a fit that lands on a trim_t bound, exit non-zero with a message */
+static int calibration_cli_fails_saying(const char *calibrate_executable, const char *points, const char *expected)
+{
+    char err_path[256];
+    char command[1024];
+    char line[512];
+    int found = 0;
+    int code;
+    FILE *err = NULL;
+
+    snprintf(err_path, sizeof(err_path), "calibration_err_%ld.txt", (long)getpid());
+    snprintf(command, sizeof(command), "\"%s\" --sensor tsw10 %s > /dev/null 2> \"%s\"", calibrate_executable, points, err_path);
+    code = system(command);
+    err = fopen(err_path, "r");
+    if (err != NULL) {
+        while (fgets(line, sizeof(line), err) != NULL) {
+            if (strstr(line, expected) != NULL) {
+                found = 1;
+            }
+        }
+        fclose(err);
+    }
+    remove(err_path);
+    return (code != 0) && found;
+}
+
+static void test_calibration_cli_rejects(const char *calibrate_executable)
+{
+    expect_true(
+        calibration_cli_fails_saying(calibrate_executable, "--point 0,4000 --point 100,3700 --point 200,3900", "fall in voltage"),
+        "calibration CLI rejects a voltage that rises with NTU"
+    );
+    expect_true(
+        calibration_cli_fails_saying(calibrate_executable, "--point 0,1000 --point 1,1000 --point 2,999", "fall in voltage"),
+        "calibration CLI rejects points too close in NTU"
+    );
+    expect_true(
+        calibration_cli_fails_saying(calibrate_executable, "--point 0,4000 --point 1000,200 --point 2000,100", "trim_t bound"),
+        "calibration CLI rejects a fit on a trim_t bound"
+    );
+}
+
 static void test_stream_cli(const char *stream_executable)
 {
     turbidity_profile profile = turbidity_default_profile(TURBIDITY_SENSOR_TSW10);
@@ -503,6 +545,7 @@ int main(int argc, char **argv)
     }
 
     test_calibration_cli(argv[2]);
+    test_calibration_cli_rejects(argv[2]);
     test_stream_cli(argv[1]);
     test_stream_rejects_bad_header(argv[1]);
     test_stream_input_contract(argv[1]);
