@@ -362,6 +362,17 @@ module lay(z) if (orient == "print") translate([0, 0, z]) rotate([180, 0, 0]) ch
 function sampler_riser_top_z() = riser_top_z;
 function sampler_face_z() = face_z;
 function sampler_clear_tube_cut() = tube_top_z - clear_z0;
+// What a vessel reads to cut and check its line. The silicone sleeve's length over the riser's top.
+function sampler_sleeve_l() = bushing_l;
+// The syringe's row, and what one stroke draws: the actuator's stroke, 2 x its crank's throw, across
+// the syringe's bore (nominal, from the syringe's row).
+function sampler_syringe() = get(act, "syringe");
+function sampler_stroke_ml() = PI * pow(get(get(act, "syringe"), "bore_d") / 2, 2) * 2 * get(act, "throw") / 1000;
+// The line's volume from a riser's open end, riser_l below its top, up the clear tube past the heads'
+// top: what a stroke has to move before the culture at the beam is culture drawn from the inlet. The
+// heads' top, because the lens window's height on them is not in the probe library.
+function sampler_line_ml(riser_l) =
+  (riser_l * PI * pow(riser_id / 2, 2) + (heads_top_z - riser_top_z) * PI * pow(tube_id / 2, 2)) / 1000;
 // Its two prints in the port frame, as they stand on the lid, the foot passed as the child.
 // Each sets its own facets: a file that uses this one does not inherit its $fn.
 module sampler_base_placed() {
