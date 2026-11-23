@@ -18,7 +18,7 @@ also checks the edge picker against the run-1 Python picker on the same raw stre
 | A2 stepped about 8–14 counts at each lamp switch, cause open. Nothing was black: the sampler case was grey PETG, and its bayonet base and the column lid clear PETG | Sampler case printed black, with a filament change to clear PETG for the bayonet section that faces the culture, so no pigment reaches it; then the light test below |
 | Lamp switch times inferred from the data | Lamp state logged on port 1's terminal B by a light-dependent resistor facing the lamp |
 | The air reading is the floor: A2 reads air below about 526 counts (air 466 + `near_air` 60), which the run-1 fit puts at OD 2.53. Run 1 plateaued at 2.2–2.35 | Run to the plateau as in run 1, so the two compare. Mark any sensor point above OD 2.4 as near the air floor |
-| Inoculum OD not measured | Same volumes (100 + 100 mL into 3 L BG-11), with the inoculum read on the Cary first |
+| Inoculum OD not measured; run 1 reached 4.0 L only with a 1 L BG-11 top-up on 11-08 | 4.0 L from the start: 200 mL of inoculum, read on the Cary first, into 3.8 L of BG-11 (volumes still to be confirmed) |
 | Room temperature known only roughly (22–23 °C) | A BME280 on the same I2C bus as the slice logs temperature, humidity and pressure through Anolis |
 
 ## Before the culture goes in
