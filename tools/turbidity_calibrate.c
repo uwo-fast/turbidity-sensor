@@ -118,8 +118,29 @@ int main(int argc, char **argv)
         &rmse_mv,
         &max_abs_error_mv
     );
+    if (status == TURBIDITY_STATUS_INVALID_ARGUMENT) {
+        double max_ntu = 0.0;
+        (void)turbidity_sensor_max_ntu(sensor_kind, &max_ntu);
+        fprintf(
+            stderr,
+            "error: the three points must lie within 0-%g NTU, span at least %g NTU, and fall in voltage as NTU rises\n",
+            max_ntu,
+            0.1 * max_ntu
+        );
+        return 1;
+    }
     if (status != TURBIDITY_STATUS_OK) {
         fprintf(stderr, "calibration solve failed: %s\n", turbidity_status_name(status));
+        return 1;
+    }
+    /* A fit pinned at a trim_t bound is clamped, not fitted: the vendor model's family cannot represent the points */
+    if ((profile.trim_t <= 1e-6) || (profile.trim_t >= (1.0 - 1e-6))) {
+        fprintf(
+            stderr,
+            "error: the fit landed on a trim_t bound (%.6f, rmse %.1f mV): these points lie outside the vendor model's family\n",
+            profile.trim_t,
+            rmse_mv
+        );
         return 1;
     }
 

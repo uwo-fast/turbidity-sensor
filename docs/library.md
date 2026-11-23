@@ -41,7 +41,7 @@ Example JSON output:
 {"sensor":"tsw10","trim_t":0.478192628,"gain":1.003159094,"offset_mv":12.943040793,"rmse_mv":0.000000000,"max_abs_error_mv":0.000000000}
 ```
 
-The solve has three free parameters for three points, so `rmse_mv` and `max_abs_error_mv` are zero whenever `trim_t` lands inside `[0, 1]`. They only become non-zero when `trim_t` is pinned at a bound, so they do not measure calibration quality.
+The solve has three free parameters for three points, so `rmse_mv` and `max_abs_error_mv` are zero whenever `trim_t` lands inside `[0, 1]`; they do not measure calibration quality. The tool exits non-zero instead of printing a profile when the points do not constrain the fit (voltage must fall as NTU rises, and the points must span at least a tenth of the sensor's range; the library returns `TURBIDITY_STATUS_INVALID_ARGUMENT` for these), or when the fit lands on a `trim_t` bound, where the vendor model's family cannot represent the points.
 
 Replay a CSV stream through the model:
 

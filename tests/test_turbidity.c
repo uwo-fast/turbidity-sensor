@@ -226,6 +226,45 @@ static void test_solver_noisy_recovery(void)
     }
 }
 
+static void test_solver_rejects_bad_points(void)
+{
+    turbidity_profile solved;
+    double rising_ntu[3] = {0.0, 100.0, 200.0};
+    double rising_mv[3] = {4000.0, 3700.0, 3900.0};
+    double narrow_ntu[3] = {0.0, 1.0, 2.0};
+    double narrow_mv[3] = {1000.0, 999.0, 998.0};
+    double repeated_ntu[3] = {0.0, 900.0, 900.0};
+    double repeated_mv[3] = {4000.0, 3000.0, 2900.0};
+    double unordered_ntu[3] = {1700.0, 100.0, 900.0};
+    double unordered_mv[3] = {0.0, 0.0, 0.0};
+    turbidity_profile source = turbidity_default_profile(TURBIDITY_SENSOR_TSW10);
+    size_t index;
+
+    /* #6: voltage must fall as NTU rises, and the points must span enough of the range to constrain the fit */
+    expect_true(
+        turbidity_solve_profile_3point(TURBIDITY_SENSOR_TSW10, rising_ntu, rising_mv, &solved, NULL, NULL) == TURBIDITY_STATUS_INVALID_ARGUMENT,
+        "solver rejects a voltage that rises with NTU"
+    );
+    expect_true(
+        turbidity_solve_profile_3point(TURBIDITY_SENSOR_TSW10, narrow_ntu, narrow_mv, &solved, NULL, NULL) == TURBIDITY_STATUS_INVALID_ARGUMENT,
+        "solver rejects points spanning under a tenth of the range"
+    );
+    expect_true(
+        turbidity_solve_profile_3point(TURBIDITY_SENSOR_TSW10, repeated_ntu, repeated_mv, &solved, NULL, NULL) == TURBIDITY_STATUS_INVALID_ARGUMENT,
+        "solver rejects two points at the same NTU"
+    );
+
+    /* the order the points are given in does not matter */
+    source.trim_t = 0.28;
+    for (index = 0; index < 3U; ++index) {
+        expect_true(turbidity_predict_measured_mv(&source, unordered_ntu[index], &unordered_mv[index]) == TURBIDITY_STATUS_OK, "unordered point should compute");
+    }
+    expect_true(
+        turbidity_solve_profile_3point(TURBIDITY_SENSOR_TSW10, unordered_ntu, unordered_mv, &solved, NULL, NULL) == TURBIDITY_STATUS_OK,
+        "solver accepts valid points in any order"
+    );
+}
+
 static void test_range_clamping(void)
 {
     turbidity_profile tsw = turbidity_default_profile(TURBIDITY_SENSOR_TSW10);
@@ -263,6 +302,7 @@ int main(void)
     test_monotonic_response();
     test_solver_exact_recovery();
     test_solver_noisy_recovery();
+    test_solver_rejects_bad_points();
     test_range_clamping();
 
     if (g_failures != 0) {
