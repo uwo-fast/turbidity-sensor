@@ -2,8 +2,9 @@
 
 Setup record ahead of the first run with the actuator and tube head together. No captures yet.
 
-- **Vessel:** the lab's clear acrylic column, 100 mm bore (7.85 mL per mm of height), sparged from
-  the bottom section through two side ports. A `7L` mark is written on the wall.
+- **Vessel:** the lab's clear acrylic column, U3, 100 mm bore (7.85 mL per mm of height), sparged from
+  the bottom section through two side ports. 670 mm overall with a 17 mm flange at each end, 115 mm
+  tube; it holds about 4 L at most with the pocket lid in (measured 2026-11-22).
 - **Lid and sampler:** the printed pocket lid from `open-source-bioreactor`
   (`scad/_spikes/column_lid/`), with the sampler (`scad/custom/sampler.scad`) and a syringe actuator
   standing on it. A stand rod steadies the actuator.
@@ -191,8 +192,7 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   to 826–828, with no addition.
 - **OD750, 11-08 about 10:15:** 0.5653 and 0.5553, mean 0.560.
 - **BG-11 top-up, 11-08 10:20:** 1 L added; level re-marked. A2: 827.9 at 09:13, then 832.3 (10:28, 215 rows) and 830.8 (10:43,
-  226 rows). Cary at 10:55: 0.4376 and 0.4344, mean 0.436, a drop to 0.78 of 0.560, which a column of about 3.5 L
-  before the addition would give.
+  226 rows). Cary at 10:55: 0.4376 and 0.4344, mean 0.436, a drop to 0.78 of 0.560.
 - **Cary against A2 so far:** 0.390 about 837, 0.436 about 831, 0.482 about 828.5 fall in order; 0.560 sits against about 828 in
   the bursts just before it, but about 815–821 in the early morning. The 05:00–09:13 rise is not explained: the lamp coming
   on, or the change in delivery, are the candidates.
@@ -227,8 +227,8 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   disturbed: no mixing for about 4.5 h, then a new air supply settling in.
 - **OD750, 11-09 19:24:** diluted 1:2, 0.3227 and 0.3267 (×3: 0.968, 0.980), mean 0.974, up about 17 % from 10:20 across the
   outage. A2 read 769.4 at 19:19 and 764.1 at 19:34, falling steadily with the lamp on.
-- **DI top-up, 11-09 19:38:** 150 mL of DI water, back to the 11-08 10:20 mark. The column holds just under 4 L, the volume now
-  held. Expected dilution about 3.7 %, OD about 0.974 to 0.938.
+- **DI top-up, 11-09 19:38:** 150 mL of DI water, back to the 11-08 10:20 mark. The column holds about 4.0 L, the volume now
+  held: the mark is 142 mm below the top flange's top face, 511 mm of culture (measured 2026-11-22). Expected dilution about 3.7 %, OD about 0.974 to 0.938.
 - **OD750, 11-09 23:03:** diluted 1:3, 0.2492 and 0.2309 (×4: 0.997, 0.924), mean 0.960; the two differ by about 8 %, more than
   usual. A2 read 762.0 at 22:49 and 762.4 at 23:04.
 - **Lamp off, 11-09 23:46.** All 95 bursts on 11-09 up to then read `ok`, with at least 70 rows of culture.
@@ -341,9 +341,7 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 Scaled from the column's width in the pictures, so good to a few centimetres at best. Replace these
 with tape-measure figures (`docs/bench/sampler-waveform.md`, step 0).
 
-- **Volumes:** the culture stands at about 5 L now and the fill line is at about 8 L, which would
-  dilute it to about 0.6 ×.
-- **Riser:** its lower end looks close to the fill line.
+- **Riser:** 22.5 cm, measured; see the setup list.
 - **Headspace:** the pocket's floor is about 85 mm above the fill line.
 - **Side port:** the hex plug in `column_front.jpg` sits about 170 mm below the top flange, near the
   fill line.
