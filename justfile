@@ -45,6 +45,10 @@ scad-setup:
 check-sampler-case:
     OPENSCADPATH={{justfile_directory()}}/.scadman/env scripts/check-sampler-case.sh
 
+# Render the pictures in hardware/sampler-case/views.tsv to build/figures: all, or `just render 'case_*'`
+render filter="*":
+    OPENSCADPATH={{justfile_directory()}}/.scadman/env scripts/render-views.sh "{{filter}}"
+
 # Regenerate calibration tables, fit reports, and the runtime header
 regen:
     python3 tools/generate_vendor_calibration.py

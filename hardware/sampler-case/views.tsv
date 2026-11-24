@@ -1,0 +1,22 @@
+# The pictures `just render` draws from bayonet.scad: name, view, flags, tab-separated.
+#
+# view   the camera's rotation, as the GUI's Edit > Copy Viewport Rotation gives it.
+# flags  -D assignments. piece is assembly, case (no actuator), base or top; explode is the step
+#        between the base, the top and the actuator in mm; section cuts away the half towards the
+#        camera in a front view.
+#
+# The actuator on its own is syringe-actuator's: its cad/views.tsv draws the 5ml-gnr2.
+
+# the prints, as they lie on the bed
+print_base	60,0,30	-D piece="base"
+print_top	60,0,30	-D piece="top"
+
+# the case: the board and the clear tube in the top, the sleeve in the base
+case_exploded	60,0,30	-D piece="case" -D explode=30
+case_exploded_section	90,0,0	-D piece="case" -D explode=30 -D section=true
+case_section	90,0,0	-D piece="case" -D section=true
+
+# the actuator on the case
+assembly	60,0,30
+assembly_exploded	60,0,30	-D explode=40
+assembly_section	90,0,0	-D section=true

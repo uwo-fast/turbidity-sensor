@@ -332,26 +332,29 @@ module actuator_place() {
 // Every bought part in place but the dip tube, which the head cuts and draws with the other tubes:
 // the board, the clear tube with its stretched top end, the silicone sleeve over the riser's top,
 // the luer-to-barb fitting (simplified to its barb and hub), the fasteners, and the actuator in its
-// body, the plunger at crank angle a (180 pushed in).
-module sampler_bought(a = 180) {
-  color("darkgreen") board_place() probe();
-  color("white", 0.5) difference() {
-    union() {
-      translate([0, 0, clear_z0]) cylinder(d=tube_od, h=tube_top_z - barb_l - clear_z0);
-      translate([0, 0, tube_top_z - barb_l]) cylinder(d=barb_od, h=barb_l);
+// body, the plunger at crank angle a (180 pushed in). explode lifts what goes in the top that far,
+// and the actuator twice that, each fastener's head standing off its seat by it.
+module sampler_bought(a = 180, explode = 0, actuator = true) {
+  translate([0, 0, explode]) {
+    color("darkgreen") board_place() probe();
+    color("white", 0.5) difference() {
+      union() {
+        translate([0, 0, clear_z0]) cylinder(d=tube_od, h=tube_top_z - barb_l - clear_z0);
+        translate([0, 0, tube_top_z - barb_l]) cylinder(d=barb_od, h=barb_l);
+      }
+      translate([0, 0, clear_z0 - 1]) cylinder(d=tube_id, h=tube_top_z - clear_z0 + 2);
     }
-    translate([0, 0, clear_z0 - 1]) cylinder(d=tube_id, h=tube_top_z - clear_z0 + 2);
+    color("whitesmoke") {
+      translate([0, 0, tube_top_z - barb_l]) cylinder(d=tube_id, h=barb_l);
+      translate([0, 0, tube_top_z]) cylinder(d=barb_od, h=fitting_l);
+    }
+    sampler_fasteners(lift=explode);
   }
   color("gainsboro") difference() {
     translate([0, 0, clear_z0]) cylinder(d=tube_id, h=bushing_l);
     translate([0, 0, clear_z0 - 1]) cylinder(d=riser_od, h=bushing_l + 2);
   }
-  color("whitesmoke") {
-    translate([0, 0, tube_top_z - barb_l]) cylinder(d=tube_id, h=barb_l);
-    translate([0, 0, tube_top_z]) cylinder(d=barb_od, h=fitting_l);
-  }
-  sampler_fasteners();
-  actuator_place() sampler_actuator(act, a);
+  if (actuator) translate([0, 0, 2 * explode]) actuator_place() sampler_actuator(act, a);
 }
 
 // print orientation: turned over about z
