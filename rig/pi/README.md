@@ -78,8 +78,8 @@ run re-picked afterwards.
 | --- | --- |
 | `ok` | At least `min_sample_rows` of culture in the burst: use it |
 | `thin` | Culture reached the beam, but too briefly: a meniscus can skew it, so it stays off the chart |
-| `no_sample` | Only air and dips: the line did not bring culture to the beam, or the culture reads like air |
-| `no_motion` | The signal barely moved: the crank may have stalled |
+| `no_sample` | The signal moved, but culture never held steady in the beam: the line did not bring culture to the beam, or the culture reads like air |
+| `no_motion` | The signal never swung by `min_swing`: nothing passed the beam. Check that the crank turns, the syringe is on its fitting and the riser is in the culture |
 | `aborted` | The Nano was lost or reset mid-burst; the motor was stopped |
 
 ## Results page

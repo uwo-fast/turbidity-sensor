@@ -81,7 +81,7 @@ def pick_sample(values, levels):
     sample = statistics.median(sample_rows) if sample_rows else None
     spread = statistics.pstdev(sample_rows) if sample_rows else None
     if max(values) - min(values) < levels["min_swing"]:
-        return sample, len(sample_rows), spread, air, "no_motion"  # a stalled crank, read in one place
+        return sample, len(sample_rows), spread, air, "no_motion"  # nothing passed the beam: a stall, or a line that moved nothing
     if not sample_rows:
         return None, 0, None, air, "no_sample"
     verdict = "ok" if len(sample_rows) >= levels["min_sample_rows"] else "thin"
