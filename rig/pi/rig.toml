@@ -23,7 +23,7 @@ near_air = 60.0            # a plateau this close to air_reference is air: wet a
 plateau_rows = 5           # rows in a row, 100 ms at 50 Hz, for a stretch to count as a level
 plateau_step = 3.0         # the most one row may move on a plateau
 min_sample_rows = 25       # under this, 0.5 s of culture in a burst, the verdict is thin
-min_swing = 100.0          # a burst moving less than this did not move the line
+min_swing = 100.0          # a burst moving less than this passed nothing through the beam
 sample_band = 15.0         # culture plateaus further than this from their common level are dropped
 
 [serial]

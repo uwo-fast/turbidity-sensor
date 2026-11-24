@@ -7,7 +7,7 @@ const VERDICTS = {
   ok: "Good",
   thin: "Check: culture barely reached the sensor this burst",
   no_sample: "Check: no culture seen, check the tube and the level",
-  no_motion: "Check: the signal did not move, the motor may have stalled",
+  no_motion: "Check: nothing passed the sensor, check the motor, the syringe and that the riser is in the culture",
   aborted: "Check: lost the sensor during this cycle",
 };
 
