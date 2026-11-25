@@ -55,6 +55,11 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - The run-2 plan said head A2 stepped about 8-14 counts at each lamp switch, the range run 1's
   notes record for the switches up to 11-11; over all 14 switches of run 1's growth test it is
   9.9-17.4 counts, 1.3-2.8 % of the reading, growing as the culture grew denser.
+- `CMakeLists.txt`, `library.json` and `CITATION.cff` said 0.2.0 at every tag, so the CMake package
+  and the PlatformIO library of v0.1.0 to v0.4.0 all reported 0.2.0. They now say 0.4.0, the
+  latest release, and `just check` (`scripts/check-version.sh`) fails unless the three agree with
+  each other, with the newest release in this changelog and, on a tag, with the tag.
+  `CONTRIBUTING.md` gives the release steps.
 
 ## [0.4.0] - 2026-11-22
 

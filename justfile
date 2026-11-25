@@ -30,8 +30,12 @@ lint: setup
     clang-tidy --quiet -p {{build_dir}} $(git ls-files '*.c')
     python3 -c "import ast, sys; [ast.parse(open(f).read(), f) for f in sys.argv[1:]]" $(git ls-files '*.py')
 
-# Format-check + lint (non-mutating — CI-equivalent)
-check: fmt-check lint
+# Fail unless CMakeLists.txt, library.json, CITATION.cff, the changelog's newest release and any tag agree
+check-version:
+    @scripts/check-version.sh
+
+# Format-check + lint + version agreement (non-mutating — CI-equivalent)
+check: fmt-check lint check-version
 
 # Build and run the test suite
 test: build

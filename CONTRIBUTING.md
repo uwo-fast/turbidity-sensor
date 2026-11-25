@@ -50,6 +50,16 @@ under `## [Unreleased]` in [`CHANGELOG.md`](CHANGELOG.md), in the same pull requ
 moves those lines under the new version. Start an entry that breaks existing use with
 `**Breaking:**`.
 
+## Releasing
+
+1. In one commit on a branch, move the lines under `## [Unreleased]` in `CHANGELOG.md` into a new
+   `## [x.y.z] - YYYY-MM-DD` section, and set the same version in `CMakeLists.txt`'s `project()`,
+   `library.json` and `CITATION.cff`. A change marked `**Breaking:**` bumps the minor version
+   while the major is 0.
+2. Merge it once CI passes; `just check` fails if the four disagree.
+3. Tag the merge commit `vx.y.z`, annotated, with a message summarising the release, and push the
+   tag. CI runs `just check` on the tag and fails if the metadata names another version.
+
 ## Project conventions
 
 - **Keep the library portable.** It is stateless and allocation-free, and must build for
