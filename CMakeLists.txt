@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(turbidity VERSION 0.4.0 LANGUAGES C)
+project(turbidity VERSION 0.5.0 LANGUAGES C)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)

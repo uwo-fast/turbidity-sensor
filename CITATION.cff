@@ -5,7 +5,7 @@ type: software
 authors:
   - family-names: "Brooks"
     given-names: "Cameron"
-version: "0.4.0"
+version: "0.5.0"
 url: "https://github.com/uwo-fast/turbidity-sensor"
 # Only the software licence goes here. A licence list in CFF means "either licence,
 # at your option", which is not what a repository licensed separately by component
