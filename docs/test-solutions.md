@@ -5,12 +5,12 @@ The recipe is in [`bench/session-1.md`](bench/session-1.md), section 5.
 
 ## Tween 20 dose
 
-0.01 % is a chosen value. No published dose for Tween 20 in dilute kaolin suspensions was
+The 0.01 % dose was chosen for this project. No published dose for Tween 20 in dilute kaolin suspensions was
 found, and kaolin dispersant doses in the literature (about 0.5–1 wt % of the clay) are for
 concentrated slurries ([Ceramics 2024](https://doi.org/10.3390/ceramics7030076)), not
 tens of mg/L.
 
-The dose is set against Tween 20's critical micelle concentration (CMC): about 0.06 mM, or
+The dose is set relative to the critical micelle concentration (CMC) of Tween 20: about 0.06 mM, or
 0.0074 % w/v at a molecular weight of 1228
 ([Thermo Fisher 28320](https://www.thermofisher.com/order/catalog/product/28320),
 [Sigma-Aldrich 11332465001](https://www.sigmaaldrich.com/deepweb/assets/sigmaaldrich/product/documents/130/724/11332465001.pdf),
@@ -24,6 +24,6 @@ The dose is set against Tween 20's critical micelle concentration (CMC): about 0
 - 0.01 % v/v is about 0.011 % w/v (density about 1.1 g/mL; the SDS gives the exact
   figure), or about 1.5 × the CMC.
 
-Every concentration comes from the one kaolin stock, so the particles' surface state is the same
-at every concentration. `03a_clear_di` against `03_clear` checks that the diluent itself
-does not change the reading.
+Every concentration is made from the same kaolin stock, so the particle surface state is the
+same at every concentration. Comparing `03a_clear_di` with `03_clear` checks that the diluent
+itself does not change the reading.
