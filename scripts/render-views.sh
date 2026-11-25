@@ -14,8 +14,12 @@ while IFS=$'\t' read -r name view flags; do
     [[ -z "$name" || "$name" == \#* ]] && continue
     # shellcheck disable=SC2053
     [[ "$name" == ${1:-*} ]] || continue
+    # A row asking for --render gets a full render: --preview anywhere on the line makes it a preview,
+    # which draws every cut face in one colour.
+    mode=--preview
+    [[ " ${flags:-} " == *" --render "* ]] && mode=
     # shellcheck disable=SC2086
-    "$OPENSCAD" --preview --projection=o --viewall --autocenter --camera="0,0,0,$view,0" \
+    "$OPENSCAD" $mode --projection=o --viewall --autocenter --camera="0,0,0,$view,0" \
         --imgsize=2400,1800 --colorscheme=Tomorrow ${flags:-} -o "$out/$name.png" \
         hardware/sampler-case/bayonet.scad 2>"$out/$name.err" >/dev/null
     if grep -q '^ERROR' "$out/$name.err" || [ ! -s "$out/$name.png" ]; then

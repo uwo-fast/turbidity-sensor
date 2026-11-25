@@ -46,26 +46,18 @@ module foot_face_seal() {
 
 // The riser, l long, hanging from its top end in the sleeve through the foot's bore and o-ring.
 module foot_riser(l) {
-  color("silver") translate([0, 0, riser_top_z - l]) difference() {
+  translate([0, 0, riser_top_z - l]) difference() {
     cylinder(d=riser_od, h=l);
     translate([0, 0, -1]) cylinder(d=riser_id, h=l + 2);
   }
 }
-
-// With section, the half towards -y cut away from each part on its own, so a colour given outside it
-// covers the cut face too: a full render (--render) keeps the colours, where a preview draws every
-// cut face in one.
-module half() if (section) difference() {
-  children();
-  translate([-500, -1000, -500]) cube(1000);
-} else children();
 
 if (piece == "base") lay(split_z) sampler_base() foot();
 else if (piece == "top") lay(face_z) sampler_top();
 else if (piece == "assembly" || piece == "case") {
   color("orange") half() sampler_base() foot();
   color("darkorange") half() translate([0, 0, explode]) sampler_top();
-  half() sampler_bought(explode=explode, actuator=piece == "assembly");
-  if (seals) half() foot_seals();
-  if (riser_l > 0) half() foot_riser(riser_l);
+  sampler_bought(explode=explode, actuator=piece == "assembly");
+  if (seals) color("black") half() foot_seals();
+  if (riser_l > 0) color("silver") half() foot_riser(riser_l);
 }
