@@ -17,6 +17,8 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- `CITATION.cff` names the project `turbidity-sensor`, not the library's `turbidity`, and adds an
+  abstract, keywords and the repository, which Zenodo reads for the archived release's record.
 - `section` cuts each part on its own, inside its colour, so its cut face is drawn in that colour;
   a part that colours itself (the screws, the actuator) keeps its colours and gets one for its cut.
   The section views render in full with Manifold, which keeps those colours; a preview drew every
