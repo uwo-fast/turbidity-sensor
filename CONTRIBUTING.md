@@ -43,6 +43,13 @@ docs: document sensor wiring
 Imperative mood, lowercase, no trailing period, subject under 72 characters. Put issue
 references in the body, not the subject. One logical change per commit.
 
+## Changelog
+
+A change that affects users of the library, firmware, tools, hardware or recorded data adds a line
+under `## [Unreleased]` in [`CHANGELOG.md`](CHANGELOG.md), in the same pull request. A release
+moves those lines under the new version. Start an entry that breaks existing use with
+`**Breaking:**`.
+
 ## Project conventions
 
 - **Keep the library portable.** It is stateless and allocation-free, and must build for
