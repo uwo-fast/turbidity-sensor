@@ -53,10 +53,10 @@ moves those lines under the new version. Start an entry that breaks existing use
 ## Releasing
 
 1. In one commit on a branch, move the lines under `## [Unreleased]` in `CHANGELOG.md` into a new
-   `## [x.y.z] - YYYY-MM-DD` section, and set the same version in `CMakeLists.txt`'s `project()`,
-   `library.json` and `CITATION.cff`. A change marked `**Breaking:**` bumps the minor version
+   `## [x.y.z] - YYYY-MM-DD` section, and set the same version in the `project()` call in `CMakeLists.txt`,
+   in `library.json` and in `CITATION.cff`. A change marked `**Breaking:**` bumps the minor version
    while the major is 0.
-2. Merge it once CI passes; `just check` fails if the four disagree.
+2. Merge it once CI passes. `just check` fails if the four versions disagree.
 3. Tag the merge commit `vx.y.z`, annotated, with a message summarising the release, and push the
    tag. CI runs `just check` on the tag and fails if the metadata names another version.
 

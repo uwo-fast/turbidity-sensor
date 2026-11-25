@@ -1,4 +1,4 @@
-# Vendor Data
+# Vendor data
 
 This directory holds the raw calibration inputs extracted from the Amphenol datasheet plots with WebPlotDigitizer.
 
