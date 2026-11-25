@@ -48,7 +48,7 @@ def keep_copying(source, latest, interval_s):
             copy_once(source, latest)
             problem = None
         except OSError as error:
-            # Keep serving the last good copy. Say so once, not every interval.
+            # Keep serving the last good copy, and report the error once, not every interval.
             if str(error) != problem:
                 problem = str(error)
                 print(f"cannot read {source}: {error}", file=sys.stderr, flush=True)

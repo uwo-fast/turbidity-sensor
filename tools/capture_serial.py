@@ -114,8 +114,8 @@ def main(argv=None):
 
     target = os.path.abspath(args.output)
     os.makedirs(os.path.dirname(target), exist_ok=True)
-    # Written beside the target and renamed onto it at the header, so an existing file survives a
-    # capture that never starts (#21). The open file follows the rename.
+    # Write to a file beside the target and rename it onto the target when the header arrives, so an
+    # existing file survives a capture that never starts (#21). The open file follows the rename.
     partial = f"{target}.partial"
     started = False
 

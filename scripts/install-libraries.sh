@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 #
-# Install the OpenSCAD libraries scadman.lock pins into .scadman/env, which the sampler's recipes
-# put on OPENSCADPATH. scadman checks each library against the content hash in the lock and
-# refuses a lock that has fallen behind scadman.toml.
+# Install the OpenSCAD libraries pinned in scadman.lock into .scadman/env, which the sampler
+# recipes put on OPENSCADPATH. scadman checks each library against the content hash in the lock and
+# refuses a lock that is out of date with scadman.toml.
 #
-# scadman itself is pinned here: on Linux x86_64 and macOS the release archive is fetched into
-# .cache/ and checked against its published sha256. Elsewhere a scadman on PATH is used. Its store
-# lives in .cache/ too, so setup runs the same on a bench, in CI and where the home directory cannot
-# be written. Idempotent.
+# scadman itself is pinned here. On Linux x86_64 and macOS, the release archive is fetched into
+# .cache/ and checked against its published sha256. Elsewhere, the scadman on PATH is used. Its
+# store is also in .cache/, so setup runs the same on a bench, in CI and where the home directory
+# is not writable. Idempotent.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# alpha.9 or later: it resolves a dependency's own dependencies, which a project pinning this one
-# relies on to reach syringe-actuator through it.
+# alpha.9 or later: it resolves transitive dependencies, which a project that pins this one relies
+# on to reach syringe-actuator through it.
 SCADMAN_VERSION=v0.1.0-alpha.9
 
 # The sha256 of each release archive, from that release's checksums.txt.

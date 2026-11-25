@@ -86,8 +86,8 @@ class PickSampleTest(unittest.TestCase):
         self.assertAlmostEqual(sample, 835.5, delta=1.5)
 
     def test_a_stretch_away_from_the_others_counts_and_the_median_holds(self):
-        # 2026-11-07 07:27 UTC burst: one stretch at 728 among culture at 840-841. It is kept, not
-        # dropped for sitting away from the others, and the median still reads the culture.
+        # 2026-11-07 07:27 UTC burst: one stretch at 728 among culture at 840-841. It is kept rather
+        # than dropped for being far from the others, and the median still reads the culture.
         values = ([840.3] * 7 + [10.0]) + ([841.0] * 10 + [10.0]) + ([841.3] * 6 + [10.0]) + ([728.3] * 8 + [10.0]) + [440.0] * 40
         sample, rows, _, _, verdict = rig.pick_sample(values, LEVELS)
         self.assertEqual((rows, verdict), (31, "ok"))
@@ -179,7 +179,7 @@ class KickTest(unittest.TestCase):
             machine._start_motor(now)
             self.assertEqual(motor_file.read_text(), "1.0")
             machine._stop_motor()
-            machine.tick(now + 1.0)  # past the kick's end: nothing may start the motor again
+            machine.tick(now + 1.0)  # past the end of the kick: nothing may start the motor again
             self.assertEqual(motor_file.read_text(), "0")
 
 

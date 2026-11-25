@@ -133,7 +133,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "calibration solve failed: %s\n", turbidity_status_name(status));
         return 1;
     }
-    /* A fit pinned at a trim_t bound is clamped, not fitted: the vendor model's family cannot represent the points */
+    /* A fit pinned at a trim_t bound is clamped, not fitted: the vendor model curves cannot represent the points */
     if ((profile.trim_t <= 1e-6) || (profile.trim_t >= (1.0 - 1e-6))) {
         fprintf(
             stderr,

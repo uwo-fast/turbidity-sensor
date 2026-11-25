@@ -187,8 +187,8 @@ class NanoLink:
                 if line.startswith(HEADER_PREFIX):
                     self.columns = line.split(",")
                     return
-                # A board that did not reset never repeats its header. Rows the same shape
-                # as the ones before the reconnect are the same board.
+                # A board that did not reset never resends its header. Rows with the same
+                # shape as those before the reconnect come from the same board.
                 if self.columns and _is_row(line, self.columns):
                     return
         self.close()
@@ -392,7 +392,7 @@ class Rig:
 
     def on_row(self, line, now):
         if line.startswith(HEADER_PREFIX):
-            # The board reset under us. Its millis restarted, and any burst is suspect.
+            # The board reset during the run. Its millis restarted, and any burst in progress is suspect.
             self.link.columns = line.split(",")
             self.abort("board_reset", "header mid-stream")
             return
