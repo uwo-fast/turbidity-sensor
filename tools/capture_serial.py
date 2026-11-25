@@ -44,8 +44,8 @@ def open_port(path, baud):
 
 def pulse_dtr(fd):
     """Drops DTR and raises it again, so the board resets even if DTR was already up when the port
-    opened (another program left it so). A port with no modem lines, such as a pseudo-terminal,
-    refuses the call; it has no board to reset."""
+    opened (left up by another program). A port with no modem lines, such as a pseudo-terminal,
+    refuses the call, because it has no board to reset."""
     dtr = struct.pack("I", termios.TIOCM_DTR)
     try:
         fcntl.ioctl(fd, termios.TIOCMBIC, dtr)

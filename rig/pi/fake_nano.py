@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Stand in for the Nano and the crank on a pseudo-terminal, for testing rig.py with no hardware.
+"""Simulate the Nano and the crank on a pseudo-terminal, for testing rig.py without hardware.
 
-Prints the logger's CSV with the signal a head would see: the crank turns while the
-throttle in --motor-file is not zero, and the beam reads air near the plunger's in
-position and sample otherwise. The turn's geometry is the 5 mL actuator's.
+Prints the logger CSV with the signal a head would see. The crank turns while the throttle in
+--motor-file is not zero, and the beam reads air near the in position of the plunger and sample
+otherwise. The turn geometry is that of the 5 mL actuator.
 """
 import argparse
 import math

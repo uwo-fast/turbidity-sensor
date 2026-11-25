@@ -101,7 +101,7 @@ class PickSampleTest(unittest.TestCase):
 
 
 class RealCaptureTest(unittest.TestCase):
-    """The picking against the first motor runs: DI water, A2, 2026-11-05."""
+    """Picking tested against the first motor runs: DI water, A2, 2026-11-05."""
 
     def run_rows(self, name):
         with open(CAPTURES / f"{name}.csv", encoding="ascii") as source:

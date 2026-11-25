@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Plot a concentration series from capture files as SVG, standard library only.
 
-Each capture's level comes from its name (`..._c1000_...` is level 1000, by default
+The level of each capture comes from its name (`..._c1000_...` is level 1000, by default
 1000 mg/L kaolin). --x maps levels to other x values, such as cells/mL, with --xlabel
 naming the axis.
 Every ADC column is normalized against its own clear (and, optionally, dark)
