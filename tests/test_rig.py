@@ -36,7 +36,6 @@ plateau_rows = 5
 plateau_step = 3.0
 min_sample_rows = 25
 min_swing = 100.0
-sample_band = 15.0
 [serial]
 header_timeout_s = {header_timeout}
 stale_s = 1.0
@@ -45,7 +44,7 @@ idle_log_s = 0.2
 """
 
 
-LEVELS = {"air_reference": 440.0, "near_air": 60.0, "plateau_rows": 5, "plateau_step": 3.0, "min_sample_rows": 25, "min_swing": 100.0, "sample_band": 15.0}
+LEVELS = {"air_reference": 440.0, "near_air": 60.0, "plateau_rows": 5, "plateau_step": 3.0, "min_sample_rows": 25, "min_swing": 100.0}
 
 
 class PlateausTest(unittest.TestCase):
@@ -86,11 +85,12 @@ class PickSampleTest(unittest.TestCase):
         self.assertEqual((rows, verdict), (13, "thin"))
         self.assertAlmostEqual(sample, 835.5, delta=1.5)
 
-    def test_a_stray_stretch_far_from_the_culture_is_dropped(self):
-        # 2026-11-07 07:27 UTC burst: one stretch at 728 among culture at 840-841.
+    def test_a_stretch_away_from_the_others_counts_and_the_median_holds(self):
+        # 2026-11-07 07:27 UTC burst: one stretch at 728 among culture at 840-841. It is kept, not
+        # dropped for sitting away from the others, and the median still reads the culture.
         values = ([840.3] * 7 + [10.0]) + ([841.0] * 10 + [10.0]) + ([841.3] * 6 + [10.0]) + ([728.3] * 8 + [10.0]) + [440.0] * 40
         sample, rows, _, _, verdict = rig.pick_sample(values, LEVELS)
-        self.assertEqual((rows, verdict), (23, "thin"))
+        self.assertEqual((rows, verdict), (31, "ok"))
         self.assertAlmostEqual(sample, 841.0, delta=0.5)
 
     def test_an_air_stop_cannot_read_as_good(self):

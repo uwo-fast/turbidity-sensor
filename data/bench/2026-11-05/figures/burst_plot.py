@@ -28,7 +28,7 @@ def burst_rows(day, burst):
 
 
 def picked_rows(values):
-    """Indices of the rows pick_sample counts as culture, from the same plateaus and band."""
+    """Indices of the rows pick_sample counts as culture, from the same plateaus."""
     sample, _, _, _, _ = rig.pick_sample(values, LEVELS)
     if sample is None:
         return set(), None
@@ -38,7 +38,7 @@ def picked_rows(values):
         while values[i:i + len(run)] != run:
             i += 1
         med = sorted(run)[len(run) // 2]
-        if med > LEVELS["air_reference"] + LEVELS["near_air"] and abs(med - sample) <= LEVELS["sample_band"]:
+        if med > LEVELS["air_reference"] + LEVELS["near_air"]:
             keep.update(range(i, i + len(run)))
         i += len(run)
     return keep, sample

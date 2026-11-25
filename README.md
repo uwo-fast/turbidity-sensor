@@ -35,9 +35,9 @@ the density of a culture in a vessel that is already running.
   ([`docs/bench/session-1-results.md`](docs/bench/session-1-results.md)).
 - **Run 1:** the sampler followed a *Chlorella vulgaris* batch culture in a sparged column for about 7
   days, against a benchtop spectrophotometer (OD750).
-  - A fit to the first four days predicted five later reads within 2.4 %. That holds only with four
+  - A fit to the first four days predicted five later reads within 2.6 %. That holds only with four
     reads that carry recorded caveats left out of the fit; with them in, the later reads come out
-    4.5–10.2 % off.
+    4.5–10.1 % off.
   - Record: [`data/bench/2026-11-05/notes.md`](data/bench/2026-11-05/notes.md).
 - **Not yet:**
   - turbidity units, from a formazin series ([#23](https://github.com/uwo-fast/turbidity-sensor/issues/23));
