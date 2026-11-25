@@ -1,18 +1,20 @@
 /**
  * @file sampler_actuator.scad
- * @brief The syringe actuator as the sampler carries it, drawn from its own library
+ * @brief The syringe actuator as mounted on the sampler, drawn from the syringe-actuator library
  * @author Cameron K. Brooks
  * @copyright 2026
  *
- * Its own file because sampler_case.scad includes NopSCADlib, whose assembly() shadows the actuator
- * library's: from here the library's is the only one in scope. Actuator frame: x along the syringe's
- * axis, the nozzle towards -x, z up from the plate's underside; sampler_case.scad places it.
+ * This is a separate file because sampler_case.scad includes NopSCADlib, whose assembly() shadows
+ * the one in the actuator library. In this file, the library version is the only one in scope.
+ * Actuator frame: x along the syringe axis, the nozzle towards -x, z up from the plate underside.
+ * sampler_case.scad places it.
  */
 
 use <syringe-actuator/cad/main.scad>
 
 // The actuator L in its body at crank angle a (180 is the plunger pushed in), with its syringe and
-// motor. The body's own mount screws are left out: the sampler's face screws come up into it instead.
+// motor. The mount screws of the body are left out, because the face screws of the sampler go up
+// into it instead.
 module sampler_actuator(L, a) {
   assembly(L, a, bought=true, body=false);
   color("lightsteelblue", 0.35) {

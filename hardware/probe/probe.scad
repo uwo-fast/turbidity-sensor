@@ -1,5 +1,5 @@
-// The probe board inside an Amphenol TSW-10 or TST-10 turbidity probe (the board is the same in
-// both), as a library a case is built around. It draws nothing itself.
+// Library model of the probe board inside an Amphenol TSW-10 or TST-10 turbidity probe (the board
+// is the same in both), for building cases around. It draws nothing itself.
 //
 // The board: a PCB with an emitter and a detector head on a U-shaped bracket, facing each other
 // across a slot, and a right-angle 3-pin connector at the other end. A clear tube runs vertically
@@ -8,21 +8,22 @@
 // Frame: origin on the PCB centreline, z = 0 at the PCB underside, +y toward the head arms, -y
 // toward the connector, whose plug enters from -y.
 //
-// The figures come from a CAD model drawn from caliper measurements, and matched the board used
-// for the tube case. Remeasure and change them here; every case follows. The bracket's
-// and the heads' heights were measured from the PCB's top face, and are kept that way.
+// The dimensions come from a CAD model drawn from caliper measurements, and matched the board
+// used for the tube case. After remeasuring, change them here and every case follows. The
+// heights of the bracket and the heads were measured from the top face of the PCB, and are
+// stored that way.
 //
 // Use it with `use <probe.scad>`:
 //   probe(c)               the board grown by c on every side, to subtract from a case
-//   probe_outline()        the PCB's outline (2D), to open a pocket to a parting plane
+//   probe_outline()        the PCB outline (2D), to open a pocket to a parting plane
 //   probe_bbox(c)          [[x0, y0, z0], [x1, y1, z1]] of probe(c)
 //   probe_optical_axis()   [x, y] where a tube passes between the heads
-//   probe_gap()            the space between the heads' inner faces: the widest tube that fits
-//   probe_heads()          [x0, x1, y0, y1, z1]: one head's inner and outer faces, its y extent
+//   probe_gap()            the gap between the inner faces of the heads: the widest tube that fits
+//   probe_heads()          [x0, x1, y0, y1, z1]: inner and outer faces of one head, its y extent
 //                          (the other head mirrors it in x) and its top
 //   probe_pcb()            [thickness, half-width of the body, the y where it narrows to the arms]
 //   probe_connector()      [half-width, plug face y, back face y, top z]
-//   probe_trimmer()        [x, y] of the RV trimmer's centre, under the PCB
+//   probe_trimmer()        [x, y] of the RV trimmer centre, under the PCB
 
 // PCB thickness
 pcb_t = 1.60;
@@ -41,7 +42,7 @@ pcb_slot_y = 4.0;
 // arm tips (y)
 pcb_y1 = 17.7;
 
-// the black head bracket's height above the PCB's top face
+// height of the black head bracket above the top face of the PCB
 bracket_h = 4.5;
 // bracket root edge (y)
 bracket_y0 = -4.0;
@@ -58,11 +59,12 @@ head_x1 = 9.65;
 // bottom of the bracket slot (y)
 bracket_slot_y = 5.0;
 
-// the emitter and detector heads' height above the PCB's top face, over y flare_y1..pcb_y1
+// height of the emitter and detector heads above the top face of the PCB, over y flare_y1..pcb_y1
 head_h = 7.5;
 
-// The emitter and detector's optical axis along the arms (y): the centre of the lens windows on the
-// heads' inner faces, measured from the arms' root. The windows are 1.4 wide by 2.6 tall.
+// Optical axis of the emitter and detector along the arms (y): the centre of the lens windows on
+// the inner faces of the heads, measured from the root of the arms. The windows are 1.4 wide by
+// 2.6 tall.
 optical_y = 10.8;
 
 // right-angle connector half-width; the plug enters from -y

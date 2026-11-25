@@ -1,27 +1,27 @@
 /**
  * @file bayonet.scad
- * @brief The sampler case on a bayonet port: bayonet-port-scad's pin as the base's foot
+ * @brief The sampler case on a bayonet port, with the bayonet-port-scad pin as the foot of the base
  * @author Cameron K. Brooks
  * @copyright 2026
  *
- * The case as open-source-bioreactor stands it on its lid: bayonet_std, an 18 mm panel, the
- * riser sealed by a 4x1.5 o-ring. It is also the pattern for any vessel's foot: define what the foot
- * is computed from before the include, set the foot_* figures after it, and pass the foot as the
- * base's child.
+ * The case as mounted on the open-source-bioreactor lid: bayonet_std, an 18 mm panel, and the
+ * riser sealed by a 4x1.5 o-ring. It is also the template for the foot of any vessel: define the
+ * values the foot is computed from before the include, set the foot_* dimensions after it, and
+ * pass the foot as the child of the base.
  */
 
 use <bayonet-port-scad/custom/bayonet_port.scad>
 include <bayonet-port-scad/custom/bayonet_interfaces.scad>
 
-panel = 18; // the lid's thickness at the port
+panel = 18; // lid thickness at the port
 
 include <sampler_case.scad>
 
-part = "none"; // sampler_case.scad's own drawing, off: this file draws the parts below
+part = "none"; // turn off the drawing in sampler_case.scad; this file draws the parts below
 piece = "assembly"; // [assembly, case, base, top]
 explode = 0; // the step between the base, the top and the actuator, in mm
 section = false; // cut away the half towards -y
-seals = false; // draw the two o-rings a builder fits: the riser's, in the foot's bore, and the face seal
+seals = false; // draw the two o-rings fitted at assembly: the riser o-ring in the foot bore, and the face seal
 riser_l = 0; // draw the riser this long, down from its top end in the sleeve; 0 draws none
 
 foot_flange_h = bayonet_flange_height(bayonet_std);
@@ -34,9 +34,9 @@ module foot() {
                bore_oring=oring_4x1p5_epdm, catch_pockets=false);
 }
 
-// The foot's two o-rings, each at its free section. The riser's sits in its gland in the bore, its ID
-// on the riser, and overlaps the gland's wall by the squeeze it is fitted with. The face seal sits in
-// the groove under the flange, standing proud of it until the foot is locked on the lid.
+// The two o-rings of the foot, each at its free cross-section. The riser o-ring sits in its gland in
+// the bore, with its ID on the riser, and overlaps the gland wall by its fitted squeeze. The face
+// seal sits in the groove under the flange and stands proud of it until the foot is locked on the lid.
 module foot_seals() { foot_riser_oring(); foot_face_seal(); }
 module foot_riser_oring() translate([0, 0, bayonet_bore_gland_centre(oring_4x1p5_epdm, panel)]) oring(oring_4x1p5_epdm);
 module foot_face_seal() {
@@ -44,7 +44,7 @@ module foot_face_seal() {
   translate([0, 0, bayonet_gland_depth(bayonet_std) - oring_cross_section(ring) / 2]) oring(ring);
 }
 
-// The riser, l long, hanging from its top end in the sleeve through the foot's bore and o-ring.
+// The riser, l long, hanging from its top end in the sleeve through the foot bore and o-ring.
 module foot_riser(l) {
   translate([0, 0, riser_top_z - l]) difference() {
     cylinder(d=riser_od, h=l);
