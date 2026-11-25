@@ -91,7 +91,7 @@ inner_screw_l = 6;
 inner_insert = ["M2x4.78 18-8", 4.78, 3.6,     2.71,   2,     3.0,      1.0,     3.4,     3.1,     undef, undef,   "97163A124", "18-8 SS", 1];
 face_screw = M3_cap_screw;     // ISO 4762, up through the face into the actuator
 face_screw_l = 10;
-face_nut = M3_nut;
+face_nut = M3nS_thin_nut;     // DIN 562 square: it cannot turn as the screw is driven from below
 
 // ---- choices ----
 clr = 0.2;        // round the board, per side; the tube case's proven fit
@@ -319,7 +319,7 @@ module sampler_fasteners(inserts=true, lift=0) {
   if (inserts) translate([inner_screw_x, 0, split_z]) insert(inner_insert);
   for (h = holes) translate([each to_port(h), 0]) {
     translate([0, 0, face_z - face_clamp_t - lift]) rotate([180, 0, 0]) screw(face_screw, face_screw_l);
-    translate([0, 0, face_z + actuator_wall]) nut(face_nut);
+    translate([0, 0, face_z + actuator_wall]) nut_square(face_nut);
   }
 }
 

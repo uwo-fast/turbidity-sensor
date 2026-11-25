@@ -7,6 +7,12 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- The sampler case draws the four nuts that hold the actuator to its face as M3 square nuts
+  (DIN 562), as they are built, not hex nuts. Only the drawing changes: the printed base and top
+  are the same.
+
 ## [0.5.0] - 2026-11-24
 
 ### Added
