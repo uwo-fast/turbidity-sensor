@@ -45,7 +45,7 @@ test: build
 scad-setup:
     @scripts/install-libraries.sh
 
-# Fail when the sampler case stops fitting its board, tube, screws, drivers or actuator
+# Fail when the sampler case stops fitting its board, tube, screws, drivers, actuator, riser or o-rings
 check-sampler-case:
     OPENSCADPATH={{justfile_directory()}}/.scadman/env scripts/check-sampler-case.sh
 

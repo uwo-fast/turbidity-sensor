@@ -329,6 +329,18 @@ module actuator_place() {
   multmatrix([[0, 0, -1, axis_z], [0, 1, 0, 0], [1, 0, 0, face_z - front_x(act)], [0, 0, 0, 1]]) children();
 }
 
+// With section, the half towards -y cut away from each part on its own, so a colour given outside it
+// covers the cut face. A part that colours itself inside keeps its own colours, and the outer one
+// reaches only its cut face. A full render (--render) keeps the colours; a preview draws every cut
+// face in one.
+section = false;
+module half() if (section) difference() {
+  children();
+  translate([-500, -1000, -500]) cube(1000);
+} else children();
+// The same for a part that colours itself inside: its cut face drawn in c, and nothing else changed.
+module half_in(c) if (section) color(c) half() children(); else children();
+
 // Every bought part in place but the dip tube, which the head cuts and draws with the other tubes:
 // the board, the clear tube with its stretched top end, the silicone sleeve over the riser's top,
 // the luer-to-barb fitting (simplified to its barb and hub), the fasteners, and the actuator in its
@@ -336,25 +348,25 @@ module actuator_place() {
 // and the actuator twice that, each fastener's head standing off its seat by it.
 module sampler_bought(a = 180, explode = 0, actuator = true) {
   translate([0, 0, explode]) {
-    color("darkgreen") board_place() probe();
-    color("white", 0.5) difference() {
+    color("darkgreen") half() board_place() probe();
+    color("white", 0.5) half() difference() {
       union() {
         translate([0, 0, clear_z0]) cylinder(d=tube_od, h=tube_top_z - barb_l - clear_z0);
         translate([0, 0, tube_top_z - barb_l]) cylinder(d=barb_od, h=barb_l);
       }
       translate([0, 0, clear_z0 - 1]) cylinder(d=tube_id, h=tube_top_z - clear_z0 + 2);
     }
-    color("whitesmoke") {
+    color("whitesmoke") half() {
       translate([0, 0, tube_top_z - barb_l]) cylinder(d=tube_id, h=barb_l);
       translate([0, 0, tube_top_z]) cylinder(d=barb_od, h=fitting_l);
     }
-    sampler_fasteners(lift=explode);
+    half_in("silver") sampler_fasteners(lift=explode);
   }
-  color("gainsboro") difference() {
+  color("gainsboro") half() difference() {
     translate([0, 0, clear_z0]) cylinder(d=tube_id, h=bushing_l);
     translate([0, 0, clear_z0 - 1]) cylinder(d=riser_od, h=bushing_l + 2);
   }
-  if (actuator) translate([0, 0, 2 * explode]) actuator_place() sampler_actuator(act, a);
+  if (actuator) half_in("gainsboro") translate([0, 0, 2 * explode]) actuator_place() sampler_actuator(act, a);
 }
 
 // print orientation: turned over about z

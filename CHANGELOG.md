@@ -7,8 +7,25 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- `seals` and `riser_l` in `bayonet.scad`: the foot's two o-rings (the riser's 4 × 1.5 in the bore,
+  the 23 × 1.5 face seal under the flange) and a length of the riser, drawn in the case and
+  assembly. Both default off, so the drawing is unchanged. The section views draw both, with
+  60 mm of riser, and `just check-sampler-case` checks that the riser passes its bore, that its
+  o-ring sits in its gland, and that the face seal fits its groove (#75).
+
+### Changed
+
+- `section` cuts each part on its own, inside its colour, so its cut face is drawn in that colour;
+  a part that colours itself (the screws, the actuator) keeps its colours and gets one for its cut.
+  The section views render in full with Manifold, which keeps those colours; a preview drew every
+  cut face in one.
+
 ### Fixed
 
+- `just render` gives a row whose flags ask for `--render` a full render. It passed `--preview`
+  ahead of every row's flags, and OpenSCAD then previews whatever follows.
 - The sampler case draws the four nuts that hold the actuator to its face as M3 square nuts
   (DIN 562), as they are built, not hex nuts. Only the drawing changes: the printed base and top
   are the same.
