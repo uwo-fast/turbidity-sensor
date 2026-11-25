@@ -57,3 +57,16 @@ intersection() {
     }
   }
 }
+// the riser, from its top end in the sleeve down through the foot and past it, inside either part: the
+// bore pinches it
+intersection() { foot_riser(riser_top_z + panel + 10); parts(); }
+// the riser's o-ring, inside the gland's radius, inside either part: the gland does not hold it, or the
+// bore below or above it pinches it. Outside that radius it meets the gland's wall, by its squeeze;
+// 0.05 inside it, so the two cylinders' facets do not meet.
+intersection() {
+  foot_riser_oring();
+  translate([0, 0, -panel - 1]) cylinder(r=bayonet_bore_gland_radius(oring_4x1p5_epdm) - 0.05, h=panel + 2, $fn=96);
+  parts();
+}
+// the face seal at its free section inside either part: its groove under the flange is too small
+intersection() { foot_face_seal(); parts(); }

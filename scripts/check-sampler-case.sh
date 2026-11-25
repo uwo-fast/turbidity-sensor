@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# Fail when the turbidity sampler stops fitting the board, the clear tube, its screws, their drivers or
-# the actuator.
+# Fail when the turbidity sampler stops fitting the board, the clear tube, its screws, their drivers,
+# the actuator, the riser or the foot's o-rings.
 #
 # tests/sampler-case/fit.scad draws each fit as the material that should not exist, so it passes only
 # by rendering EMPTY, and OpenSCAD writes no file then. Runs as `just check-sampler-case`.
@@ -17,4 +17,4 @@ if grep -qE '^(ERROR|WARNING)|Assertion' "$tmp/err"; then
 elif [ -f "$tmp/fit.stl" ]; then
     echo "FAIL  sampler fits: something stands where it must not; render tests/sampler-case/fit.scad to see it"; exit 1
 fi
-echo "ok    sampler fits the board, the clear tube, its screws, their drivers and the actuator"
+echo "ok    sampler fits the board, the clear tube, its screws, their drivers, the actuator, the riser and its o-rings"

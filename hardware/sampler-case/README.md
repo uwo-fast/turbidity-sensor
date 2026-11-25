@@ -74,7 +74,9 @@ To export a print, with the libraries on `OPENSCADPATH`:
 OPENSCADPATH=$PWD/.scadman/env openscad --export-format binstl -D 'piece="base"' -o base.stl hardware/sampler-case/bayonet.scad
 ```
 
-`piece` is `base`, `top` or `assembly`; both prints come out lying as they print.
+`piece` is `base`, `top`, `case` or `assembly`; both prints come out lying as they print. In `case`
+and `assembly`, `seals=true` draws the foot's two o-rings, the riser's in its bore and the face seal
+under the flange, and `riser_l` draws that many millimetres of the riser down from its top end.
 
 ## Status
 
