@@ -12,7 +12,7 @@
 #define TURBIDITY_ADC_MAX_COUNT 1024.0
 #endif
 
-/* Measure the board's 5 V rail with a multimeter and set this to it. */
+/* Measure the 5 V rail of the board with a multimeter and set this to the reading. */
 #ifndef TURBIDITY_ADC_REF_MV
 #define TURBIDITY_ADC_REF_MV 5000.0
 #endif
@@ -60,7 +60,7 @@
 /*
  * On the ATmega328P, Vcc is estimated from the internal 1.1 V bandgap. The
  * bandgap varies by about 10% between chips, so vcc_mv tracks supply drift
- * within a session; it is not an absolute measurement.
+ * within a session. It is not an absolute measurement.
  */
 #if defined(__AVR_ATmega328P__)
 #define TURBIDITY_HAS_VCC_MONITOR 1

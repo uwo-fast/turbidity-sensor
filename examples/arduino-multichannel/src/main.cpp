@@ -2,8 +2,8 @@
 //
 // Each head (probe + SEN0189 adapter, switch at A) feeds one analog input.
 // Every sample period this prints one CSV row with the oversampled ADC counts
-// for every channel. It applies no model: normalization against each head's
-// dark and clear-water readings happens on the host (just summarize).
+// for every channel. It applies no model. Each head is normalized against its
+// own dark and clear-water readings on the host (just summarize).
 #include <Arduino.h>
 
 #ifndef TURBIDITY_SAMPLE_PERIOD_MS
@@ -18,7 +18,7 @@
 /*
  * On the ATmega328P, Vcc is estimated from the internal 1.1 V bandgap. The
  * bandgap varies by about 10% between chips, so vcc_mv tracks supply drift
- * within a session; it is not an absolute measurement.
+ * within a session. It is not an absolute measurement.
  */
 #if defined(__AVR_ATmega328P__)
 #define TURBIDITY_HAS_VCC_MONITOR 1

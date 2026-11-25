@@ -30,7 +30,7 @@ lint: setup
     clang-tidy --quiet -p {{build_dir}} $(git ls-files '*.c')
     python3 -c "import ast, sys; [ast.parse(open(f).read(), f) for f in sys.argv[1:]]" $(git ls-files '*.py')
 
-# Fail unless CMakeLists.txt, library.json, CITATION.cff, the changelog's newest release and any tag agree
+# Fail unless CMakeLists.txt, library.json, CITATION.cff, the newest changelog release and any tag agree
 check-version:
     @scripts/check-version.sh
 
@@ -41,7 +41,7 @@ check: fmt-check lint check-version
 test: build
     ctest --test-dir {{build_dir}} --output-on-failure
 
-# Install the pinned scadman and the OpenSCAD libraries scadman.lock pins, into .scadman/env
+# Install the pinned scadman and the OpenSCAD libraries pinned in scadman.lock into .scadman/env
 scad-setup:
     @scripts/install-libraries.sh
 

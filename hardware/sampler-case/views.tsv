@@ -1,12 +1,12 @@
-# The pictures `just render` draws from bayonet.scad: name, view, flags, tab-separated.
+# Views that `just render` renders from bayonet.scad. Columns, tab-separated: name, view, flags.
 #
-# view   the camera's rotation, as the GUI's Edit > Copy Viewport Rotation gives it.
-# flags  -D assignments. piece is assembly, case (no actuator), base or top; explode is the step
-#        between the base, the top and the actuator in mm; section cuts away the half towards the
-#        camera in a front view; seals draws the foot's two o-rings, and riser_l that much of the riser
-#        down from its top end.
+# view   camera rotation, as given by Edit > Copy Viewport Rotation in the GUI.
+# flags  -D assignments. piece is assembly, case (no actuator), base or top. explode is the gap
+#        between the base, the top and the actuator, in mm. section cuts away the half towards the
+#        camera in a front view. seals draws the two o-rings of the foot, and riser_l draws that
+#        length of riser down from its top end.
 #
-# The actuator on its own is syringe-actuator's: its cad/views.tsv draws the 5ml-gnr2.
+# Views of the actuator alone are in syringe-actuator: its cad/views.tsv draws the 5ml-gnr2.
 
 # the prints, as they lie on the bed
 print_base	60,0,30	-D piece="base"
