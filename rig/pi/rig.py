@@ -61,9 +61,10 @@ def plateaus(values, min_rows, max_step):
 def pick_sample(values, levels):
     """What one burst shows: (sample level, its rows, its spread, air level, verdict).
 
-    Sample is the plateaus above the air band that sit within sample_band of their common level. So it
-    needs culture that reads above air, which stops being true near air's own level: then a burst reads
-    no_sample, not a wrong number. Wet air drifts, so the band is wide.
+    Sample is the median of every plateau above the air band, and its spread theirs: none is dropped
+    for sitting away from the others, so a draw that reads differently counts. It needs culture that
+    reads above air, which stops being true near air's own level: then a burst reads no_sample, not a
+    wrong number. Wet air drifts, so the band is wide.
     """
     if not values:
         return None, 0, None, None, "no_sample"
@@ -71,10 +72,6 @@ def pick_sample(values, levels):
     air_top = levels["air_reference"] + levels["near_air"]
     air_bottom = levels["air_reference"] - levels["near_air"]
     above = [run for run in found if statistics.median(run) > air_top]
-    if above:
-        # The culture is the level most of those rows share; a stray stretch far from it is not culture.
-        centre = statistics.median([x for run in above for x in run])
-        above = [run for run in above if abs(statistics.median(run) - centre) <= levels["sample_band"]]
     sample_rows = [x for run in above for x in run]
     air_rows = [x for run in found if air_bottom <= statistics.median(run) <= air_top for x in run]
     air = statistics.median(air_rows) if air_rows else None

@@ -321,7 +321,7 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
 - **Cary 50 clock:** one hour ahead since the change to standard time on 11-01; right on 10-29. Subtract an hour from Cary
   stamps from 11-01 on.
 - **Rig data in this folder:** `rig-data/<run>/` holds each run's raw logs (gzip), `summary.csv` and `events.csv`, the complete
-  `algae-run-1c` to its stop at 11-16 19:55, every file matching the Pi's byte for byte, and to 11-09 23:19 for the others; `rig-data/picked-<run>.csv` is the picking at that date applied to each run. `80`–`82` and `90` are the column
+  `algae-run-1c` to its stop at 11-16 19:55, every file matching the Pi's byte for byte, and to 11-09 23:19 for the others; `rig-data/picked-<run>.csv` is `pick_samples.py` applied to each run's raw logs, re-picked 2026-11-24 when the picker stopped dropping steady stretches more than 15 counts from the burst's common level (`sample_band`): 5, 29 and 195 readings moved, by at most 7.5 counts, and 6 `algae-run-1c` bursts in the setup days went from `thin` to `ok`. The picks before then are in git history. `80`–`82` and `90` are the column
   diagnostics and live reads from the Pi.
 - **Figures:** `figures/growth_test.png` (sensor counts and Cary OD over the growth test, 11-08 10:20 to the stop on 11-16;
   sensor points end at the 11-15 08:19 burst, the last before the stall) and `figures/agreement.png` (Cary OD against the
@@ -330,7 +330,7 @@ Logger data in `~/rig-data/algae-run-1/` on the Pi, 2-minute cycles while inocul
   Redraw with `python3 growth_plot.py`, then `python3 agreement_plot.py` and `python3 burst_plot.py` in `figures/`, then
   `rsvg-convert` for the PNGs. The Cary values are written into
   `growth_plot.py` from these notes. The curve in `agreement.png` is fitted to the 7 Cary samples from 11-08 to 11-11 without a
-  caveat; the 5 later samples without a caveat, 11-12 to 11-14, read −0.1 % to +2.4 % from it. The 11-13 09:38 sample, about
+  caveat; the 5 later samples without a caveat, 11-12 to 11-14, read +0.1 % to +2.6 % from it (−0.1 % to +2.4 % before the re-pick). The 11-13 09:38 sample, about
   70 min after lamp-on, is drawn with a caveat as the earlier lamp-on samples are.
 - **Spreadsheet:** `algae_run1_column_results_2026-11-21.xlsx`, a snapshot as of 2026-11-21 of the Cary reads, the sensor
   agreement, every burst, the events and the hand draws, for reading in Excel. These notes and `rig-data/` are the record;
