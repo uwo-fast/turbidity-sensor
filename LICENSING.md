@@ -2,12 +2,13 @@
 
 This document states which licence covers which parts of this repository, and
 explains what that means. [What applies where](#what-applies-where) is the operative
-section — it is how these files are made available. The commentary around it is for
-convenience; the binding terms are the full texts in [`LICENSES/`](LICENSES/).
+section: it states the terms under which these files are made available. The rest of
+this document is commentary for convenience. The binding terms are the full texts in
+[`LICENSES/`](LICENSES/).
 
-Where a project holds both software and hardware design files, they are licensed
-separately by component — not dual-licensed, since you do not get to choose which of
-the two covers a given file:
+Where a project holds both software and hardware design files, each component is
+licensed separately. This is not dual licensing: you do not choose which licence
+covers a given file.
 
 - **Software** — GNU General Public License v3.0 or later (`GPL-3.0-or-later`) —
   [`LICENSES/GPL-3.0-or-later.txt`](LICENSES/GPL-3.0-or-later.txt)
@@ -16,9 +17,9 @@ the two covers a given file:
 - **Research data** — Creative Commons Attribution 4.0 International (`CC-BY-4.0`) —
   [`LICENSES/CC-BY-4.0.txt`](LICENSES/CC-BY-4.0.txt)
 
-The root [`LICENSE`](LICENSE) is a copy of the GPL text. GitHub reports only one
-licence per repository and reads that file, so this document is where the full
-picture lives.
+The root [`LICENSE`](LICENSE) is a copy of the GPL text. GitHub reads that file and
+reports only one licence per repository, so this document is the complete statement
+of licensing.
 
 ## What applies where
 
@@ -37,17 +38,17 @@ Add a row to the table above for each new top-level directory.
 Parametric CAD source is granted under both licences so that a licensee who Makes a
 Product from the geometry can satisfy CERN-OHL-S-2.0 §4, which requires the Complete
 Source — the design in its preferred form for modification, meaning the source, not
-the mesh. The tube case, probe and flange CAD include no GPL-licensed library, which is
-what lets them carry both. The sampler case includes NopSCADlib, bayonet-port-scad
-and syringe-actuator, which are GPL-3.0-or-later, so it and the geometry generated
-from it are `GPL-3.0-or-later` alone; see the organization
-[licensing policy](https://github.com/uwo-fast/.github/blob/main/LICENSING.md).
+the mesh. The tube case, probe and flange CAD can carry both licences because they
+include no GPL-licensed library. The sampler case includes NopSCADlib,
+bayonet-port-scad and syringe-actuator, which are GPL-3.0-or-later. The sampler case
+and the geometry generated from it are therefore `GPL-3.0-or-later` only. See the
+organization [licensing policy](https://github.com/uwo-fast/.github/blob/main/LICENSING.md).
 
 **Documentation.** Documentation specific to software is licensed
-`GPL-3.0-or-later`, and documentation specific to hardware `CERN-OHL-S-2.0`. A
-document covering both — a build guide carrying a bill of materials alongside code
-listings — and documentation specific to neither are licensed under both, at your
-option.
+`GPL-3.0-or-later`, and documentation specific to hardware `CERN-OHL-S-2.0`.
+Documentation that covers both (for example, a build guide with a bill of materials
+and code listings), and documentation specific to neither, is licensed under both, at
+your option.
 
 ## Third-party components
 
@@ -81,8 +82,8 @@ provisions. Review them before using, modifying, or distributing this project.
 
 ## Disclaimer of warranty and liability
 
-A summary of terms in the licences themselves — GPL-3.0 sections 15–17 and
-CERN-OHL-S-2.0 section 6.
+This section summarises terms in the licences themselves: GPL-3.0 sections 15–17
+and CERN-OHL-S-2.0 section 6.
 
 THIS PROJECT, INCLUDING ALL SOFTWARE AND HARDWARE DESIGNS, IS PROVIDED "AS IS"
 WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
@@ -113,5 +114,5 @@ contributors, except as needed to describe the project's origin.
 ## Precedence
 
 Where the commentary in this document and the full licence texts conflict, the full
-texts prevail. The scope table above is not commentary — it is the statement of
-which files are made available under which terms.
+texts prevail. The scope table above is not commentary. It states which files are
+made available under which terms.

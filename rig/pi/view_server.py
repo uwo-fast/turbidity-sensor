@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Show the rig's summary.csv on a read-only page, served to this computer only.
+"""Show the rig summary.csv on a read-only page, served to this computer only.
 
-Every --interval seconds this reads summary.csv into memory, and serves that copy, replaced
-whole, so the page never sees a half-read file. It only reads the original and writes no files,
-and shares nothing else with rig.py: it cannot reach the motor or the Nano, and rig.py runs the
-same with or without it. The address is fixed to 127.0.0.1 and only the named files below can
-be fetched. Standard library only.
+Every --interval seconds, this reads summary.csv into memory and serves that copy. Each copy
+replaces the previous one whole, so the page never sees a half-read file. It only reads the
+original, writes no files, and shares nothing else with rig.py. It cannot reach the motor or the
+Nano, and rig.py runs the same with or without it. The address is fixed to 127.0.0.1, and only
+the files named below can be fetched. Standard library only.
 """
 import argparse
 import errno
@@ -31,7 +31,7 @@ PAGES = {
 
 
 class Latest:
-    """The last good read of the summary. Replacing content is one step, so a request gets all of one read."""
+    """The last good read of the summary. Content is replaced in one step, so a request always gets one complete read."""
 
     content = None
 
@@ -48,7 +48,7 @@ def keep_copying(source, latest, interval_s):
             copy_once(source, latest)
             problem = None
         except OSError as error:
-            # Keep serving the last good copy. Say so once, not every interval.
+            # Keep serving the last good copy, and report the error once, not every interval.
             if str(error) != problem:
                 problem = str(error)
                 print(f"cannot read {source}: {error}", file=sys.stderr, flush=True)

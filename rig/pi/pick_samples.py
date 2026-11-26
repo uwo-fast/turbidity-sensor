@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pick the culture out of saved raw logs: one CSV row per burst, on stdout. It changes no file.
+"""Pick culture readings from saved raw logs: one CSV row per burst, on stdout. Modifies no files.
 
     pick_samples.py ~/rig-data/algae-run-1b/raw-*.csv
 """

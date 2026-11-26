@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 #
 # Fail when the turbidity sampler stops fitting the board, the clear tube, its screws, their drivers,
-# the actuator, the riser or the foot's o-rings.
+# the actuator, the riser or the o-rings of the foot.
 #
-# tests/sampler-case/fit.scad draws each fit as the material that should not exist, so it passes only
-# by rendering EMPTY, and OpenSCAD writes no file then. Runs as `just check-sampler-case`.
+# tests/sampler-case/fit.scad draws each fit check as the material that should not exist, so the
+# check passes only when the render is EMPTY, and OpenSCAD then writes no file. Runs as
+# `just check-sampler-case`.
 set -uo pipefail
 : "${OPENSCAD:=openscad}"
-# "Nothing rendered" is also what a binary that renders nothing says.
+# A binary that cannot render anything also reports "nothing rendered".
 source "$(dirname "$0")/openscad-canary.sh"
 openscad_canary
 tmp=$(mktemp -d) && trap 'rm -rf "$tmp"' EXIT

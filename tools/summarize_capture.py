@@ -22,7 +22,7 @@ import statistics
 import sys
 
 SIGNAL_COLUMNS = ("adc_counts", "dark_adc_counts", "vcc_mv", "raw_mv")
-# 95% of the 10-bit ADC's 1024 counts: a clear reference above this may clip.
+# 95% of the 1024 counts of the 10-bit ADC: a clear reference above this may clip.
 FULL_SCALE_WARN_COUNTS = 972
 
 

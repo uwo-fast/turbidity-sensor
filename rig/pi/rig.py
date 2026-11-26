@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-"""Run the syringe actuator on a timer, log everything, and pick the culture out of the log.
+"""Run the syringe actuator on a timer, log every row, and pick culture readings from the log.
 
-The motor runs for burst_s every period_s, with no knowledge of where the crank is. The Nano's
-rows are logged at its full rate during a burst. Air and culture pass the beam in turn, so each
-burst holds stretches at the culture's level, and those are its reading. Nothing depends on where
-the crank stops.
+The motor runs for burst_s every period_s, without knowing the crank position. During a burst,
+the Nano rows are logged at the full rate. Air and culture pass the beam in turn, so each burst
+contains steady stretches at the culture level, and those give the reading. Nothing depends on
+where the crank stops.
 
 Files in data_dir:
   raw-YYYYMMDD.csv  every row in a burst, 1 Hz between them
-  summary.csv       one row per burst: the culture picked from it, and a verdict
+  summary.csv       one row per burst: the culture reading picked from it, and a verdict
   events.csv        anything that went wrong, and starts and stops
 
-pick_samples.py applies the same picking to any saved raw file. Only the motor library is outside
-the standard library, and only `--stub-motor` avoids it. See README.md.
+pick_samples.py applies the same picking to any saved raw file. The motor library is the only
+dependency outside the standard library, and `--stub-motor` is the only way to run without it.
+See README.md.
 """
 import argparse
 import csv
@@ -44,9 +45,10 @@ class LinkLost(Exception):
 
 
 def plateaus(values, min_rows, max_step):
-    """The steady stretches: at least min_rows in a row, each within max_step of the last.
+    """Return the steady stretches: at least min_rows consecutive rows, each within max_step of the
+    previous row.
 
-    Meniscus crossings and droplets swing far from any level, and are not one themselves.
+    Meniscus crossings and droplets swing far from any level and do not form a level themselves.
     """
     found = []
     start = 0
@@ -59,12 +61,13 @@ def plateaus(values, min_rows, max_step):
 
 
 def pick_sample(values, levels):
-    """What one burst shows: (sample level, its rows, its spread, air level, verdict).
+    """Summarise one burst: (sample level, its rows, its spread, air level, verdict).
 
-    Sample is the median of every plateau above the air band, and its spread theirs: none is dropped
-    for sitting away from the others, so a draw that reads differently counts. It needs culture that
-    reads above air, which stops being true near air's own level: then a burst reads no_sample, not a
-    wrong number. Wet air drifts, so the band is wide.
+    The sample is the median of every plateau above the air band, and the spread is that of those
+    plateaus. No plateau is dropped for being far from the others, so a draw that reads differently
+    still counts. Picking needs culture that reads above air. Near the air level this stops being
+    true, and the burst then reads no_sample instead of a wrong value. Wet air drifts, so the band is
+    wide.
     """
     if not values:
         return None, 0, None, None, "no_sample"
@@ -150,7 +153,7 @@ def _is_row(line, columns):
 
 
 class NanoLink:
-    """The Nano's CSV over USB. Connecting waits for the header its setup() prints."""
+    """The Nano CSV stream over USB. Connecting waits for the header that its setup() prints."""
 
     def __init__(self, port, header_timeout_s):
         self._port = port
@@ -187,15 +190,15 @@ class NanoLink:
                 if line.startswith(HEADER_PREFIX):
                     self.columns = line.split(",")
                     return
-                # A board that did not reset never repeats its header. Rows the same shape
-                # as the ones before the reconnect are the same board.
+                # A board that did not reset never resends its header. Rows with the same
+                # shape as those before the reconnect come from the same board.
                 if self.columns and _is_row(line, self.columns):
                     return
         self.close()
         raise LinkLost(f"no CSV header from {port} within {self._header_timeout_s:g} s")
 
     def _reset_board(self):
-        """Opening a port resets most Nanos, not all; the header is only sent after a reset."""
+        """Opening a port resets most Nanos, but not all. The header is sent only after a reset."""
         try:
             fcntl.ioctl(self._fd, termios.TIOCMBIC, termios.TIOCM_DTR.to_bytes(4, sys.byteorder))
             time.sleep(0.05)
@@ -239,7 +242,7 @@ def clock_synced():
 
 
 class Appender:
-    """A CSV opened for appending, its header written once, with a torn last line ended."""
+    """A CSV opened for appending. The header is written once, and a truncated last line is ended."""
 
     def __init__(self, path, header):
         needs_header = not path.exists() or path.stat().st_size == 0
@@ -266,7 +269,7 @@ class Appender:
 
 
 class RawLog:
-    """One file per UTC day. A change of the Nano's columns starts a new file."""
+    """One file per UTC day. A change in the Nano columns starts a new file."""
 
     def __init__(self, data_dir):
         self._data_dir = data_dir
@@ -346,7 +349,7 @@ class Rig:
         self.throttle = throttle
 
     def _start_motor(self, now):
-        """Start from rest. A crank that runs at the set throttle may not break free at it."""
+        """Start from rest. A crank that runs at the set throttle may not start turning at it."""
         motor = self.config["motor"]
         if "kick_throttle" in motor:
             self._set_throttle(motor["kick_throttle"])
@@ -392,7 +395,7 @@ class Rig:
 
     def on_row(self, line, now):
         if line.startswith(HEADER_PREFIX):
-            # The board reset under us. Its millis restarted, and any burst is suspect.
+            # The board reset during the run. Its millis restarted, and any burst in progress is suspect.
             self.link.columns = line.split(",")
             self.abort("board_reset", "header mid-stream")
             return

@@ -1,8 +1,8 @@
-# Calibration Data
+# Calibration data
 
 `vendor-data/` contains the raw `voltage,ntu` point clouds digitized from the Amphenol datasheet plots.
 
-`tools/generate_vendor_calibration.py` is the single-source-of-truth pipeline for the generated artifacts in this directory. Running it regenerates:
+`tools/generate_vendor_calibration.py` produces every generated file in this directory. Running it regenerates:
 
 - `tst10-calibration.csv`
 - `tsw10-calibration.csv`
@@ -21,4 +21,4 @@ Generated calibration CSVs use this schema:
 - `Voltage (High)`
 - `Voltage (Low)`
 
-The runtime library does not parse these CSV files. It consumes the checked-in generated header in `src/`.
+The runtime library does not parse these CSV files. It uses the generated header checked in under `src/`.

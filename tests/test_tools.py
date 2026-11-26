@@ -40,7 +40,7 @@ class CaptureSerialTest(unittest.TestCase):
             stderr=subprocess.PIPE,
             text=True,
         )
-        # The script flushes pending input when it opens the port; give it time to.
+        # The script flushes pending input when it opens the port, so give it time to do that.
         time.sleep(0.5)
         for chunk in chunks:
             os.write(self.master, chunk)

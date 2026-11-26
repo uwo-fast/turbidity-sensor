@@ -44,8 +44,8 @@ def open_port(path, baud):
 
 def pulse_dtr(fd):
     """Drops DTR and raises it again, so the board resets even if DTR was already up when the port
-    opened (another program left it so). A port with no modem lines, such as a pseudo-terminal,
-    refuses the call; it has no board to reset."""
+    opened (left up by another program). A port with no modem lines, such as a pseudo-terminal,
+    refuses the call, because it has no board to reset."""
     dtr = struct.pack("I", termios.TIOCM_DTR)
     try:
         fcntl.ioctl(fd, termios.TIOCMBIC, dtr)
@@ -114,8 +114,8 @@ def main(argv=None):
 
     target = os.path.abspath(args.output)
     os.makedirs(os.path.dirname(target), exist_ok=True)
-    # Written beside the target and renamed onto it at the header, so an existing file survives a
-    # capture that never starts (#21). The open file follows the rename.
+    # Write to a file beside the target and rename it onto the target when the header arrives, so an
+    # existing file survives a capture that never starts (#21). The open file follows the rename.
     partial = f"{target}.partial"
     started = False
 

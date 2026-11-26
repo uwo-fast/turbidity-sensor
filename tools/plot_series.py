@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Plot a concentration series from capture files as SVG, standard library only.
 
-Each capture's level comes from its name (`..._c1000_...` is level 1000, by default
+The level of each capture comes from its name (`..._c1000_...` is level 1000, by default
 1000 mg/L kaolin). --x maps levels to other x values, such as cells/mL, with --xlabel
 naming the axis.
 Every ADC column is normalized against its own clear (and, optionally, dark)
@@ -24,8 +24,8 @@ import sys
 
 from summarize_capture import is_adc, read_capture
 
-# Validated categorical slots (CVD and normal-vision separation, all pairs); the marker
-# shape repeats the identity for greyscale print and colour-vision deficiency.
+# Categorical colours, validated for separation of all pairs in normal and colour-deficient (CVD)
+# vision. The marker shape also identifies each series, for greyscale print and CVD.
 COLOURS = ("#2a78d6", "#eb6834", "#1baf7a", "#6250d6")
 SHAPES = ("circle", "square", "triangle", "diamond")
 INK, MUTED, GRID, SURFACE = "#0b0b0b", "#52514e", "#e4e3df", "#ffffff"

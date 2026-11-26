@@ -1,12 +1,12 @@
 # Sampler waveform test
 
-What the tube head sees over one crank turn, measured before any logger is written for the column
-(`data/bench/2026-11-05/notes.md`). About an hour, off the column at first.
+This test measures the tube head signal over one crank turn, before any logger is written for the
+column (`data/bench/2026-11-05/notes.md`). It takes about an hour, and starts off the column.
 
-It settles five things:
+It answers five questions:
 
-1. Whether the signal alone can tell air from sample when the two read the same, or the crank needs
-   an index sensor.
+1. Whether the signal alone can distinguish air from sample when the two read the same, or whether the
+   crank needs an index sensor.
 2. How far moving readings differ from still ones.
 3. How many turns replace the sample.
 4. The real stroke volume.
@@ -27,29 +27,31 @@ In the tube, air reads below clear water. A1 read 474.5 counts with a dry tube
   ```
 
   Do not add `-UTURBIDITY_SAMPLE_PERIOD_MS`: PlatformIO places it last, and the build falls back to
-  100 ms with no error. The compiler warns that the macro is redefined; that is expected. Check the
-  rate from `timestamp_ms` in the first capture. The arithmetic gives about 13 ms per row, not yet
-  measured on a board.
+  100 ms with no error. The compiler warns that the macro is redefined. This is expected. Check the
+  rate from `timestamp_ms` in the first capture. The calculation gives about 13 ms per row; this has
+  not yet been measured on a board.
 - **Motor:** terminal M4 of the Adafruit 2348 HAT, with 12 V on its power terminal and the Pi on its
   own supply. A bench supply with the leads switched by hand also works for this test.
-- **Heads:** one head in the sampler, with its load resistor and references as recorded for it. Take
+- **Heads:** one head in the sampler, with the load resistor and references recorded for it. Take
   a clear-water and a dry-tube reading first.
-- **Fluid path:** the sampler's own riser and tube, tip down, with a jar at the same lift the column
-  will have. Leave the line full of air when starting.
+- **Fluid path:** the riser and tube of the sampler, tip down, with a jar at the same lift height as
+  the column. Leave the line full of air when starting.
 
 ## Steps
 
-Name captures `60_` upward in a new dated folder, and note the motor voltage in each.
+Number the captures from `60_` upward in a new dated folder, and note the motor voltage for each.
 
-**0. Measure.** Hole to fill line; hole to the beam (riser's top end to window); riser length; culture
-level now and at the fill line, in litres; gas flow on the rotameter.
+**0. Measure.** Measure the distance from the hole to the fill line, the distance from the hole to the
+beam (top end of the riser to the window), the riser length, the culture volume now and at the fill
+line in litres, and the gas flow on the rotameter.
 
-**1. Light.** Clear water still in the tube, 60 s each: lamp off, lamp on, a torch held on the sampler's
-grey walls. The sampler is grey, not the opaque black the case calls for. Pass: within about 1 count
-of each other. Otherwise sleeve it before anything else.
+**1. Light.** With clear water standing in the tube, record 60 s each with the lamp off, the lamp on, and
+a torch held on the grey walls of the sampler. The sampler is grey, not the opaque black that the case
+design calls for. Pass: the three readings agree within about 1 count. Otherwise, sleeve the sampler
+before anything else.
 
-**2. Waveform, clear water.** Run 20 turns at 12 V. Expect a two-level trace. Note the air level
-against the dry-tube reading: a wet tube may differ.
+**2. Waveform, clear water.** Run 20 turns at 12 V. Expect a two-level trace. Compare the air level
+with the dry-tube reading, since a wet tube may differ.
 
 **3. Waveform at the crossover.** Dilute culture or kaolin until the still reading is within about
 5 counts of the air level, and run 20 turns. Look for a visible edge at each meniscus crossing.
@@ -57,23 +59,24 @@ against the dry-tube reading: a wet tube may differ.
 | Result | Then |
 | --- | --- |
 | Edges clear at the crossover | No crank sensor needed |
-| No edges, but moving readings match still ones (step 4) | No crank sensor if burst data is enough; still readings near the crossover get flagged |
+| No edges, but moving readings match still ones (step 4) | No crank sensor if burst data is enough. Still readings near the crossover are flagged |
 | No edges, and moving readings differ from still ones | Add the crank sensor |
 
 **4. Moving against still.** On a sample well away from the air level, cut power at five random
-points. Read 60 s still after each. Compare with that sample's level in the moving trace. This also
-shows the settling rate.
+points. Read for 60 s with the liquid still after each. Compare with the level of that sample in the
+moving trace. This also shows the settling rate.
 
 **5. Exchange.** Start with clear water in the line, then put the riser in culture and log turn by
-turn. Count the turns to within 1 % of that culture's level. Repeat with the line primed full of
-liquid and no air: I expect that to be slower, with old liquid shuttling in the line.
+turn. Count the turns until the reading is within 1 % of the culture level. Repeat with the line
+primed full of liquid and no air. I expect that to be slower, because old liquid shuttles back and
+forth in the line.
 
-**6. Stroke volume.** Line primed with water, its beaker on a 0.01 g balance. Turn the crank by hand
-to each end of the stroke and read the mass at each. Difference in grams ≈ mL. Compare with 5.77 mL,
-worked out from the nominal bore.
+**6. Stroke volume.** Prime the line with water and put its beaker on a 0.01 g balance. Turn the crank
+by hand to each end of the stroke and read the mass at each. The difference in grams ≈ mL. Compare
+with 5.77 mL, calculated from the nominal bore.
 
-**7. Lowest speed.** Step the voltage or HAT throttle down from 12 V. At each step, note the turn time
-and whether the motor restarts from a stop with the plunger mid-draw, five times. Note splashing or
+**7. Lowest speed.** Step the voltage or HAT throttle down from 12 V. At each step, note the turn time,
+and check five times whether the motor restarts from a stop with the plunger mid-draw. Note splashing or
 bubbles at each speed. Keep the slowest setting that always restarts, with some margin.
 
 ## Then, on the column
@@ -83,5 +86,5 @@ real gas flow before starting a long run.
 
 ## Not covered
 
-Fouling, drift and wear over days. The first multi-day run measures those; end it with a clear-water
-reference in the same tube.
+This test does not cover fouling, drift or wear over several days. The first multi-day run measures
+those. End that run with a clear-water reference in the same tube.

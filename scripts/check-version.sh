@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# Fail unless the version is the same everywhere it is written: CMakeLists.txt's project(),
+# Fail unless the version is the same everywhere it is written: project() in CMakeLists.txt,
 # library.json, CITATION.cff and the newest released section of CHANGELOG.md. On a tag, it must
-# also be the tag's version, so a release cannot ship metadata that names another.
+# also match the tag, so a release cannot ship metadata that names a different version.
 # Runs in `just check`.
 set -uo pipefail
 cd "$(dirname "$0")/.." || exit 1

@@ -309,8 +309,8 @@ turbidity_status turbidity_estimate_ntu_from_mv(
     return TURBIDITY_STATUS_OK;
 }
 
-/* Three calibration points constrain the fit only if their voltage falls as NTU rises, and they span
- * at least a tenth of the sensor's range. In any order. */
+/* Three calibration points, in any order, constrain the fit only if their voltage falls as NTU rises
+ * and they span at least a tenth of the sensor's range. */
 static int points_constrain_fit(const turbidity_model_record *model, const double ntu[3], const double mv[3])
 {
     size_t order[3] = {0U, 1U, 2U};

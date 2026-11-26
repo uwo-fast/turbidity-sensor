@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ray-trace the tube case's cross-section: how much light reaches the detector.
+"""Ray-trace the tube case cross-section to find how much light reaches the detector.
 
 A 2D model in the plane across the tube. The emitter and detector windows face each
 other at x = -4.15 and +4.15 mm (head_x0 in hardware/probe/probe.scad), each 1.4 mm
@@ -10,7 +10,7 @@ internal reflection or on missing the next surface. The script reports the fract
 of emitted power that lands on the detector window for each fill, and its ratio to
 an air-filled tube.
 
-Not modelled: the windows' own lenses, the axis along the tube (no focusing there),
+Not modelled: the lenses in the windows, the axis along the tube (no focusing there),
 scattering, absorption. Standard library only.
 """
 import argparse

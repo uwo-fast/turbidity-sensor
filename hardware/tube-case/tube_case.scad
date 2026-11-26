@@ -9,9 +9,9 @@
 // head arms, -y toward the connector. The base sits below z = split_z, the lid above.
 //
 // Every pocket in both parts is cut from one board envelope grown by `clr`, so the
-// two parts cannot disagree about where the board is. The board, its envelope and
-// its figures live in ../probe/probe.scad; this file adds only the case's own
-// choices.
+// two parts always agree on where the board is. The board, its envelope and its
+// dimensions are defined in ../probe/probe.scad. This file adds only the case
+// parameters.
 //
 // Export both parts with `just tube-case`.
 
@@ -71,12 +71,12 @@ eps = 0.01;
 // thinnest wall the asserts below accept
 min_wall = 0.8;
 
-// the board's pocket, its clearance included
+// the board pocket, including clearance
 pocket = probe_bbox(clr);
 bot_z = pocket[0][2] - floor_t;
 top_z = pocket[1][2] + roof_t;
 bore_d = tube_od + tube_fit;
-// the tube on the board's optical axis
+// the tube on the optical axis of the board
 tube_y = probe_optical_axis()[1];
 // key centreline, halfway between the head pocket and the outer wall
 key_x = (case_w / 2 + probe_heads()[1] + clr) / 2;
@@ -144,7 +144,7 @@ module tube_bore() {
     cylinder(d1=bore_d, d2=bore_d + 2 * lead_in, h=lead_in + eps);
 }
 
-// The lid's alignment keys, grown by c on every side but the top. c = key_clr cuts the grooves.
+// The lid alignment keys, grown by c on every side except the top. c = key_clr cuts the grooves.
 module keys(c = 0) {
   mirror_x() box(
       [key_x - key_w / 2 - c, key_y0 - c, split_z - key_h - c],

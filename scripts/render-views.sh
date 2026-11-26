@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
 # Render the rows of hardware/sampler-case/views.tsv to build/figures/<name>.png, cropped to the
-# model. $1 is a glob over the names, "*" for all. Previews, orthographic, so seconds each. A failing
-# render still exits 0, so stderr is the signal.
+# model. $1 is a glob over the names, "*" for all. Each render is an orthographic preview, so it
+# takes seconds. A failing render still exits 0, so stderr is the signal.
 set -uo pipefail
 : "${OPENSCAD:=openscad}"
 source "$(dirname "$0")/openscad-canary.sh"
