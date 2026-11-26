@@ -7,6 +7,8 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-25
+
 ### Added
 
 - `seals` and `riser_l` in `bayonet.scad` draw the two o-rings of the foot (the 4 × 1.5 riser
