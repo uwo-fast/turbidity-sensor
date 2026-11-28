@@ -7,6 +7,11 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- The Zenodo concept DOI, 10.5281/zenodo.24616962, in `CITATION.cff` and as a README badge.
+  v0.6.0 is the first archived release (#76).
+
 ## [0.6.0] - 2026-11-25
 
 ### Added

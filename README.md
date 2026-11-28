@@ -2,6 +2,7 @@
 
 [![Software: GPL-3.0-or-later](https://img.shields.io/badge/Software-GPL--3.0--or--later-blue.svg)](LICENSES/GPL-3.0-or-later.txt)
 [![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/Hardware-CERN--OHL--S--2.0-orange.svg)](LICENSES/CERN-OHL-S-2.0.txt)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24616962.svg)](https://doi.org/10.5281/zenodo.24616962)
 
 A low-cost turbidity sensor and its software, for monitoring culture density in a running
 bioreactor. It uses the circuit board from a TST-10-type turbidity probe (as sold on DFRobot's
