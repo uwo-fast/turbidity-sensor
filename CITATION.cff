@@ -1,12 +1,27 @@
 cff-version: 1.2.0
 message: "If you use this project, please cite it using the metadata below."
-title: "turbidity"
+title: "turbidity-sensor"
 type: software
+abstract: >-
+  A low-cost turbidity sensor and its software, for monitoring culture density in a running
+  bioreactor. It uses the circuit board from a TST-10-type turbidity probe (as sold on DFRobot's
+  SEN0189 module), mounted in a 3D-printed case around a clear tube and read by an Arduino Nano.
+  A timed syringe actuator draws culture from the vessel through the tube for each reading. The
+  repository contains the printed cases, a C library that models and calibrates the sensor, the
+  Arduino firmware, the sampler logger, and the bench and bioreactor data.
+keywords:
+  - turbidity
+  - optical density
+  - photobioreactor
+  - microalgae
+  - open hardware
+  - arduino
 authors:
   - family-names: "Brooks"
     given-names: "Cameron"
-version: "0.5.0"
+version: "0.6.0"
 url: "https://github.com/uwo-fast/turbidity-sensor"
+repository-code: "https://github.com/uwo-fast/turbidity-sensor"
 # This field holds only the software licence. In CFF, a list of licences means
 # "either licence, at your option", which is not what a repository licensed
 # separately by component grants. LICENSING.md states the hardware and data licences.

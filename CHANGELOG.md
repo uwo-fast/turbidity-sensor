@@ -7,6 +7,8 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-25
+
 ### Added
 
 - `seals` and `riser_l` in `bayonet.scad` draw the two o-rings of the foot (the 4 × 1.5 riser
@@ -17,6 +19,9 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- `CITATION.cff` names the project `turbidity-sensor` instead of the library name `turbidity`,
+  and adds an abstract, keywords and the repository URL. Zenodo uses these fields for the record
+  of each archived release.
 - `section` cuts each part separately, inside its colour, so the cut face is drawn in that
   colour. A part that sets its own colours (the screws, the actuator) keeps them, and its cut face
   gets one colour. The section views use a full render with Manifold, which keeps those colours.
